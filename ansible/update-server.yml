@@ -11,14 +11,13 @@
       - /home/sparrow/HomeLab/portainer
       - /home/sparrow/HomeLab/vpn
       - /home/sparrow/HomeLab/minecraft
-      - /home/sparrow/HomeLab/monitoring
+      - /home/sparrow/HomeLab/fail2ban
+      - /home/sparrow/HomeLab/server-monitor
       - /home/sparrow/HomeLab/monitoring/loki
       - /home/sparrow/HomeLab/monitoring/grafana
       - /home/sparrow/HomeLab/monitoring/smartctl-exporter
       - /home/sparrow/HomeLab/monitoring/alloy
-      - /home/sparrow/HomeLab/monitoring/fail2ban
       - /home/sparrow/HomeLab/monitoring/prometheus
-
   tasks:
     - name: Pull Docker images
       ansible.builtin.command:

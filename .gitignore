@@ -44,7 +44,11 @@ server-monitor/__pycache__/
 server-monitor/*.log
 server-monitor/.deploy-status.json
 
-/vpn/
+# VPN runtime
+vpn/wireguard/server/
+vpn/wireguard/peer*/
+vpn/wireguard/wg_confs/
+vpn/duckdns/
 
 # =========================
 # Syncthing
