@@ -1,24 +1,64 @@
-# WireGuard generated files
-vpn/wireguard/server/privatekey*
-vpn/wireguard/server/publickey*
-vpn/wireguard/wg_confs/*.conf
-vpn/wireguard/peer*/peer*.conf
-vpn/wireguard/peer*/privatekey*
-vpn/wireguard/peer*/publickey*
-vpn/wireguard/peer*/presharedkey*
-vpn/wireguard/**/*.png
+# =========================
+# Runtime / application data
+# =========================
 
-# DuckDNS logs
-vpn/duckdns/*.log
-vpn/duckdns/logrotate.*# WireGuard secrets
-vpn/duckdns/logrotate.status
-vpn/duckdns/logrotate.conf
-vpn/wireguard/wg_confs/*.conf
-vpn/wireguard/peer*/peer*.conf
-vpn/wireguard/peer*/privatekey*
-vpn/wireguard/peer*/publickey*
-vpn/wireguard/peer*/presharedkey*
-vpn/wireguard/**/*.png
+# Portainer
+portainer/data/
 
-# DuckDNS token/config
-vpn/duckdns/config/
+# Grafana
+monitoring/grafana/data/
+
+# Loki
+monitoring/loki/data/
+
+# Alloy
+monitoring/alloy/data/
+
+# Prometheus
+monitoring/prometheus/data/
+
+# Minecraft runtime
+minecraft/backups/
+minecraft/data/crash-reports/
+minecraft/data/hs_err_pid*.log
+minecraft/data/.run-forge.env
+minecraft/data/.rcon-cli.env
+minecraft/data/.rcon-cli.yaml
+minecraft/data/banned-players.json
+minecraft/data/banned-ips.json
+minecraft/data/ops.json
+minecraft/data/whitelist.json
+minecraft/data/usercache.json
+minecraft/data/usernamecache.json
+minecraft/data/eula.txt
+minecraft/data/world/
+minecraft/data/world_nether/
+minecraft/data/world_the_end/
+minecraft/data/logs/
+minecraft/data/libraries/
+minecraft/data/.cache/
+minecraft/data/config/spark/tmp/
+
+# Server monitor runtime
+server-monitor/__pycache__/
+server-monitor/*.log
+server-monitor/.deploy-status.json
+
+/vpn/
+
+# =========================
+# Syncthing
+# =========================
+
+syncthing/data/
+syncthing/config/
+.stfolder/
+.stignore
+
+# =========================
+# Plex runtime
+# =========================
+
+plex/config/
+plex/transcode/
+plex/cache/

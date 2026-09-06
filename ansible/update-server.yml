@@ -1,0 +1,40 @@
+---
+- name: Check Docker updates
+  hosts: server
+  become: true
+
+  vars:
+    compose_projects:
+      - /home/sparrow/HomeLab/syncthing
+      - /home/sparrow/HomeLab/website
+      - /home/sparrow/HomeLab/plex
+      - /home/sparrow/HomeLab/portainer
+      - /home/sparrow/HomeLab/vpn
+      - /home/sparrow/HomeLab/minecraft
+      - /home/sparrow/HomeLab/monitoring
+      - /home/sparrow/HomeLab/monitoring/loki
+      - /home/sparrow/HomeLab/monitoring/grafana
+      - /home/sparrow/HomeLab/monitoring/smartctl-exporter
+      - /home/sparrow/HomeLab/monitoring/alloy
+      - /home/sparrow/HomeLab/monitoring/fail2ban
+      - /home/sparrow/HomeLab/monitoring/prometheus
+
+  tasks:
+    - name: Pull Docker images
+      ansible.builtin.command:
+        cmd: docker compose pull
+        chdir: "{{ item }}"
+      loop: "{{ compose_projects }}"
+      register: docker_pull
+      changed_when: false
+
+    - name: Show pull results
+      ansible.builtin.debug:
+        msg: "{{ item.stdout_lines }}"
+      loop: "{{ docker_pull.results }}"
+
+    - name: Recreate Docker services
+      ansible.builtin.command:
+        cmd: docker compose up -d
+        chdir: "{{ item }}"
+      loop: "{{ compose_projects }}"

@@ -1,0 +1,34 @@
+services:
+  minecraft:
+    image: itzg/minecraft-server:latest
+    container_name: minecraft
+    tty: true
+    stdin_open: true
+    ports:
+      - "55555:25565"
+    environment:
+      EULA: "TRUE"
+      TYPE: "FORGE"
+      VERSION: "1.20.1"
+      MEMORY: "4G"
+      ONLINE_MODE: "FALSE"
+    volumes:
+      - ./data:/data
+    restart: unless-stopped
+
+  minecraft-backup:
+    image: itzg/mc-backup:latest
+    container_name: minecraft-backup
+    depends_on:
+      minecraft:
+        condition: service_healthy
+    environment:
+      RCON_HOST: minecraft
+      BACKUP_INTERVAL: "1h"
+      INITIAL_DELAY: "5m"
+      PAUSE_IF_NO_PLAYERS: "true"
+      PRUNE_BACKUPS_COUNT: "24"
+    volumes:
+      - ./data:/data:ro
+      - ./backups:/backups
+    restart: unless-stopped

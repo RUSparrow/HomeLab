@@ -1,0 +1,19 @@
+services:
+  smartctl-exporter:
+    image: prometheuscommunity/smartctl-exporter:latest
+    container_name: smartctl-exporter
+    privileged: true
+    user: root
+    command:
+      - "--smartctl.powermode-check=never"
+    volumes:
+      - /dev:/hostdev
+    ports:
+      - "9633:9633"
+    networks:
+      - monitoring
+    restart: unless-stopped
+
+networks:
+  monitoring:
+    external: true

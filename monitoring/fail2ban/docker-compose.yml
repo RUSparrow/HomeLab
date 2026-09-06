@@ -1,0 +1,16 @@
+services:
+  fail2ban-exporter:
+    image: registry.gitlab.com/hctrdev/fail2ban-prometheus-exporter:latest
+    container_name: fail2ban-exporter
+    user: root
+    volumes:
+      - /var/run/fail2ban:/var/run/fail2ban:ro
+    ports:
+      - "9191:9191"
+    networks:
+      - monitoring
+    restart: unless-stopped
+
+networks:
+  monitoring:
+    external: true
