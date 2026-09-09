@@ -1,0 +1,138 @@
+---
+- name: Install HomeLab
+  hosts: server
+  become: true
+
+  vars:
+    homelab_user: sparrow
+
+  tasks:
+
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Install required packages
+      ansible.builtin.apt:
+        name:
+          - ca-certificates
+          - curl
+          - wget
+          - git
+          - gnupg
+          - lsb-release
+          - python3
+          - python3-pip
+          - python3-venv
+          - unzip
+          - htop
+          - smartmontools
+          - fail2ban
+        state: present
+
+    - name: Create Docker keyring directory
+      ansible.builtin.file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: "0755"
+
+    - name: Add Docker GPG key
+      ansible.builtin.get_url:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        dest: /etc/apt/keyrings/docker.asc
+        mode: "0644"
+
+    - name: Add Docker repository
+      ansible.builtin.deb822_repository:
+        name: docker
+        types: deb
+        uris: https://download.docker.com/linux/ubuntu
+        suites: "{{ ansible_facts['distribution_release'] }}"
+        components:
+          - stable
+        architectures:
+          - "{{ ansible_facts['architecture'] }}"
+        signed_by: /etc/apt/keyrings/docker.asc
+        state: present
+
+    - name: Update apt cache after adding Docker repository
+      ansible.builtin.apt:
+        update_cache: true
+
+    - name: Install Docker
+      ansible.builtin.apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        state: present
+
+    - name: Enable and start Docker
+      ansible.builtin.systemd:
+        name: docker
+        enabled: true
+        state: started
+
+    - name: Add HomeLab user to docker group
+      ansible.builtin.user:
+        name: "{{ homelab_user }}"
+        groups: docker
+        append: true
+
+    - name: Create HomeLab runtime directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        owner: "{{ homelab_user }}"
+        group: "{{ homelab_user }}"
+        mode: "0755"
+      loop:
+        - "{{ homelab_path }}/plex/config"
+        - "{{ homelab_path }}/plex/transcode"
+        - "{{ homelab_path }}/plex/cache"
+
+        - "{{ homelab_path }}/monitoring/grafana/data"
+        - "{{ homelab_path }}/monitoring/loki/data"
+        - "{{ homelab_path }}/monitoring/prometheus/data"
+        - "{{ homelab_path }}/monitoring/alloy/data"
+
+        - "{{ homelab_path }}/portainer/data"
+
+        - "{{ homelab_path }}/syncthing/data"
+        - "{{ homelab_path }}/syncthing/config"
+
+        - "{{ homelab_path }}/minecraft/data"
+        - "{{ homelab_path }}/minecraft/backups"
+
+        - "{{ homelab_path }}/vpn/wireguard/server"
+        - "{{ homelab_path }}/vpn/wireguard/peer1"
+        - "{{ homelab_path }}/vpn/wireguard/wg_confs"
+        - "{{ homelab_path }}/vpn/duckdns"
+
+        - "{{ homelab_path }}/server-monitor"
+
+    - name: Start Docker Compose projects
+      ansible.builtin.command:
+        cmd: docker compose up -d
+        chdir: "{{ item }}"
+      loop:
+        - "{{ homelab_path }}/syncthing"
+        - "{{ homelab_path }}/website"
+        - "{{ homelab_path }}/plex"
+        - "{{ homelab_path }}/portainer"
+        - "{{ homelab_path }}/vpn"
+        - "{{ homelab_path }}/minecraft"
+        - "{{ homelab_path }}/fail2ban"
+        - "{{ homelab_path }}/monitoring/loki"
+        - "{{ homelab_path }}/monitoring/grafana"
+        - "{{ homelab_path }}/monitoring/smartctl-exporter"
+        - "{{ homelab_path }}/monitoring/alloy"
+        - "{{ homelab_path }}/monitoring/prometheus"
+
+    - name: Build and start Server Monitor
+      ansible.builtin.command:
+        cmd: docker compose up -d --build
+        chdir: "{{ homelab_path }}/server-monitor"

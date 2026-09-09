@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:4a257eda22301ecb6b1a8ad87a583755c95e670bbb5cd1efb9a58228cf789d70",
+  "claims": [
+    {
+      "id": "claim_4ce864d7be594cee9517fcc00bae51c7",
+      "statement": "The bootstrap playbook runs on the Ansible `server` group with privilege escalation, installs host prerequisites and Docker Compose, enables Docker, adds `sparrow` to the Docker group, creates application runtime directories, starts the listed Compose projects, and builds `server-monitor` last with `docker compose up -d --build`.",
+      "evidence": [
+        {
+          "resource": "repo://ansible/install-homelab.yml#L117-L138",
+          "version": "repo-lines-v1:sha256:eaf84b6127bb6ca6d0e5afb8e60d0381f40ad7c496d3dcc98a7e0acd0a2e04db:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE1NzgyMmNmMDc4ZWM5MGRjOWJjYTdkYjgwNzZmYjdkMjY5NWRkZTljMmQzMmJlNzI5MDA1ZjkyZWE5YjgxMDIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZiZWNmNDgxMDEzMGZmZWQwNjA1NDgyYTZlOTE4YjY0NjFhYTBmM2MwZTM4YjVlMmNkZGY1ODg4OTM4MDA1ZTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcxMmZlM2JjYzViODI2NjBkZjljY2EzZGY3M2VjMTE3NzFlZWU0ZTM4NmY4OWU3ZmQwYTdhNjhmOTBmYTI4YmQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://ansible/install-homelab.yml#L16-L32",
+          "version": "repo-lines-v1:sha256:e40016f5bff86b4ed18fce852c0b5c558a861db3d28ba48d2da3979c6d514953:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFiM2FlYzg4NWFhM2JmMmFlNjQyZGE5Nzg0YzA3ODlmNGU3ODVkYmZlYmRiNTEyODE5YjEyNzhjMzQ4N2VmM2MiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA3MzY5ZmNlNTdiMDMyYjc5MDA2NGJhOTllNWQzZDFmOGExZmFiNjAzNTVjZDE0M2RmMzJlY2Y0MDIzZTE0OTAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ4MDkwNjkzYTU4NDI2Y2Q1MTkyY2E2YTkzZWZlMjZkNmNiYzllNWE0YmNjZDBlM2Q5ZWVhZTAxODA1MTJkYWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhlZjI5NzU1YjExYjM1NGUwM2FlZTc0ZTFiOTllMjFmYzAyMTQ1MTNhMGZhZmFmNTY5MTZiZjAzMjBlOWI5MDcifQ"
+        },
+        {
+          "resource": "repo://ansible/install-homelab.yml#L2-L3",
+          "version": "repo-lines-v1:sha256:ddadc44fa1feaae3bc3d3bc9504c06efafe2195ec87a7114e6e24ce9b6ec3140:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiY2M4NjY3YmVmNjAwMGIyNzIyMjI1MmYwZTIzYjQwMjlmNDRkYjk5NmFmYzE5NGI2MDE3MmVkYWFlOTE5NjMxYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMWUzZjBhYTcxYTBkZjFkMzFjYzA3NWE4ZThiNTBhZjI0M2QzODA2ZTIyMGNmNjc5ZjA0NTdiNTA5YjRhZTE4NCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjEsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjUyZDcxMTEwM2Q1MGE0Mzc4MzBjNmZiY2QwNGZiNGJhYjQ5YTBmODJmNmQyNmQxYzc5MWM2ZTg0ODhkZDA5MCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNGNmZDM3NGMyYTllMGNhY2NkYmI2OTZmZGRmNWZhNDIwNTFmZDI1NzQ2Y2M0MDJmNjA3OGRmZDY1ZWY4MGUyNyJ9"
+        },
+        {
+          "resource": "repo://ansible/install-homelab.yml#L63-L91",
+          "version": "repo-lines-v1:sha256:1de87926eec1c19de0a3e0d36b111fc2d6a0e0bf263cb3f71bfa01dde8e46b67:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIxNDY4YjZkMGYwMjllZjJlYWYyYzkzNjdiZWM3YmQxNzdlMjY0ZWI2NzAyZjVlMzdjMDFmMDZkM2RmZDVjZGEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU4NGVjMDQxNWM2NmQ0ODc3YTQzNmY4MmU0MDEzNWZiZDI0YWYzNzVlZTNkNzU5YmQ3MTljZjUwNjU1MjVlNWQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdmMzdmNzNiNWEzZWY4NWFkZWYzY2VlNGMzNWY4YzExMDFjYzhkMzJmOWRiMmUzN2Q5ZjU3ZjIzYThkODY2NzUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE3ZTY3ODc4OGY4MDdjNjI4NjI2Zjc5NTcyM2MwMGMxODFlNTEyMGJiMWU4NjQ2NWQzZDUyNTU0MzE4OGE2OGYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_2b1c4bcdeb394ae8befd673916056d60",
+      "statement": "The maintenance playbook processes an explicit `/home/sparrow/HomeLab` Compose project list in order, runs `docker compose pull` for each project, prints registered pull output, and then runs `docker compose up -d`; it does not request a build.",
+      "evidence": [
+        {
+          "resource": "repo://ansible/update-server.yml#L2-L20",
+          "version": "repo-lines-v1:sha256:31fb7ce21998e25e6993550e046fe6beddffcbc0da04fe811a026df4846e4873:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYwY2MwZDE2Yzg0N2ZjNWVlMjkyM2MyYTYyMmMyOTgwY2VjNDM2NDUwZTU0NTQ0OTE1YzYyNGVkOGRmODFlNzkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ4MDBmZGNhYzRmMTA0OTNkMmYyZmEwOGQ3ZWUyYzgxYzBlNTc0OWU1ZDMzMGI2ZDgxNzQyOTI3M2NiNzEzYTUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjoxLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY1MmQ3MTExMDNkNTBhNDM3ODMwYzZmYmNkMDRmYjRiYWI0OWEwZjgyZjZkMjZkMWM3OTFjNmU4NDg4ZGQwOTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjljNmU0ZDBiMWRlOGJkZWJkZWY4ZWYzZWNlOTdkOWIyZTNiYzllNWE1MzNhMDc2OTA4MGJhNTdjMzY1Njk0MWUifQ"
+        },
+        {
+          "resource": "repo://ansible/update-server.yml#L22-L38",
+          "version": "repo-lines-v1:sha256:a7e1b4ebfbcda83f29da4e8d5b0858ed5b253f2c63c69b2553426efb93727de8:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQxMjliMjE1MjA5NjU5YTIwYWU2ZTU4ZmM4YjA3YmQwNjQwM2Y5NWJhM2E4NTQzZDVmNjM2ZjI0MjQ5ZTUyOTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM5ZmQyNDYwNWEyOTcxNGViYzc3MTkzNGVkZDc1ODUzNzY2YWRlZjA2OTZhZjMyMDFiZTBkMTIwYjlmM2NmNmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNlZTM4OGY2MWU4OTE0MmNhM2QzNDQzOTc5MzZmZGJmZTY1MzYxYmI0NGIyMDU4MTUwOWNiMzUyMmFlOGJlOTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJkNmM3NGUzZTdjYTUzNzIzZDVhMzJiZjliZjJhMDU2NjY2NGQwNGNmODc5YjVlNDdiZWQ3Y2M2Y2JkYmY0YWMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_682ad0e315bb4a1e80be171c8397ab17",
+      "statement": "The server-monitor backend proxies update and status requests to `DEPLOY_AGENT_URL` (default `http://deploy-agent:9000`) with a five-second timeout, returning the agent JSON on success and HTTP 503 when the agent request fails.",
+      "evidence": [
+        {
+          "resource": "repo://server-monitor/backend/app/main.py#L13-L14",
+          "version": "repo-lines-v1:sha256:383b469512d4622f984293daee7ba97849c16a437ef922d5a64aa10080596dfb:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZjM3OWU3MTdjOWE5OTNkZDExYmQzMjJkYTFiZjA2OTc0MTYxYzExZDIwOWM1NjhmMDY4Mzk5M2FiMmJkN2RkZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYWYxODI5MTIzY2JjMDRiYzI5MWM4NGE5NWQyYTQzOGZkNmIwOWQ1ZDA0YzljM2YzYjE4OTNjNTMxZDEzNDhiNSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDY2ZTkwYzcyN2MwYTM3YzNlNWYxNTZhZGM5MzNlNzM4OTBiZTZmMDYxM2MyNjE3MTRjZDhjMGJkNjg4OWFmOSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDI4NTE1MDY2NzJjODc3N2YzZTBhZGZlMDNhNDlkNWZiMzc4OTdmNGY1ZGE0YmVhNTUxOTFhZDAxYjM5NTUxYiJ9"
+        },
+        {
+          "resource": "repo://server-monitor/backend/app/main.py#L39-L58",
+          "version": "repo-lines-v1:sha256:a6985f0aefe94590d5e73ee996f3ac7c758daaf1964647fd9ace71f1bfc82c2d:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM5ZGNiYmRkNjYxMmU2YWUwYWYzOGJiN2ExZjY1NGM5NmM0OTI0MWY0MDRiN2NhYjVkZWIxMjRlMzU0ZjU0NGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhkOGMzYjM5ZGMwNGIxNWNhZTEwYjBkOTVkYjcyODI4NjZiOWVjNTNhMDM2ZDQ4OTUzMjE1MmMwOWYzZDcyYjUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA2NjRiZmUwOGQ0MDM0ZTRkYjA3MzFkNjQyYzE2N2FhYjFkN2M2ZDk1ZTc2OWJmNzQwNTUwYTdhMTk5MTA5MTQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJmMTgxMzNjZjljMDJmYmI1NDgyZGMwMzAyYmY0YTk4ZmNhMThlMTZkM2IyMWVlYzk5MTk5MjdhZGZjMzk0NWYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_8d1b7dcd88174774932779e414e5a758",
+      "statement": "The deploy agent owns persisted deployment state in `DEPLOY_STATUS_FILE`, treats a missing or invalid status file as idle, serializes status transitions with a lock, and atomically replaces the status file through a temporary file.",
+      "evidence": [
+        {
+          "resource": "repo://server-monitor/deploy-agent/app/main.py#L10-L12",
+          "version": "repo-lines-v1:sha256:1ea9b10edd179eeb0aeff3651d86e355d058ca27d8ee3049a15774ae40cb0241:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNmY4ZjAyMzU1NzlkYTEzYmVmMWVjOTdjYTAyMjY0MDEwY2Q0ZjU3NmVhMjlhNzA4ODU4ODkyNjU1ZGZmN2ZjNSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiODJlOWZhZmJjYTJiNzZmZThkYWQ0MDVmOTNjZWM1ZGEwYjgyY2FhMWFkNDkxNDU1OWQ5MTlkZTE3M2E2MTZkMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYmU2MGZiY2FkMDU3YWU2ZTExZjA4OGRlMzM0YjExNWJjMDg5M2Q4MDk4MWZmMmNjNzcwYjFhMDBlMmYyMmRmMiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDJjN2Y5NDgxYzY2ZGVlYWNiYzVjOTc5OTcyNWExZjk5OWQ1NDgzNjljMGNlOWU2YWFlMzRjMzQ4YmRkMGY0ZSJ9"
+        },
+        {
+          "resource": "repo://server-monitor/deploy-agent/app/main.py#L17-L32",
+          "version": "repo-lines-v1:sha256:fab3d4f5fdd97300da9c06ca4942ec0ed768e0b0b811ec4b34f171d505dfb350:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMyYWU1ODNkYjA5OGFiYTgzYWVjODczNDY5ZjQxNzQ4NWIwN2U3MTc5YzU0NjZjZTVmNjkwOThmMTU2YTkxYzUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE2MTY2MmFmMjUxZThkZjE1M2JiN2QxMjM0OTI3OTk0YjVmMjczMTU4Mzg1YWU5NWJiYzAzOTYzODFlMjc1YzgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE1MzRkMjZhNjEyOWJlMWJjNzIzZDcxNWZmODBiMzE0NjU1MGQxNWMzODUwMDdkZmFiYjA5MGI4YTYxNzhmYWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImYyMGQyOTFmOGU0MmU3YjRlOWE0MTg0NWNiNTIwYTQ5ZWU4MjJlNWY1MDc1OTkxYmM4ZWIzYmVhMmNhY2JlMjgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_2f87b1a3f0ee4501a5d2bb7a7f23a4cc",
+      "statement": "A deploy request writes running before launching `deploy.sh` asynchronously in a new session; a second request while running is reported as already started rather than launching another process, and an `OSError` during launch is persisted as error and returned as HTTP 500.",
+      "evidence": [
+        {
+          "resource": "repo://server-monitor/deploy-agent/app/main.py#L51-L65",
+          "version": "repo-lines-v1:sha256:2c758acc8d67570fb225fac2d895e3ea7739983b0a4494a3ae1d1ab5e8e086dc:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg3NWY2YTdmYmE2MzY1YjViNzdkNGJkMGRiZTlkNjU2YzVhZDQ4ZjBkNTgxOWQyNmJjN2E0ZmI3Mjc5ZGNkZjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFlMTE0OGFkM2I5N2IxYmQzYzE1NjIxNjM3MDU2MDVmYWI1NGIzYTU1MTI0ODkyNzE5MmNiYmRiYWZmM2U0N2MiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYyMDI4MjkwYmEyZjQ0OWY5Y2EzNmMyYmE1N2Y2NGQ5NjhhZmQzNDZmNzdmNGFiNDM5NDZhYjgzMWMwNDQ2MjQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM4Y2UwNzdiZGQwOTJjYjI1MDZmMzJjM2M0NDU2Y2I3M2EyOTg2MGNiMjQxYTM3YjExN2UyY2RkOTJkMjA0NjUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_3f1808e5d8784f859eeaa93da88de647",
+      "statement": "The deploy agent waiter persists completed for exit code zero and error with the exit code for non-zero subprocess termination; on startup it converts a persisted running state into an interruption error.",
+      "evidence": [
+        {
+          "resource": "repo://server-monitor/deploy-agent/app/main.py#L35-L48",
+          "version": "repo-lines-v1:sha256:84e37aad3fb2d983087597e2512c33cf4beb30f3e73fba2a657915079fc8f0b5:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI5ODc1NmRiZmNiNzJmOTU2YTY5ZTc3MTg5YWEyYjczN2VlMWRiYmExZmZkMzZiN2Q3MjU2MDhiY2I0NmQxYjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYxYzNjNTUzMjQ4OGU4ZDZkODU3MDkyZTYyZjc4OWQ0ZTViZDVhMjRkNzAzMjk5MjZiODA5YTc4NzhiNjRmZWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYzYjJkMjNlNTZkYmM3ODg4N2Q2M2M1ODhiYzFlNzA5OTY3YWFlMmYzOTY5OTliNDk0YWM5NjI4YWRkNTFjYzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM1NTQ0MDA5ZDAyMjUyNTA1NzZjNTJmYzZhYjZmYTQ5OTQyMTAyOWRkMGU2MWNiMWRlNjZhMjNkZjY0NmViZDIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a661a8f5852b4636ac3b9030f942f14b",
+      "statement": "The deployment script fails fast, pulls the Git checkout at `/home/sparrow/HomeLab`, and rebuilds and starts only the `server-monitor` Compose service with `docker compose up -d --build --no-deps server-monitor`; a failed pull or build prevents later commands and yields a non-zero subprocess result.",
+      "evidence": [
+        {
+          "resource": "repo://server-monitor/deploy-agent/scripts/deploy.sh#L1-L13",
+          "version": "repo-lines-v1:sha256:a1a9879d2a70183f72ee4c97884bdea0a4bd4ca0cfc88921618693ce6e804580:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI4NzVmOTI4NTQ2YWVlNzg1NWNiMWRiOWFmYzhhYjNmMWE4YTM0ZDQzZGU1YmJkNjJmNzA3NmQ3YmE5ZjM5MTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNjN2NlMDc1YmI1NjczZmQ0ZmU0NzFiZDhlOGY4M2YwNmU2NzE3YjQxODc3MjdhM2JhOTcwZGFiOTc5ZWRhZDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_4e5637340040436d8f535d3ce3a8b52e",
+      "statement": "The Compose configuration connects the backend to `deploy-agent:9000`, publishes server-monitor on host port 8080 and the agent on port 9000, mounts the host checkout into the agent, gives the agent Docker socket access, persists deployment status through the configured host path, and uses `restart: unless-stopped` for both services.",
+      "evidence": [
+        {
+          "resource": "repo://server-monitor/docker-compose.yml#L1-L5",
+          "version": "repo-lines-v1:sha256:e348d135a4fc41378543c9b10158ccf3ad3242e8b444a125336de63987fb5714:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZmE3M2ZjY2RjOTllYTgzNTk2N2M3ZGVlN2VmYmVkMWYzY2E4NzI2MGQ5MjkzMTg1MGZkZDY2ZGE4Y2IxMmYxZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTdhYmFhMDNlOGNkNmM1Y2E1NzY5M2YyNTA1MDVhZWU0NjBiYTc0YmQ4ZDA0NDZkMmUyODllMDcxNGYxYjQ2OCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDAxNDJkYjUwNTQ5M2Y2NTU2MGFjZGVhZDRlMTA0ZGVjZGZjNmQ5NzFhOGMzYzkxYTMzMTJjNzA4Yjk3OTcyOSJ9"
+        },
+        {
+          "resource": "repo://server-monitor/docker-compose.yml#L31-L44",
+          "version": "repo-lines-v1:sha256:dc9788eef59c774099c0a4d550f6ed850cee9de921f9ffb4a350b06540c5bbea:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmNWI4MGM5NmNiZmIwOTc1NWM3NjAwYzNkM2I1MDkzYzBiZjA5ZWFlODgwYmQ3OTdjN2QxMDdmYmQ3ODljOWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1MzFlMjYwMzk4YWQ2MTA5MTRkZmMyOGYwNDhkMzkyNjRiYTdkNTAzMjc4ZGQyZjhiYjFjNGMxNGI0OTlkOTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg2ZTZmMzZhMDk0YzAxY2NkOWZmZjk2NmQyNGU0NWNiY2E4OWY4ZjYzYWYyYmYxNWM5MTA1ZmE2YzczZGVhNzEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://server-monitor/docker-compose.yml#L6-L29",
+          "version": "repo-lines-v1:sha256:b2703bcbf3f325f61f04a0a08502b174e17daf5534f3803e9da568b6922ce8c1:eyJzZWxlY3RlZExpbmVDb3VudCI6MjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5ZWVhYmE1NTk3ZmI4OGIzNmJkZWNmZWY4NGYxOGE2YThjMzQ2MzQ0MGUwNDc3MjY4M2UzODI1ZGRmODY0MGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk0OWY5OGYxMjljMjAzZmJjYjQwNDg5ZDUzYjg0ZDgyZTgwZTI5NWMxNjkyZjdiMjYxNWJlYzNjMjExMWUwMWIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZmYzFlODZkNDJlZjM5MWIxMzQ2YjAwYzAzNmVkMGE3YjJlNjk4ZGNjMjM3ZjM0YWIxOTg5MGYzYjMyM2FmZWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjljMGIwNmU4OTg2YWJmN2MzOTk2MjYyMjBjNDU5MGFkYTc2ZTZhYTZmM2IyZDM5NDc4NWU4M2ViNzEzNGVmZDgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_6b4594dd92684950af8f830d2b2c8f54",
+      "statement": "The frontend starts an update with POST `/api/actions/update`, navigates to `/update-status` only when the response says started, and polls `/api/actions/status` every three seconds; completed returns to the home page, error displays the message, and other states continue polling.",
+      "evidence": [
+        {
+          "resource": "repo://server-monitor/frontend/js/app.js#L326-L345",
+          "version": "repo-lines-v1:sha256:72e7cdc8e87e50400f2de2d3829d8e35b5ee145a45183ee3cd13cdd6d92c9d6c:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU0YzIwZWRlY2Q3Njg3YmY3NDZmYjVkMjBkMjYxZDRlYmQzNGJhYzcwYTM0YTcxZTQyMDJhNGI5YTIyODBlMTEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhNzYyMWE2YzEwMGUxNDlhYzM2YTJjYzNhYTllOTRjN2M2YmQ1ODliZTEyOTEzOTAyNGFiY2FmY2Y0ZGNlMmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ5NGRmYWFhNGZmMjEyMDVhOWYzNDM4NjA5Y2VhYjk5NGQyMjVlNjY4MmI4ZTc0ZjQ5MmViMTEzMWYxOWI3NDMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoyLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY4NzIxMzZjNjc5YWU1YjQzNzI0YzIyMDA4YzY3NWIyMGFmNGYyNWJkMzRlZDIyZjI1OTVhNTY1NGRmYWYyYzAifQ"
+        },
+        {
+          "resource": "repo://server-monitor/frontend/js/update-status.js#L1-L37",
+          "version": "repo-lines-v1:sha256:9aba4ad1d156473e961a5b22d6f45ec3ec0feb02022ed96b6b3b673917171b76:eyJzZWxlY3RlZExpbmVDb3VudCI6MzcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMwNmEzZTZmNTljMDE3MmViNmNkOTdlMTQ2MWU3NmRiYzc3NGM4YWQ1NjM5Zjg1NWI5ZmFkMjY2MzA2MTE0ZjMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJhZGNjNGM2ZDRjY2QzMDM2YzM4OWY3MDllMTA2M2U3MDQxMzc3MWUzYjkzZTk1ZTZiNzM3YWNiNThkMTUyZWMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a044eb924a684de8867c97c63a6e9b24",
+      "statement": "The update status completed value represents successful deploy-script subprocess exit, not an application health check; the backend exposes `/api/health` separately and `/api/metrics` through `collect_all`.",
+      "evidence": [
+        {
+          "resource": "repo://server-monitor/backend/app/main.py#L29-L36",
+          "version": "repo-lines-v1:sha256:56b415c87c07cedd79ce4d72c8545a6370d2731c146087652fa945197055d44d:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTliYWRmMGE3ZGZjNjM2ZmYzMmU5NDZkYmMwNGE4MzBhOTQ5M2NmNTg0YzE0ODIzMzIzN2U3MTEwYmJkMjdhMSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjc1ODNjYTU5MmI0MThkMDI1MzJjOWRkZTIyNmYzMmQ1NTNmNjZlMWY0YzI3YmZkMmEyOTNlY2E2Y2U1MzE2NSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOWVkNjgzYzY5MzEyZmU1ZTQ3YWEzNTkxYTEzZTU0NjAyNDdhMDE5OTU1M2RjZWI0YWI3NmI3YzQ4Y2I5ZTMwYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMWFkNDhiNzYzZDg4MDY1NGQxMmQ4YTkxMjI3MGZkNGM2YmM1MTZkOGRlMDU0MjQ0Yjk3Mzg5ZmNjMTY0MDlmNiJ9"
+        },
+        {
+          "resource": "repo://server-monitor/deploy-agent/app/main.py#L35-L42",
+          "version": "repo-lines-v1:sha256:0312fc657e339b3b8d93606b220f82340592bbc5f263e8e0b24fff69c0f8bb21:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjk4NzU2ZGJmY2I3MmY5NTZhNjllNzcxODlhYTJiNzM3ZWUxZGJiYTFmZmQzNmI3ZDcyNTYwOGJjYjQ2ZDFiNyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjNiMmQyM2U1NmRiYzc4ODg3ZDYzYzU4OGJjMWU3MDk5NjdhYWUyZjM5Njk5OWI0OTRhYzk2MjhhZGQ1MWNjMCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMzI1NTA2NTg5NGYyYjEzNjcwZTU3NzM1MWJiY2M2ZTkzMjM0NTBlZGE0MjQwODQxNmE0ZTgwYzViMTMzZGFmNCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_99618acf832242ecb41e2a558bd31731",
+      "statement": "The checked-in Ansible inventory maps the `server` group to local execution, so playbook path, variable, Docker daemon, and project-directory assumptions must be verified before running the workflows.",
+      "evidence": [
+        {
+          "resource": "repo://ansible/install-homelab.yml#L2-L3",
+          "version": "repo-lines-v1:sha256:ddadc44fa1feaae3bc3d3bc9504c06efafe2195ec87a7114e6e24ce9b6ec3140:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiY2M4NjY3YmVmNjAwMGIyNzIyMjI1MmYwZTIzYjQwMjlmNDRkYjk5NmFmYzE5NGI2MDE3MmVkYWFlOTE5NjMxYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMWUzZjBhYTcxYTBkZjFkMzFjYzA3NWE4ZThiNTBhZjI0M2QzODA2ZTIyMGNmNjc5ZjA0NTdiNTA5YjRhZTE4NCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjEsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjUyZDcxMTEwM2Q1MGE0Mzc4MzBjNmZiY2QwNGZiNGJhYjQ5YTBmODJmNmQyNmQxYzc5MWM2ZTg0ODhkZDA5MCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNGNmZDM3NGMyYTllMGNhY2NkYmI2OTZmZGRmNWZhNDIwNTFmZDI1NzQ2Y2M0MDJmNjA3OGRmZDY1ZWY4MGUyNyJ9"
+        },
+        {
+          "resource": "repo://ansible/inventory.ini#L1-L2",
+          "version": "repo-lines-v1:sha256:0d412a889326cb2778150d9af385f0d12dd1042076f5a676d3accedc8d0c6bac:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDI4MGEyOTFlMDgwODg1MjFjNTEzMjc5MzQ5NmM0ZWJhZmZhYmQyMjM3YmQwYjdlYjFjZDY4OTUyNWUzMGQxNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOWI3NTlhZTA3ZmFhOTBiZDY3ZTQwYzRhOWI0NDkzOTE5YzhkOGZlNzkxNWRkOWRmODE5Mjg2OWU2YmY4ZDU4ZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://ansible/update-server.yml#L6-L20",
+          "version": "repo-lines-v1:sha256:eaddce15ad07a39840fcbcfa964f58643e27576ee3f40295db2a3458b428ba3b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgyOGUwZmRlZTJlM2MwY2Y4ZWUzNzhjYzQ1ZjJjYWMyNTUzZGM4OTc0NjJhNDdmM2YyNTliMjgyZGUwN2I5NDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ4MDBmZGNhYzRmMTA0OTNkMmYyZmEwOGQ3ZWUyYzgxYzBlNTc0OWU1ZDMzMGI2ZDgxNzQyOTI3M2NiNzEzYTUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY3ZWQxNDkyMGMxZmJlZDVkMTgwODRmZjlmMDVmOWM2NGRkOTFkYzk3MWE2ZjU2NWYxNDFjOWE1MjBjYWM2NmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjljNmU0ZDBiMWRlOGJkZWJkZWY4ZWYzZWNlOTdkOWIyZTNiYzllNWE1MzNhMDc2OTA4MGJhNTdjMzY1Njk0MWUifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.5.0",
+    "at": "2026-09-09T11:31:25.948Z"
+  }
+}

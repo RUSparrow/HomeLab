@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:e8aa88a2d9b3753b71396afafbcf5f7fd07c20a74ebe5ef228ca2e774cee7414",
+  "claims": [
+    {
+      "id": "claim_40e9a7934bcb4efbab933708b4fe02f1",
+      "statement": "The server-monitor FastAPI application exposes health, aggregate metrics, update-start, update-status, root dashboard, and update-status page routes; it serves frontend assets from FRONTEND_DIR and proxies update calls to DEPLOY_AGENT_URL, translating agent request failures into HTTP 503.",
+      "evidence": [
+        {
+          "resource": "repo://server-monitor/backend/app/main.py#L13-L74",
+          "version": "repo-lines-v1:sha256:59a2e4dec65a636afc75e213b943732cb49309857d266916a9f748c17b58b22b:eyJzZWxlY3RlZExpbmVDb3VudCI6NjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYzNzllNzE3YzlhOTkzZGQxMWJkMzIyZGExYmYwNjk3NDE2MWMxMWQyMDljNTY4ZjA2ODM5OTNhYjJiZDdkZGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU4MmQyNTUyYTdiODcwMDNkNTAwMzZmZmEyMDFiMmI1ZjhkYWRkNjEyMWMzZjYxN2NiNzYzMWE2ZWE4YWEzOWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ2NmU5MGM3MjdjMGEzN2MzZTVmMTU2YWRjOTMzZTczODkwYmU2ZjA2MTNjMjYxNzE0Y2Q4YzBiZDY4ODlhZjkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_2c1f7d3d92424f9bb62b146a75ff72a1",
+      "statement": "The monitor aggregates CPU, memory, root and configured storage disks, uptime, temperature, Docker, WireGuard, Plex, hostname, and timestamp data, while optional integrations return partial fallback results instead of failing the aggregate metrics response.",
+      "evidence": [
+        {
+          "resource": "repo://server-monitor/backend/app/metrics.py#L139-L191",
+          "version": "repo-lines-v1:sha256:9f7476897178edeebec4cb70d4178fb1e9270ce0aba6584e9ba44dff27117be0:eyJzZWxlY3RlZExpbmVDb3VudCI6NTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIzMTE4YWQ5MGM2OTg1Mjg1NGVkZGJkMjA4M2JkYzA1YWMxYjIxMWMxOTUyMmZlMWMwYzA0ZWIyMzY0YWQ2OTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEzYmU4OWQ3ZjI1Mjc0NzBiMjMwZTljMTljMDczNmNmOWViMGI5ZjE3YjlkMjBiYzliMThiOGI2NjdkNjQ3MDMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRmYmQwMDkzMTRiYzI3MDg0MTY3MzRhMDJhZTVmZjM5YTFlNDhhMDUwYmU5MWY0M2IyZmFhOTIwMDJjNjJiZmMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhlZmZlMWQ2YmFlYzJjOWQ0OGUyODczM2IwZjk0YTBiNTVmY2IxNWFlZDFjZWM1MjI5YjIwOWU3YTI1MWM2OWUifQ"
+        },
+        {
+          "resource": "repo://server-monitor/backend/app/metrics.py#L321-L444",
+          "version": "repo-lines-v1:sha256:8c633b1a6ac90f023aecd03fbe6e1fb33089b7f69148e0fa0555d7715a5c8459:eyJzZWxlY3RlZExpbmVDb3VudCI6MTI0LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIzMjQxYTJiNWEwY2M4NThlNTM2NTU0YWJhZTgzN2NjNmIzOGExM2IwMTdkYTE5ZGZkYjg1NGM4NzQ1MmI3YWQ1IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI0ODkzZjQwZTM3ODFlYjg5NmM4MmQwNDZhMDgwNjdhMTFlMzVjZGYyZjFkZmFmMjZmZWE5MGI4ZGI2Njc2NDEzIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI0ZmJkMDA5MzE0YmMyNzA4NDE2NzM0YTAyYWU1ZmYzOWExZTQ4YTA1MGJlOTFmNDNiMmZhYTkyMDAyYzYyYmZjIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MCwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1In0"
+        },
+        {
+          "resource": "repo://server-monitor/backend/app/metrics.py#L53-L78",
+          "version": "repo-lines-v1:sha256:57d4ac361d4c5fc0d12c518c75fde09270dadc498e42f7f02f513c5ee007debf:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRiMzM4YWM0MWRiNTU5MWUwYmQxNTIzZGQ3MWZkZjRhZWFmNzNhN2YxMjJkNDFjZWIxNTU2MzVhNjZiZGJlNjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYwNTk4NzlmNDM4YTdiMTJiMDllNWViZTU4Y2RjODQ3ZTNmOTc4ZjU2NjZlYTk1MDRhNjYzOTFjYWMzNDVjOWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFhMTlhZWMyZmI5YjlkMjU2MTRmY2NiNDY3NzNlMjc1YjEwNzAyNTA3N2NiM2IwNzEyYWU2NmY1YWRhNmYyNWIifQ"
+        },
+        {
+          "resource": "repo://server-monitor/backend/app/metrics.py#L99-L128",
+          "version": "repo-lines-v1:sha256:5f2c8719194580840e108990cc7b80ea7b8f2edfaae5be14daf4fd0937b2a5e0:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRiMmZkNWI4YjA5OTc2MGJjODlkMTA3OTVjNzVjZjRiNDBkM2YwMzdjOGUwMzM0ZmQzYjc5NTI1ODQ1MWU2ZGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRkY2IyY2MyMzZmYTMwOWU0YmU3ZDMyMzdlNjQ2ZGYyNmQyNDc3MWYyYzM0ZGFlZmNmOTYwMmQ1NjJmMjdiMTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ5YjU0MTlhMWE2Y2QyNjYxNjQ4YzBjNzM1YjUyNzg1YWRhYzJmYmQwMjNhYjE0YjM2NmZmNGM0MzNjN2ZmYmUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI1MGIwNDRlMjcxODM4NTU3ZGQ1NGJjYmY0MDkyYmNkM2MxYzQ1MTc3MjdiMzA1Y2Y2NGMxNjkxZDI1NjEzMmMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_fee90d362e0c4f59b0768be9155d7c51",
+      "statement": "The monitor's metric integrations use host and container boundaries: Docker is queried through the Docker client with an unavailable fallback, Plex combines systemd service inspection with an HTTP /identity check and TCP fallback, and WireGuard executes wg show wg0 dump inside the wireguard container with unavailable/error fallbacks.",
+      "evidence": [
+        {
+          "resource": "repo://server-monitor/backend/app/metrics.py#L169-L191",
+          "version": "repo-lines-v1:sha256:f3041c20663aff6584685bbc9761abd1eb3c454ded7a0b21defc5a70b7bd363c:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk1NjNmNTQ0YjY3MDczOGE2NGM0NWE2NTY4NzBlZWQ3Y2MwNzI1ZTg1MGIzNTc1OWQ2ODc4ZDVhOTdkODU5NWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEzYmU4OWQ3ZjI1Mjc0NzBiMjMwZTljMTljMDczNmNmOWViMGI5ZjE3YjlkMjBiYzliMThiOGI2NjdkNjQ3MDMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRmYmQwMDkzMTRiYzI3MDg0MTY3MzRhMDJhZTVmZjM5YTFlNDhhMDUwYmU5MWY0M2IyZmFhOTIwMDJjNjJiZmMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhlZmZlMWQ2YmFlYzJjOWQ0OGUyODczM2IwZjk0YTBiNTVmY2IxNWFlZDFjZWM1MjI5YjIwOWU3YTI1MWM2OWUifQ"
+        },
+        {
+          "resource": "repo://server-monitor/backend/app/metrics.py#L221-L267",
+          "version": "repo-lines-v1:sha256:8723e590abe29a4cb5c432060bd5ff7459e186557e14586b32e9fe2ebbd28d59:eyJzZWxlY3RlZExpbmVDb3VudCI6NDcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI5Y2U4ZTMyNTAwNWZhNjQ0NmJmMDgzMTU5ZWZlYjFlODg5NmEyNmEzMzAxZmRhZmUwNTA3ODBjMWU1NjE0ZGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjVjNDhhNjViZTBlMDc3YjJlN2NlNDNiZGI4MWEyZjliZTYxY2NmMTBiYTIwNTYwZjUwZTgwNWFjNWRkMzI0NTgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJjNmQyMGIyNTVmZjUzNmI0N2FhODM2YjJlZWJmN2JhNjU4YjhkZmI1OTNjYWRlN2Q2MTBmNzBiZGE3ZWY5ZDMifQ"
+        },
+        {
+          "resource": "repo://server-monitor/backend/app/metrics.py#L269-L337",
+          "version": "repo-lines-v1:sha256:ea1684f1e62e80ca68b6b690a8f0835324df25c5e3d988ecf65f56e26b112341:eyJzZWxlY3RlZExpbmVDb3VudCI6NjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc0ZGVhZTA5ZWMzZWZlM2MyNGViM2QzMDg5YTg4ZDE3MmI4NGExZjE3OGI1ZTRkNTliZGRhM2ZlYzdmN2RhMzMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBmOGNmNmU2MjBjMDg2ZDAzMTIyYzIxNThkMTY2ODZkMmIzYzBkZGE3YjY1ZDdkMjc4YjVkNWFlOGE2MDMxMmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJlYzQ0NzBmZjYxZTE4NTNlNzM2NDBmN2Y2MjEyMWI0NDNhNmNiOGVjODEyOTExYmQxMzIwZGRmOTFkZmUzN2UifQ"
+        },
+        {
+          "resource": "repo://server-monitor/backend/app/metrics.py#L340-L414",
+          "version": "repo-lines-v1:sha256:f36fa89ff706bef8af9746b09e983c6dc401ec3d6b69bfcfe9c5bc098f218794:eyJzZWxlY3RlZExpbmVDb3VudCI6NzUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5ZjVjMjNjNjEyZGI0MDZmN2E2N2FmYzgyNWViYjIzOWIwMWY2YzcxMDY3MTY2NGZmNjg2MjA2YTYzZGNkYjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2YjA0NDkxNDY5NzIyZTgzNjNhOTRlNDA0NDUzOGUwMTNhMmEyMTdlMzZiMWU1NjhiYTYwYWNiN2I0YzhmMmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRmYmQwMDkzMTRiYzI3MDg0MTY3MzRhMDJhZTVmZjM5YTFlNDhhMDUwYmU5MWY0M2IyZmFhOTIwMDJjNjJiZmMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJjZTA3ZmFiMmNhNDIyYzI1MGNjN2NmYTIyMDkzMjVlYjVmMmExOGFkMmNjMWJhOTk5MmY2Zjg5MmYzNmFkZjIifQ"
+        },
+        {
+          "resource": "repo://server-monitor/docker-compose.yml#L9-L29",
+          "version": "repo-lines-v1:sha256:43a8de25ec0a7998b2fcbd737c1069e9ac5be0da93c16995008e155d9d082539:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk3NGQzOTZiZmIzYzdmN2JlMzJmMDk4MzIyNzAzMGJiNzE4NGYzNzYyYzljN2Y1Njc4YWM2NWZiZTkxMjA2MzMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk0OWY5OGYxMjljMjAzZmJjYjQwNDg5ZDUzYjg0ZDgyZTgwZTI5NWMxNjkyZjdiMjYxNWJlYzNjMjExMWUwMWIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQwMTQyZGI1MDU0OTNmNjU1NjBhY2RlYWQ0ZTEwNGRlY2RmYzZkOTcxYThjM2M5MWEzMzEyYzcwOGI5Nzk3MjkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjljMGIwNmU4OTg2YWJmN2MzOTk2MjYyMjBjNDU5MGFkYTc2ZTZhYTZmM2IyZDM5NDc4NWU4M2ViNzEzNGVmZDgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f6671e653345411880b190d58a8307da",
+      "statement": "The dashboard fetches metrics immediately and every three seconds, renders the collected integration data, retains polling after a fetch failure, and starts the update flow only when POST /api/actions/update returns status started.",
+      "evidence": [
+        {
+          "resource": "repo://server-monitor/frontend/index.html#L10-L166",
+          "version": "repo-lines-v1:sha256:3d146e082417063e6e8a2f732a1a90c37300fcc651aa162bad9a01e2b49b619a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTU3LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI1Mzc4NzlhYjUwZjIxY2QxZDJlNjUzYWEwMWIwMzJhOGNlNDRjNjYzNTY0NDg3ZWQ5NDk1NDFmZGRhMWM5MzhkIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJjNjgxYjFkYzdjN2Y0Nzk5MWRhNWU3MjVmYTA0NTUwNTMyMjc3ZmVjNTMyNGYyM2E0Y2ViMWY2MDc2Y2ZmNDM5IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI1ZDRjMmIwY2ZjYmE3N2QwZmZlY2FhMzBlM2IyOTNlMzY5NGI1NGNkNWYzNTk5NTljZWYxMDM0NjMzOTU1OWIyIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MiwiZm9sbG93aW5nQ29udGV4dEhhc2giOiIwMmVkNTRlZGM0MmZiYmJjMzY5ODhiMmExODRiNjdlNDk1NjhiZTQ4MDc4MzI1MzhiYTliN2VkZGE1Mzc0NGQ4In0"
+        },
+        {
+          "resource": "repo://server-monitor/frontend/js/app.js#L290-L302",
+          "version": "repo-lines-v1:sha256:a135757ac346af3c74c7e0cb328e7841f5b214e514c67923e78f0aa8dddf9b97:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZmMmE1NzBhZTdkOGNhYzY4ZjEzNzY3OTkzNmQ0ZTQ4NDBjMzczNTg2NGNiZjdmMTcyOTU4ODAxNjg2ZThmZDUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImMwNjk2ZjJiMmIyYTUxOTljY2YzZGRjMWNkYTYxMDRkMDM5NTViMjAyMjA2ZWE0OWM0Mzc5MjcyMzRiNjRkMGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY5ODYwNWE2NWU5MWE5NDZiYTc5ZTM3ODc5M2NkMDhjMGYyYTdmZmUxOTIxNmEwZGQ0M2Q1ZTIxOWJhMGM4YzQifQ"
+        },
+        {
+          "resource": "repo://server-monitor/frontend/js/app.js#L326-L347",
+          "version": "repo-lines-v1:sha256:8e21f17a6e9707a706d092fc05433941234db9ac04dc909305ec84e97a56b145:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU0YzIwZWRlY2Q3Njg3YmY3NDZmYjVkMjBkMjYxZDRlYmQzNGJhYzcwYTM0YTcxZTQyMDJhNGI5YTIyODBlMTEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYxOThhZWQzZjc1YzJiNjcyYWI0YTM3OGIzNDY5NmE5YmZhNTY1M2I2MzZjMGJiNDI2YTg5ODE4MzJmNzZjMGMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ5NGRmYWFhNGZmMjEyMDVhOWYzNDM4NjA5Y2VhYjk5NGQyMjVlNjY4MmI4ZTc0ZjQ5MmViMTEzMWYxOWI3NDMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_39355b370ab14384b6ebeb77b887f86a",
+      "statement": "The deploy-agent persists update status in DEPLOY_STATUS_FILE, defaults missing or invalid status to idle, writes status through an atomic temporary-file replacement, and serializes status operations with a process-local status_lock.",
+      "evidence": [
+        {
+          "resource": "repo://server-monitor/deploy-agent/app/main.py#L10-L32",
+          "version": "repo-lines-v1:sha256:cf7f7d7f39dac5d1718d26d7ad91b26cfcbbf07579c01f506f629090d3370fd8:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZmOGYwMjM1NTc5ZGExM2JlZjFlYzk3Y2EwMjI2NDAxMGNkNGY1NzZlYTI5YTcwODg1ODg5MjY1NWRmZjdmYzUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE2MTY2MmFmMjUxZThkZjE1M2JiN2QxMjM0OTI3OTk0YjVmMjczMTU4Mzg1YWU5NWJiYzAzOTYzODFlMjc1YzgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJlNjBmYmNhZDA1N2FlNmUxMWYwODhkZTMzNGIxMTViYzA4OTNkODA5ODFmZjJjYzc3MGIxYTAwZTJmMjJkZjIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImYyMGQyOTFmOGU0MmU3YjRlOWE0MTg0NWNiNTIwYTQ5ZWU4MjJlNWY1MDc1OTkxYmM4ZWIzYmVhMmNhY2JlMjgifQ"
+        },
+        {
+          "resource": "repo://server-monitor/deploy-agent/app/main.py#L68-L71",
+          "version": "repo-lines-v1:sha256:172a48e29836f77f6631ddf76174a908617db8da1cbb1c72eb45de385c4c30d9:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjhkNGVlZmNkZjM5YWVmYzAxMmY2OWU2NTE4MWNiYmRkM2RiMjYxOTBjZWIxNGJiMDA1NGFhMzNiMDU2Yjk3MSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNWYwZTYwNDkyY2U2MDc0YmRhMGQyNzI2NTg3OTRlZTMzYTU1ZjgzZGM5MzA0ZTQ4ZWM4NWMyMzg4ZjE5NDBhZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjg2ZTlkZWM3MDU0Y2E1MDkzMTg5MjNjMjJhOWE3NGE5ODQ2ZDQ5M2I3NzhlZjc0YjI4OTUzZTQwODQ4YjdlNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_857747e63e5b44a2bd74ab77b0186a93",
+      "statement": "The deploy-agent prevents concurrent deployments by checking for running status under status_lock and returning an already-running started response without launching another process; a new update writes running, launches deploy.sh asynchronously, and returns immediately.",
+      "evidence": [
+        {
+          "resource": "repo://server-monitor/deploy-agent/app/main.py#L51-L65",
+          "version": "repo-lines-v1:sha256:2c758acc8d67570fb225fac2d895e3ea7739983b0a4494a3ae1d1ab5e8e086dc:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg3NWY2YTdmYmE2MzY1YjViNzdkNGJkMGRiZTlkNjU2YzVhZDQ4ZjBkNTgxOWQyNmJjN2E0ZmI3Mjc5ZGNkZjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFlMTE0OGFkM2I5N2IxYmQzYzE1NjIxNjM3MDU2MDVmYWI1NGIzYTU1MTI0ODkyNzE5MmNiYmRiYWZmM2U0N2MiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYyMDI4MjkwYmEyZjQ0OWY5Y2EzNmMyYmE1N2Y2NGQ5NjhhZmQzNDZmNzdmNGFiNDM5NDZhYjgzMWMwNDQ2MjQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM4Y2UwNzdiZGQwOTJjYjI1MDZmMzJjM2M0NDU2Y2I3M2EyOTg2MGNiMjQxYTM3YjExN2UyY2RkOTJkMjA0NjUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_2c31c898be9d43a9bc35267430ee08ad",
+      "statement": "The deploy-agent lifecycle records completed on exit code zero, error with an exit-code message on non-zero exit, error on launch failure, and converts persisted running state to an interruption error during startup.",
+      "evidence": [
+        {
+          "resource": "repo://server-monitor/deploy-agent/app/main.py#L35-L48",
+          "version": "repo-lines-v1:sha256:84e37aad3fb2d983087597e2512c33cf4beb30f3e73fba2a657915079fc8f0b5:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI5ODc1NmRiZmNiNzJmOTU2YTY5ZTc3MTg5YWEyYjczN2VlMWRiYmExZmZkMzZiN2Q3MjU2MDhiY2I0NmQxYjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYxYzNjNTUzMjQ4OGU4ZDZkODU3MDkyZTYyZjc4OWQ0ZTViZDVhMjRkNzAzMjk5MjZiODA5YTc4NzhiNjRmZWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYzYjJkMjNlNTZkYmM3ODg4N2Q2M2M1ODhiYzFlNzA5OTY3YWFlMmYzOTY5OTliNDk0YWM5NjI4YWRkNTFjYzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM1NTQ0MDA5ZDAyMjUyNTA1NzZjNTJmYzZhYjZmYTQ5OTQyMTAyOWRkMGU2MWNiMWRlNjZhMjNkZjY0NmViZDIifQ"
+        },
+        {
+          "resource": "repo://server-monitor/deploy-agent/app/main.py#L57-L65",
+          "version": "repo-lines-v1:sha256:749dea71935636329863d18d827f3a93b9ad7940b25bae702346e7a0a5a18d98:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjU2OWNiMDkyODBlZTA3ODE5NDVlNDhkNDA0MWJkMmRmYWFlNjkxYWQyZWFiZjVkM2NiYTA4NDZjNzIxNmNhYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYWUxMTQ4YWQzYjk3YjFiZDNjMTU2MjE2MzcwNTYwNWZhYjU0YjNhNTUxMjQ4OTI3MTkyY2JiZGJhZmYzZTQ3YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDFlMGMyNzc4NTQ4MmQ4YmU2YmE2MmUyMjdiNjE3Njg4M2VlZjkwZTg5ZjJiYzYxODExM2RhOTYyMjJhNDA4NyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzhjZTA3N2JkZDA5MmNiMjUwNmYzMmMzYzQ0NTZjYjczYTI5ODYwY2IyNDFhMzdiMTE3ZTJjZGQ5MmQyMDQ2NSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_5d2e3950626646f0a7c91eceb5b11348",
+      "statement": "The deployment script uses set -e, pulls /home/sparrow/HomeLab, then runs docker compose up -d --build --no-deps server-monitor from the server-monitor directory, so command failures become non-zero process exits recorded by the agent.",
+      "evidence": [
+        {
+          "resource": "repo://server-monitor/deploy-agent/app/main.py#L35-L42",
+          "version": "repo-lines-v1:sha256:0312fc657e339b3b8d93606b220f82340592bbc5f263e8e0b24fff69c0f8bb21:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjk4NzU2ZGJmY2I3MmY5NTZhNjllNzcxODlhYTJiNzM3ZWUxZGJiYTFmZmQzNmI3ZDcyNTYwOGJjYjQ2ZDFiNyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjNiMmQyM2U1NmRiYzc4ODg3ZDYzYzU4OGJjMWU3MDk5NjdhYWUyZjM5Njk5OWI0OTRhYzk2MjhhZGQ1MWNjMCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMzI1NTA2NTg5NGYyYjEzNjcwZTU3NzM1MWJiY2M2ZTkzMjM0NTBlZGE0MjQwODQxNmE0ZTgwYzViMTMzZGFmNCJ9"
+        },
+        {
+          "resource": "repo://server-monitor/deploy-agent/scripts/deploy.sh#L1-L13",
+          "version": "repo-lines-v1:sha256:a1a9879d2a70183f72ee4c97884bdea0a4bd4ca0cfc88921618693ce6e804580:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI4NzVmOTI4NTQ2YWVlNzg1NWNiMWRiOWFmYzhhYjNmMWE4YTM0ZDQzZGU1YmJkNjJmNzA3NmQ3YmE5ZjM5MTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNjN2NlMDc1YmI1NjczZmQ0ZmU0NzFiZDhlOGY4M2YwNmU2NzE3YjQxODc3MjdhM2JhOTcwZGFiOTc5ZWRhZDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_cfd8adc5bb0148379e46d17be54ee191",
+      "statement": "The update-status browser page polls /api/actions/status every three seconds without cache, redirects to the dashboard on completed, shows the persisted message and a back link on error, and retries after status-fetch errors.",
+      "evidence": [
+        {
+          "resource": "repo://server-monitor/frontend/js/update-status.js#L1-L37",
+          "version": "repo-lines-v1:sha256:9aba4ad1d156473e961a5b22d6f45ec3ec0feb02022ed96b6b3b673917171b76:eyJzZWxlY3RlZExpbmVDb3VudCI6MzcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMwNmEzZTZmNTljMDE3MmViNmNkOTdlMTQ2MWU3NmRiYzc3NGM4YWQ1NjM5Zjg1NWI5ZmFkMjY2MzA2MTE0ZjMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJhZGNjNGM2ZDRjY2QzMDM2YzM4OWY3MDllMTA2M2U3MDQxMzc3MWUzYjkzZTk1ZTZiNzM3YWNiNThkMTUyZWMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://server-monitor/frontend/update-status.html#L10-L19",
+          "version": "repo-lines-v1:sha256:6bb52347e9cd14d661180f86defa216effa3b31f650a2c9a375432c025521dd8:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM2NjBlZTFhNGM0MDMyNmM5NjRlYjU3YmJhMmFmMzEzOGMyNDVjZjA0NGQyNzM5ZjlmMGQxMDFlZWMzZTA0Y2QiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI0MzRlZjRmOWYyNTU3NDkzOTBlY2JlYzZjZjNjYTAxZGE2MGFhZmVjMTI3ZmJlNDg3MDQ5N2UzZjgzZWMxZDMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU4ZmYyNGQ0ZTRkZGI1ZmRjN2NmOWY3ODEwOGEyZWZhZjM0MzU5NTVmMTZhMjQyZmM4N2Q5N2M3ZTE4NGQ4MjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoyLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAyZWQ1NGVkYzQyZmJiYmMzNjk4OGIyYTE4NGI2N2U0OTU2OGJlNDgwNzgzMjUzOGJhOWI3ZWRkYTUzNzQ0ZDgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0ff62d8143234887a5c9c3edca0ab1cc",
+      "statement": "Compose runs server-monitor on host port 8080 and deploy-agent on 9000, supplies the monitor's host integration environment variables and read-only observability mounts, and configures the deploy agent's persisted status path and restart policy.",
+      "evidence": [
+        {
+          "resource": "repo://server-monitor/docker-compose.yml#L1-L44",
+          "version": "repo-lines-v1:sha256:3264e2f858c9593142a34805a83226545d12b30c43fd9823e53bea1f652a6bba:eyJzZWxlY3RlZExpbmVDb3VudCI6NDQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhNzNmY2NkYzk5ZWE4MzU5NjdjN2RlZTdlZmJlZDFmM2NhODcyNjBkOTI5MzE4NTBmZGQ2NmRhOGNiMTJmMWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1MzFlMjYwMzk4YWQ2MTA5MTRkZmMyOGYwNDhkMzkyNjRiYTdkNTAzMjc4ZGQyZjhiYjFjNGMxNGI0OTlkOTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.5.0",
+    "at": "2026-09-09T11:31:25.948Z"
+  }
+}

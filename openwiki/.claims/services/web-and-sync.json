@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:9ed7b5ca7a68788d5608c10d8e60ce698a383ecb0ab6576ba3be39f0df5c60fb",
+  "claims": [
+    {
+      "id": "claim_019ddb76b3a340ad9bef876761c192e9",
+      "statement": "The website Compose project runs nginx as container `website`, publishes host port 8081 to container port 80, and serves a read-only bind mount from `./html` at `/usr/share/nginx/html`.",
+      "evidence": [
+        {
+          "resource": "repo://website/docker-compose.yml#L1-L9",
+          "version": "repo-lines-v1:sha256:9b688f0095dc159ddfbe15685674656c6225ae8b528fea896a974e0b1aa616ab:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZmE3M2ZjY2RjOTllYTgzNTk2N2M3ZGVlN2VmYmVkMWYzY2E4NzI2MGQ5MjkzMTg1MGZkZDY2ZGE4Y2IxMmYxZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYTJhNzUwMzYzMGY0MTc3ZDg0MjdjYzNhYmQ5YTFlNTRjODM3MDQ0ZjBjODIxZmI0MGIyYmEzOTllZTRjMTMyOCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_7871de4ded1d468a8371f918950d0c0c",
+      "statement": "The repository's website entrypoint is at `website/index.html` and references relative assets `css/style.css` and `js/main.js`; the Compose file expects those assets below the separate `website/html` mount root, while no `website/html` path is present in the repository tree and therefore the source-to-container content path requires deployment verification.",
+      "evidence": [
+        {
+          "resource": "repo://website/docker-compose.yml#L7-L9",
+          "version": "repo-lines-v1:sha256:5c7a785b3afad80ed128422c681249503235dd3a98cd83cf318a5253c4bf0eb1:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEzZjRkOTY2MWU5ZDJjM2UxYTI4OWU1ODMyMjk5YmVhMTRjZGI2NGJmODg2NjFkZjcxN2IxMmZhMDJkMDExZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYTJhNzUwMzYzMGY0MTc3ZDg0MjdjYzNhYmQ5YTFlNTRjODM3MDQ0ZjBjODIxZmI0MGIyYmEzOTllZTRjMTMyOCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNmFiZTI3MDVlMjNhMmUwZjdhOTczZWJlNjRmMjNkMWQwOTQ1OGM2NTEwYjhkY2M4YzNlNWYwZjcwOWQxMzZiMSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://website/index.html#L1-L9",
+          "version": "repo-lines-v1:sha256:8f3dc3974c2142ae0d5412d9d19dd9dc92c923fc990567667ff96747458fd43e:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiM2QwYjZmNWUzMDlkZjhmY2U4ODE1ZjkwOGRkNjgyMWIwNDk2Y2Y0M2NkOWZiNGZmN2VhOWMwY2U3NDc3MDgyNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDExMWM5ZjZhOGEwODlhMzMzM2M2MDdmMTQ4ZWVlYmMyNTIxMjhhNjljZDBhMTFlNzk0ZjZlZWVjODYzZWQzMiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNWQzMzRmNGQ1YTFlODlmOTFjYTg5Nzc1OTRlZmYwYzM2YTIzODA2OGQ0ODVlNzE3NjUyNDQ4NTkwNjQxODI2ZCJ9"
+        },
+        {
+          "resource": "repo://website/index.html#L140-L144",
+          "version": "repo-lines-v1:sha256:c4600e919adec18a0d5e1e822f3e68b5c2326f6eae483c81f90c462a5fda4aa7:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNGYwMTlhYmViOWMxOWQzNTAzYjNlMjI0ZmZmMmMzNjRmYzM3ZGM2MWY3ZDdkNGZmYjg0ZTUyYThjZDViNDU5MiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDNlZDgxY2QxNmRmODhkNjkyMTY2NDZkOGRhZGE3NjM0YjMzYTY5ODZlOWMyM2E3MjYzMWQxOTMzYjYzNWE1MiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYTgzMThmOTAzMGFhNjliMzA1YTk0OTIwY2NkZTgyYjMzODgwZmI5YjIyYzJlMjEyYTA3YjZiYWUyNzA4MWQzOCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_98a507ed302d4f9f93d7f147a4c15795",
+      "statement": "The website contact form is client-side only: JavaScript prevents the submit event, validates name, email, and message fields, shows a success toast, and resets the form without invoking a delivery backend.",
+      "evidence": [
+        {
+          "resource": "repo://website/index.html#L103-L124",
+          "version": "repo-lines-v1:sha256:16c5569de0c86d283d1ccf3e54e15f77ecb2d5f665fb46cba5c97d1d1ced89f5:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZjOGU4M2NjYTkzYjViY2I4MjQyN2UwZmQ2M2VhYTI1Mjk4MmY4NjJmYTFiZWI4YmI5MmM2ODZkMmU1MTc2MzQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1YzM0M2Y3MDZiZGE4OTFjYmM4YzVkNzJiZTU4OWE1NjA5NjlhZmY5OTlhYjU2MjRkYzA1OTY3YjU3Y2Y5ZGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhjMTE1NTEyMjc5YzUyMzdjYTU1NzhjNjkzOTU4MDI3MmZkOTI2MjMxYWI0NDBiM2VjMGI3NWY1MWFmNjg3NTgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI1NDJlOTVlNWFlNzdhNmQ2MjdiZTM3ZGNiYzFjM2NjYjk1Y2ZkZTQxNDk5YjMwOWNmNjJmODIxZWU3NmIwZTcifQ"
+        },
+        {
+          "resource": "repo://website/js/main.js#L72-L109",
+          "version": "repo-lines-v1:sha256:08f136258e697a11b3228bd72f163aa6e664ee90885955bb5765fd7c0d4087e0:eyJzZWxlY3RlZExpbmVDb3VudCI6MzgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUxOGRkYTQ1Y2IwNmNhMjAyYmFiMGFmY2JmZTkwMTVmYmRmN2I1YWQwMDU2YTY0MjU4ZTQwNzlhMmNhZWI0ZTIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhM2U0NmY5NDI3NmI2ZjZmNGVkMWYwMmFmNzhiZWY2YTJlZTFjNDM5ZGQ1NTg0Yjk3Mzk0ODMxMzIxNGQyYjciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjgwMTRmNTc1Yjk2Zjk2MDljNDBkOTUxZDk0M2IzYjU5ZWVlOTViMzQ5NzcyYjgxM2EwNTM1OWQyZTViZTc0NWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImNlNDA4YTMyY2VhYzZjYmZkODhlODJhOGNmYTEzODJlZDFkMjk3OGJhZDMwMjZlYWQ4ZmM1ZGI2M2VmNjU4YjkifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_87390fb161944975909970e46ee5addc",
+      "statement": "Syncthing runs with hostname `home-server`, UID/GID environment values 1000/1000, persists service state through `./data:/var/syncthing`, exposes `/home/sparrow/HomeLab` at `/sync/HomeLab`, and publishes UI, synchronization, and local-discovery ports 8384, 22000 TCP/UDP, and 21027 UDP.",
+      "evidence": [
+        {
+          "resource": "repo://syncthing/docker-compose.yml#L1-L17",
+          "version": "repo-lines-v1:sha256:cb8134bceebbbe1d041915b1a4af2cda392f5f381066fa2e5a794334954232d4:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhNzNmY2NkYzk5ZWE4MzU5NjdjN2RlZTdlZmJlZDFmM2NhODcyNjBkOTI5MzE4NTBmZGQ2NmRhOGNiMTJmMWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1MzFlMjYwMzk4YWQ2MTA5MTRkZmMyOGYwNDhkMzkyNjRiYTdkNTAzMjc4ZGQyZjhiYjFjNGMxNGI0OTlkOTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_4347a6d2ea2744719a9cd339dcba85d1",
+      "statement": "The provisioning playbook creates `syncthing/data` and `syncthing/config`, but the supplied Syncthing Compose file mounts only `./data`, making `syncthing/config` an unreferenced directory unless another deployment step uses it.",
+      "evidence": [
+        {
+          "resource": "repo://ansible/install-homelab.yml#L102-L105",
+          "version": "repo-lines-v1:sha256:e823a5914a9f1f095389c3918a2c0352a42ad4642b375c03c6f5c8a8d015a8a9:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYWUxZmVmNGYzNmIyZmIyZjhmOWMzODQ3Mzk0NDY2NWVhM2ZmNjlhMjFhM2IyZTcyM2RjYWYwY2YxNzQ1YWQwYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYWFmOTNlOGVlYmRjZDgzMGJkOGE5ZGY4ZGIwNWQzZjUzZjFiYWY5MjFkYzM4ZjA2MWQ1MTQyNzgxOTZjY2FhYSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMGIzNmZjMWJhNWJiZDJhMTk0YmYyMzI1ZWIzN2YyM2M0MTlhNzcyODI4MGYwMGQ5MjI5OTMzOWM1MzcyN2E0ZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTg1ZTAyYWUwZGQ1ZWRjOTlmODgzNmY5MGFiMGU2YzEwNGQzYmQ1YzMwMzBjODdmYzE1MTU1ODU1MmFhOWZjNyJ9"
+        },
+        {
+          "resource": "repo://syncthing/docker-compose.yml#L9-L11",
+          "version": "repo-lines-v1:sha256:f6cd892a5eff0f006b7e38a6fc1c6c28b471cc36c36e7900088cb496da932933:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEzZjRkOTY2MWU5ZDJjM2UxYTI4OWU1ODMyMjk5YmVhMTRjZGI2NGJmODg2NjFkZjcxN2IxMmZhMDJkMDExZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZTBiMTcyZmQ5M2Y0MjhhZTcxMTMyMmZjMzUwNzBiM2ZmZjQ3OGQ1Y2VmYWFlNGQyZjA4MTZhYjQ5ZjM4NzEwMiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOGEzZWVhM2MyOTU5YWEyNzFmYTNkNmU1NWE4MWZhMTA1MjlkMWFhMTZiNzZmN2I1NWQzNWI4NWU1ZmQ2OGIzMiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiY2Y4YjAwOGFmMmI1YzcyMmQ2NWNiNDZmZTA3N2Y0MGIzZGJhMjA0NjlhYTllMmJjMGRlNjQ0MWNlOTYyNTgxOSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_f9d0b28a716944e7bdd9d3bb2367a286",
+      "statement": "Portainer publishes port 9443, persists application state in `./data:/data`, and mounts the Docker daemon socket read-write at `/var/run/docker.sock`, making the socket and endpoint a high-impact operator access boundary.",
+      "evidence": [
+        {
+          "resource": "repo://portainer/docker-compose.yml#L1-L10",
+          "version": "repo-lines-v1:sha256:ae8e15fdab998d70b4c481fca35c4230efaddc59343b6a3865709af836571f32:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhNzNmY2NkYzk5ZWE4MzU5NjdjN2RlZTdlZmJlZDFmM2NhODcyNjBkOTI5MzE4NTBmZGQ2NmRhOGNiMTJmMWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1MzFlMjYwMzk4YWQ2MTA5MTRkZmMyOGYwNDhkMzkyNjRiYTdkNTAzMjc4ZGQyZjhiYjFjNGMxNGI0OTlkOTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_59135cef8d954af59cc06cb2e2ae0174",
+      "statement": "The Fail2ban exporter publishes port 9191 and reads the host Fail2ban socket through a read-only `/var/run/fail2ban` bind mount, but its Compose project declares no monitoring network; Prometheus's service-name scrape therefore requires an explicit shared-network attachment or equivalent deployment adjustment.",
+      "evidence": [
+        {
+          "resource": "repo://fail2ban/docker-compose.yml#L1-L9",
+          "version": "repo-lines-v1:sha256:f7999c8c8abe8d74e88bbf1e34f27dae0e5a1fdc20dad08b47dd94bb22f97a6b:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZmE3M2ZjY2RjOTllYTgzNTk2N2M3ZGVlN2VmYmVkMWYzY2E4NzI2MGQ5MjkzMTg1MGZkZDY2ZGE4Y2IxMmYxZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTUzMWUyNjAzOThhZDYxMDkxNGRmYzI4ZjA0OGQzOTI2NGJhN2Q1MDMyNzhkZDJmOGJiMWM0YzE0YjQ5OWQ5OCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://monitoring/prometheus/prometheus.yml#L13-L15",
+          "version": "repo-lines-v1:sha256:db7ffd3d7c9f750bcb0d1b83befdad341c9b90d46987e466657807329ed6a79f:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiM2RlZmYxNWRlYjQ0ZTIyYzA5MzUzNWQwYzcxNTVkOTExZjBmMTFlZjE0ZTA0OTVlMTA2ZDZlNTI5OWIzYzM5ZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNjgxM2QwN2MwZmQ5Yzc4NzUzZTY1Zjk0ZWI3YWY2YjA1NGM4OTE3ZDA4ZDUxNzkzN2I3MDNjNWQ3YzcyYjU3YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMmM0MjA3NWIxYTAwNGE1MzUwYzRkNTUxN2Y5ZWIxZTM0OWY4ZWJmOTE2YTZlYjkyYjEzYTgwZjRkZGZlNGFkOSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_f07b6d0e4bd14f2180d5df60bb9886b9",
+      "statement": "The installation playbook starts Syncthing, website, Portainer, and Fail2ban as separate Compose projects with `docker compose up -d` from each project directory, so their lifecycle and network integration must be verified independently.",
+      "evidence": [
+        {
+          "resource": "repo://ansible/install-homelab.yml#L117-L133",
+          "version": "repo-lines-v1:sha256:703b12e9df04e49a4ede13758d36347a037cc5dbfe5476e7e3390ca1486be0e2:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE1NzgyMmNmMDc4ZWM5MGRjOWJjYTdkYjgwNzZmYjdkMjY5NWRkZTljMmQzMmJlNzI5MDA1ZjkyZWE5YjgxMDIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3MTU1MTI4MDVlN2E0MTMyZjg3NTczOGFjOTJkY2Y4ZWVjNjdiNzQ4YmIwNjkxYWUyOGUzYjZiM2JmOTllNDMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcxMmZlM2JjYzViODI2NjBkZjljY2EzZGY3M2VjMTE3NzFlZWU0ZTM4NmY4OWU3ZmQwYTdhNjhmOTBmYTI4YmQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk1MWNiOWFjOTA0ZDM4YWNlNzY0NTVhZmM1OTUyZjI1Y2EyMWQwODc3OGY1M2MzOWI3MTA1ZGMxNTNjMTA2YzgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_d0e855181cd24f83a26434b49937d346",
+      "statement": "All four standalone services use `latest` images and `restart: unless-stopped`, so image updates are mutable and the containers are configured to restart unless explicitly stopped.",
+      "evidence": [
+        {
+          "resource": "repo://fail2ban/docker-compose.yml#L1-L9",
+          "version": "repo-lines-v1:sha256:f7999c8c8abe8d74e88bbf1e34f27dae0e5a1fdc20dad08b47dd94bb22f97a6b:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZmE3M2ZjY2RjOTllYTgzNTk2N2M3ZGVlN2VmYmVkMWYzY2E4NzI2MGQ5MjkzMTg1MGZkZDY2ZGE4Y2IxMmYxZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTUzMWUyNjAzOThhZDYxMDkxNGRmYzI4ZjA0OGQzOTI2NGJhN2Q1MDMyNzhkZDJmOGJiMWM0YzE0YjQ5OWQ5OCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://portainer/docker-compose.yml#L1-L10",
+          "version": "repo-lines-v1:sha256:ae8e15fdab998d70b4c481fca35c4230efaddc59343b6a3865709af836571f32:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhNzNmY2NkYzk5ZWE4MzU5NjdjN2RlZTdlZmJlZDFmM2NhODcyNjBkOTI5MzE4NTBmZGQ2NmRhOGNiMTJmMWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1MzFlMjYwMzk4YWQ2MTA5MTRkZmMyOGYwNDhkMzkyNjRiYTdkNTAzMjc4ZGQyZjhiYjFjNGMxNGI0OTlkOTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://syncthing/docker-compose.yml#L1-L17",
+          "version": "repo-lines-v1:sha256:cb8134bceebbbe1d041915b1a4af2cda392f5f381066fa2e5a794334954232d4:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhNzNmY2NkYzk5ZWE4MzU5NjdjN2RlZTdlZmJlZDFmM2NhODcyNjBkOTI5MzE4NTBmZGQ2NmRhOGNiMTJmMWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1MzFlMjYwMzk4YWQ2MTA5MTRkZmMyOGYwNDhkMzkyNjRiYTdkNTAzMjc4ZGQyZjhiYjFjNGMxNGI0OTlkOTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://website/docker-compose.yml#L1-L9",
+          "version": "repo-lines-v1:sha256:9b688f0095dc159ddfbe15685674656c6225ae8b528fea896a974e0b1aa616ab:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZmE3M2ZjY2RjOTllYTgzNTk2N2M3ZGVlN2VmYmVkMWYzY2E4NzI2MGQ5MjkzMTg1MGZkZDY2ZGE4Y2IxMmYxZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYTJhNzUwMzYzMGY0MTc3ZDg0MjdjYzNhYmQ5YTFlNTRjODM3MDQ0ZjBjODIxZmI0MGIyYmEzOTllZTRjMTMyOCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.5.0",
+    "at": "2026-09-09T11:31:25.948Z"
+  }
+}

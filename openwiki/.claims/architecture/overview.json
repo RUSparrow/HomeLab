@@ -1,0 +1,244 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:dbbbfc228b8abc3aa4528c9940cc2a4a5f918da89af1ea2210927556eda9af94",
+  "claims": [
+    {
+      "id": "claim_46d741db33a34bd39c9089a8860ba96f",
+      "statement": "The Ubuntu host is provisioned as independent Docker Compose projects: Ansible installs and enables Docker, adds the sparrow user to the docker group, creates runtime directories, and starts each project from its own directory.",
+      "evidence": [
+        {
+          "resource": "repo://ansible/install-homelab.yml#L117-L138",
+          "version": "repo-lines-v1:sha256:eaf84b6127bb6ca6d0e5afb8e60d0381f40ad7c496d3dcc98a7e0acd0a2e04db:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE1NzgyMmNmMDc4ZWM5MGRjOWJjYTdkYjgwNzZmYjdkMjY5NWRkZTljMmQzMmJlNzI5MDA1ZjkyZWE5YjgxMDIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZiZWNmNDgxMDEzMGZmZWQwNjA1NDgyYTZlOTE4YjY0NjFhYTBmM2MwZTM4YjVlMmNkZGY1ODg4OTM4MDA1ZTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcxMmZlM2JjYzViODI2NjBkZjljY2EzZGY3M2VjMTE3NzFlZWU0ZTM4NmY4OWU3ZmQwYTdhNjhmOTBmYTI4YmQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://ansible/install-homelab.yml#L2-L7",
+          "version": "repo-lines-v1:sha256:158177d49c17058b3c9710e9afedc9911cde40986292532ca51e8c19e9697bbe:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiY2M4NjY3YmVmNjAwMGIyNzIyMjI1MmYwZTIzYjQwMjlmNDRkYjk5NmFmYzE5NGI2MDE3MmVkYWFlOTE5NjMxYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTE1ZmNhZmI4YTVjYzcyNmViNjA0YmM0NTJjZWQxYmE3MDVmZGJlYjBlZDIxMzhlNjM5NzZlZDgwMjkzMTdlZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjEsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjUyZDcxMTEwM2Q1MGE0Mzc4MzBjNmZiY2QwNGZiNGJhYjQ5YTBmODJmNmQyNmQxYzc5MWM2ZTg0ODhkZDA5MCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNTVjMjE3OWY4NjI0Mzc1NzE3YmMzNGVjMjBiNzYxZWMyZmEyZWI5NmJjZDdmNmI2ODQzM2Y1YWIwNTFjMzBiZiJ9"
+        },
+        {
+          "resource": "repo://ansible/install-homelab.yml#L63-L83",
+          "version": "repo-lines-v1:sha256:70536c515bad71b2bc9c176c34df4102c1c7ba0b6d52c2c84e35f3596bd930a9:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIxNDY4YjZkMGYwMjllZjJlYWYyYzkzNjdiZWM3YmQxNzdlMjY0ZWI2NzAyZjVlMzdjMDFmMDZkM2RmZDVjZGEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVmM2NhNTVjNDNmMDQ3Nzc2MDQ3ZmYyNTYyMzM1OWM1Y2QwZTI4NjFiZWY1Nzg5YmFlZDg4ZjQ1Y2U1YTFlZGMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdmMzdmNzNiNWEzZWY4NWFkZWYzY2VlNGMzNWY4YzExMDFjYzhkMzJmOWRiMmUzN2Q5ZjU3ZjIzYThkODY2NzUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJhYzAzZWI3ZjNhMmM5MzZhZmRhYzk1YTQ3ODIyZWUwNWY5MmQ1Zjc5ODlkYzg2YWUwNTM1NTNiOGViMzBiMjEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b03d4e8ccfcd445b8972f847705dbd3d",
+      "statement": "The monitoring services are split across Compose projects and join an externally managed Docker network named monitoring.",
+      "evidence": [
+        {
+          "resource": "repo://monitoring/alloy/docker-compose.yml#L1-L22",
+          "version": "repo-lines-v1:sha256:b87687e8004d104aa5813b08811d30130dbacb1dea247fd316b4c79c4c1d388e:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhNzNmY2NkYzk5ZWE4MzU5NjdjN2RlZTdlZmJlZDFmM2NhODcyNjBkOTI5MzE4NTBmZGQ2NmRhOGNiMTJmMWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRiYWViNjkzYzRlODcwZmM4OGJkZGI3YWY3YzIwOWFhODliOWE4MzdjZTVkMjkzNDllMzQxMjllYTUwYzE0YTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://monitoring/grafana/docker-compose.yml#L1-L15",
+          "version": "repo-lines-v1:sha256:bbd3fce13c5b80c2dd9064e68d9f2af14ff18724ab5087ad0a1c22ad6dbc8383:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhNzNmY2NkYzk5ZWE4MzU5NjdjN2RlZTdlZmJlZDFmM2NhODcyNjBkOTI5MzE4NTBmZGQ2NmRhOGNiMTJmMWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRiYWViNjkzYzRlODcwZmM4OGJkZGI3YWY3YzIwOWFhODliOWE4MzdjZTVkMjkzNDllMzQxMjllYTUwYzE0YTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://monitoring/loki/docker-compose.yml#L1-L17",
+          "version": "repo-lines-v1:sha256:da5ad72124d04ed77116081f9ec748e5212d1669ec70c60253055f7ecd654872:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhNzNmY2NkYzk5ZWE4MzU5NjdjN2RlZTdlZmJlZDFmM2NhODcyNjBkOTI5MzE4NTBmZGQ2NmRhOGNiMTJmMWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRiYWViNjkzYzRlODcwZmM4OGJkZGI3YWY3YzIwOWFhODliOWE4MzdjZTVkMjkzNDllMzQxMjllYTUwYzE0YTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://monitoring/prometheus/docker-compose.yml#L1-L29",
+          "version": "repo-lines-v1:sha256:6cfa32033fefa95166a6f54a29736ece813dba0eb35d307aa30f50a44d1ee502:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhNzNmY2NkYzk5ZWE4MzU5NjdjN2RlZTdlZmJlZDFmM2NhODcyNjBkOTI5MzE4NTBmZGQ2NmRhOGNiMTJmMWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwMjMwMzdhMjMyYTZlYjgyYzM2ZTQ1ZTk4M2U2MzRiNjY2YmU1ODNmZDNkYTc3YjdiY2UzMDcyNDEzZDZmODMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImRiYWViNjkzYzRlODcwZmM4OGJkZGI3YWY3YzIwOWFhODliOWE4MzdjZTVkMjkzNDllMzQxMjllYTUwYzE0YTYifQ"
+        },
+        {
+          "resource": "repo://monitoring/smartctl-exporter/docker-compose.yml#L1-L19",
+          "version": "repo-lines-v1:sha256:bba0eab256cb8b0f7cac321474b0de3efce21542415f6017089fa5f163b1c937:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhNzNmY2NkYzk5ZWE4MzU5NjdjN2RlZTdlZmJlZDFmM2NhODcyNjBkOTI5MzE4NTBmZGQ2NmRhOGNiMTJmMWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRiYWViNjkzYzRlODcwZmM4OGJkZGI3YWY3YzIwOWFhODliOWE4MzdjZTVkMjkzNDllMzQxMjllYTUwYzE0YTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_51fc98f916c947a380cf34686c4264da",
+      "statement": "Prometheus scrapes node-exporter, smartctl-exporter, and fail2ban-exporter every 15 seconds using the service names and ports configured in prometheus.yml.",
+      "evidence": [
+        {
+          "resource": "repo://monitoring/prometheus/prometheus.yml#L1-L15",
+          "version": "repo-lines-v1:sha256:ce9dc7f23b58cfc57a118d6cfb00ae560025ce250fb846f9d189d7726e2bfd3b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg0ZTNlZTk0MGFhZmZlMzgxYzg0NmZjZjIyN2IyMjMzMmZjYThiY2M2MjE5N2M3OTg5YjViY2FjOGQ5MWU0MmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY4MTNkMDdjMGZkOWM3ODc1M2U2NWY5NGViN2FmNmIwNTRjODkxN2QwOGQ1MTc5MzdiNzAzYzVkN2M3MmI1N2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_7f341055d1eb4bdf82ea5b048eb4048c",
+      "statement": "The website publishes host TCP port 8081 to nginx port 80 and serves repository content from website/html as a read-only mount.",
+      "evidence": [
+        {
+          "resource": "repo://website/docker-compose.yml#L1-L9",
+          "version": "repo-lines-v1:sha256:9b688f0095dc159ddfbe15685674656c6225ae8b528fea896a974e0b1aa616ab:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZmE3M2ZjY2RjOTllYTgzNTk2N2M3ZGVlN2VmYmVkMWYzY2E4NzI2MGQ5MjkzMTg1MGZkZDY2ZGE4Y2IxMmYxZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYTJhNzUwMzYzMGY0MTc3ZDg0MjdjYzNhYmQ5YTFlNTRjODM3MDQ0ZjBjODIxZmI0MGIyYmEzOTllZTRjMTMyOCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_336812d68e554e9a9541c52d2a79ead1",
+      "statement": "Plex runs with host networking, stores configuration under the HomeLab Plex path, mounts /mnt/media, and is expected by server-monitor on host port 32400.",
+      "evidence": [
+        {
+          "resource": "repo://plex/docker-compose.yml#L1-L17",
+          "version": "repo-lines-v1:sha256:6c6ca8ef23c6f957944e7e9195f530a6255c40396bf3c68b64590e8dcb256fc8:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhNzNmY2NkYzk5ZWE4MzU5NjdjN2RlZTdlZmJlZDFmM2NhODcyNjBkOTI5MzE4NTBmZGQ2NmRhOGNiMTJmMWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1MzFlMjYwMzk4YWQ2MTA5MTRkZmMyOGYwNDhkMzkyNjRiYTdkNTAzMjc4ZGQyZjhiYjFjNGMxNGI0OTlkOTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://server-monitor/docker-compose.yml#L22-L29",
+          "version": "repo-lines-v1:sha256:62d7e9b066868f7a568bcd543699372c2d37c414d70bad511824fc1b457d65f9:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjI3NDYzMzRmZGJkNjUxMzIzOWYxMzI2ZGI4YjYxMjc1N2I1YjMyYzA4MDhiNTA4MWE5OTM3ZjY1MzNiOGRiOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTQ5Zjk4ZjEyOWMyMDNmYmNiNDA0ODlkNTNiODRkODJlODBlMjk1YzE2OTJmN2IyNjE1YmVjM2MyMTExZTAxYiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYTUxZDFlOGU0MzFiMmI4NjE5ZDMzNmJjZGYzYTA4ZTQyYzhmNjdmNGVmZmJjZTMzNTZmN2EzMTViYTI3M2E2NiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOWMwYjA2ZTg5ODZhYmY3YzM5OTYyNjIyMGM0NTkwYWRhNzZlNmFhNmYzYjJkMzk0Nzg1ZTgzZWI3MTM0ZWZkOCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_854c958853694294b366b4208173ba8f",
+      "statement": "The VPN project runs DuckDNS and WireGuard, publishes UDP port 51820, persists state under duckdns and wireguard, and configures the WireGuard server with seven peers and the 10.13.13.0/24 subnet.",
+      "evidence": [
+        {
+          "resource": "repo://vpn/docker-compose.yml#L1-L34",
+          "version": "repo-lines-v1:sha256:f9280a4bf9c3676be4bf32ea297a4d79c4532e41775746cba09dc21387ea099e:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhNzNmY2NkYzk5ZWE4MzU5NjdjN2RlZTdlZmJlZDFmM2NhODcyNjBkOTI5MzE4NTBmZGQ2NmRhOGNiMTJmMWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBhY2FiMmQxYWMwYjc3NzAwZTMwMmEwOGNjODY4YzE0OTZiOGJmM2FlOTEwNTJjYzA2YzQxM2Q2MWY0OTZkMzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE1MzFlMjYwMzk4YWQ2MTA5MTRkZmMyOGYwNDhkMzkyNjRiYTdkNTAzMjc4ZGQyZjhiYjFjNGMxNGI0OTlkOTgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_fa369d9f4dc74c2bb887e50ce4d95e41",
+      "statement": "server-monitor has host-observability integrations including host PID mode, read-only Docker, proc, sysfs, disk, D-Bus, and WireGuard access, while its environment maps storage devices and points to Plex through host.docker.internal.",
+      "evidence": [
+        {
+          "resource": "repo://server-monitor/docker-compose.yml#L1-L29",
+          "version": "repo-lines-v1:sha256:ffe7ac2147f8b42e60cdb6219b490a5f9cc0616f06e281de85989676cafa77b3:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhNzNmY2NkYzk5ZWE4MzU5NjdjN2RlZTdlZmJlZDFmM2NhODcyNjBkOTI5MzE4NTBmZGQ2NmRhOGNiMTJmMWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk0OWY5OGYxMjljMjAzZmJjYjQwNDg5ZDUzYjg0ZDgyZTgwZTI5NWMxNjkyZjdiMjYxNWJlYzNjMjExMWUwMWIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjljMGIwNmU4OTg2YWJmN2MzOTk2MjYyMjBjNDU5MGFkYTc2ZTZhYTZmM2IyZDM5NDc4NWU4M2ViNzEzNGVmZDgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_52359c0255d54a8dbf85121b8370bb7d",
+      "statement": "deploy-agent is the deployment control boundary: it publishes port 9000, mounts the HomeLab tree and SSH directory, has read-write Docker socket access, and records status at .deploy-status.json.",
+      "evidence": [
+        {
+          "resource": "repo://server-monitor/docker-compose.yml#L31-L44",
+          "version": "repo-lines-v1:sha256:dc9788eef59c774099c0a4d550f6ed850cee9de921f9ffb4a350b06540c5bbea:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmNWI4MGM5NmNiZmIwOTc1NWM3NjAwYzNkM2I1MDkzYzBiZjA5ZWFlODgwYmQ3OTdjN2QxMDdmYmQ3ODljOWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1MzFlMjYwMzk4YWQ2MTA5MTRkZmMyOGYwNDhkMzkyNjRiYTdkNTAzMjc4ZGQyZjhiYjFjNGMxNGI0OTlkOTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg2ZTZmMzZhMDk0YzAxY2NkOWZmZjk2NmQyNGU0NWNiY2E4OWY4ZjYzYWYyYmYxNWM5MTA1ZmE2YzczZGVhNzEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_da83714915e74f8d8f668b47d74ee6eb",
+      "statement": "The inspected services persist operational state through host bind mounts for Plex, Prometheus, Grafana, Loki, Alloy, website content, VPN state, and server-monitor status.",
+      "evidence": [
+        {
+          "resource": "repo://monitoring/alloy/docker-compose.yml#L5-L13",
+          "version": "repo-lines-v1:sha256:eb9d00b45737a97275ff4289e4f287f391270704e1fef8ff80f4419e6ba16e10:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiN2Y2YmE0MjU1ZDAxYzZkMmMwMTI1ZmQ3YTFhYjE2YTcxZmY3YTBiOThkYWZiNTQxYzNiMzA4YjIxN2Q4MmM2MiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzg4YmE0NWY2Y2NhNzdlZTk3MjViYjliNGM0YzZhODYyYzZjNDVjOThkM2FlMGI4MTM0YTM2NGEwMjgxNTY1MyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjY1ZDM4ZTU2N2U1NDM0ZjA3MzA5ZjRkNjQyMWJhNzE3MjE5MmE0MzQ1YWU4ODFmNDJiYzE4YWVjMDdlMjgzNCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjE1NGQyYjExZDBkY2MxMTcyNzBjMTEzMDk4OTkwMzA0YmQ5OWYwYTVhYzg4ZmRlOTljMmQ0YjE4ZWE2NzgxOSJ9"
+        },
+        {
+          "resource": "repo://monitoring/grafana/docker-compose.yml#L5-L10",
+          "version": "repo-lines-v1:sha256:353ef6f63c6b4f761a8ee2bc11de07b9c29444eb05852ee415cab857bc327696:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYmMxNmVkMjM5YTM2NTFiNTA3OWMwZTRlN2YwNzg0NGVhMzI5Yzg3NjI4YmY5ZmNjNDYzNjc3MzNmNWUxZTkzZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzU3YjJkYTMzYTIwMjY2NTRjMzYwNDU3ZjM2YzJkNWZmZTcyOWJlMjhmZmNiNzYxODc4ZmRmZTJiZGZjOTY4YSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiN2U3NTg5ODgzN2NjOGVjYTI5ZTdiMTk0ODJiZmMxYTMyNjI1ZjQzZDNjYWE2Mjk4NjlhZTA3MmYxMTYzYWQ2YSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjVlNGJkOTkyODk0ZmNmOGUzNmE1ZmZhYzhmZDFiNDQ3MDhmNzM0MDA4NjA2MzNhNWJiMTQ4ODgzMjZhZTQ1MiJ9"
+        },
+        {
+          "resource": "repo://monitoring/loki/docker-compose.yml#L5-L10",
+          "version": "repo-lines-v1:sha256:83a8d1095ce5691d0c1e004cc241cc436a7d90612931f3c236c00de702286de3:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODJhODA1NDMzOGYzOGUwZWQ1MzZjYjhhNDhmNjc3MjkxZjNhNDNhNTVlZWFkNjM5NWVhMDVmOGM4YzEwY2NhZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZTRiMWQ4NTllYjFjNTM0NzU0YWU0YzViN2JhOWY0Nzg0MTkyOGM0YmQ2OWU0MWIyZjhkZjdmZWZkMjEzMWZkMSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNzM3YzU0ZTA1MzY0N2QxNDY0OWY0MWMxODcxOTUzZTY5MTI1ZmI4MDQ4Njg1Y2Y0Mjc4YWZhOGY5Y2IwYjFmNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYTczNGM3ODMwZmYyYmMxZGM1MzFmM2VlZTQ2YTRiNjFiNGY0MGRjYWJjZGI1YzY3ZTE0N2QwMmU5MWFmYjljMiJ9"
+        },
+        {
+          "resource": "repo://monitoring/prometheus/docker-compose.yml#L8-L12",
+          "version": "repo-lines-v1:sha256:90ac6c6d347459ff150d8df2a764c8e0f6fa7ba10374990ca71c9d6626f77b58:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEzZjRkOTY2MWU5ZDJjM2UxYTI4OWU1ODMyMjk5YmVhMTRjZGI2NGJmODg2NjFkZjcxN2IxMmZhMDJkMDExZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYWJjODkyYmFlZGFjZTU1MmZlMjAyZTcxNjJjNGZkMzlmZmU5N2ViNjRiZmM1OGI3Y2E4NjEyNjMyNDZhNTNiZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjczYTliZjdlYjM0MTM2Y2VmMDM2NGMxYmI3YjZmZjc5OGQxMzBiY2VjMmM0MTM0YzRkNzdjYTFkODZhMGY5OSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYTczNGM3ODMwZmYyYmMxZGM1MzFmM2VlZTQ2YTRiNjFiNGY0MGRjYWJjZGI1YzY3ZTE0N2QwMmU5MWFmYjljMiJ9"
+        },
+        {
+          "resource": "repo://plex/docker-compose.yml#L13-L16",
+          "version": "repo-lines-v1:sha256:adeb8196b3500c01358ab372e15c62d0c28f81cae836ebb00c04dd57fde8ab33:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEzZjRkOTY2MWU5ZDJjM2UxYTI4OWU1ODMyMjk5YmVhMTRjZGI2NGJmODg2NjFkZjcxN2IxMmZhMDJkMDExZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjk0ZmRmNTFmMjZkNWMzNTZkNDUyZGQ4MDU5NzFhMGE3ZjE1OTU4Zjc3NjIwNWUzYTQ3ZmQ4NGZlODdiMmE0MiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjEsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTUzMWUyNjAzOThhZDYxMDkxNGRmYzI4ZjA0OGQzOTI2NGJhN2Q1MDMyNzhkZDJmOGJiMWM0YzE0YjQ5OWQ5OCJ9"
+        },
+        {
+          "resource": "repo://server-monitor/docker-compose.yml#L38-L44",
+          "version": "repo-lines-v1:sha256:7a8c1ab1d8da2374c2143e0870b20033a0a4e31022cbdea170d3d77ee31780b8:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEzZjRkOTY2MWU5ZDJjM2UxYTI4OWU1ODMyMjk5YmVhMTRjZGI2NGJmODg2NjFkZjcxN2IxMmZhMDJkMDExZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTUzMWUyNjAzOThhZDYxMDkxNGRmYzI4ZjA0OGQzOTI2NGJhN2Q1MDMyNzhkZDJmOGJiMWM0YzE0YjQ5OWQ5OCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjIyNjM3ZmZmOGRmMTBlMDRjM2FmZGI3MjI1MzA0YzA3M2Q0YWQ3ZWUzODdiZmZkZTQ2OGFmN2I5ODk1NzVjZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://vpn/docker-compose.yml#L12-L14",
+          "version": "repo-lines-v1:sha256:d8cca68141c415379a6cb8c02856c632750d9e4ead49be26f380d6171dbebcc3:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEzZjRkOTY2MWU5ZDJjM2UxYTI4OWU1ODMyMjk5YmVhMTRjZGI2NGJmODg2NjFkZjcxN2IxMmZhMDJkMDExZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTUzMWUyNjAzOThhZDYxMDkxNGRmYzI4ZjA0OGQzOTI2NGJhN2Q1MDMyNzhkZDJmOGJiMWM0YzE0YjQ5OWQ5OCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMGI0YjUyMjlmYWRjYTc3YmJjNDE5Yjk5MWFiMjYwYzM4ZGMzYzJiYzUxZjA5NzQxYmQ4ZmUwOThkMmRkYmEzMSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDllODM0ZjRiNjIwNWQyYzQ4MDA0MGMyMmY1YmIzZjM4YzI5Yjk4MTI1N2E3NzgzNmNkMjBjNDM0MzRiNmZiMiJ9"
+        },
+        {
+          "resource": "repo://vpn/docker-compose.yml#L30-L34",
+          "version": "repo-lines-v1:sha256:c7bdca206764b7d586af3210387c036d55fa45a2b07c2cc94913da5ce27d4b30:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEzZjRkOTY2MWU5ZDJjM2UxYTI4OWU1ODMyMjk5YmVhMTRjZGI2NGJmODg2NjFkZjcxN2IxMmZhMDJkMDExZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMGFjYWIyZDFhYzBiNzc3MDBlMzAyYTA4Y2M4NjhjMTQ5NmI4YmYzYWU5MTA1MmNjMDZjNDEzZDYxZjQ5NmQzOSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNGViM2Y3Y2RhZGVmNzA5MjgxMTE1YTcxNDM4ZjNhOTI2MDU0MWZhM2IxZDYwZDMwNGRjNTIxNTM1NDVhYzAyZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjEsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTUzMWUyNjAzOThhZDYxMDkxNGRmYzI4ZjA0OGQzOTI2NGJhN2Q1MDMyNzhkZDJmOGJiMWM0YzE0YjQ5OWQ5OCJ9"
+        },
+        {
+          "resource": "repo://website/docker-compose.yml#L5-L9",
+          "version": "repo-lines-v1:sha256:de54236c5b7dace174c3f7eebddef4d074dd243344737cd8c82f83331357c031:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYmMxNmVkMjM5YTM2NTFiNTA3OWMwZTRlN2YwNzg0NGVhMzI5Yzg3NjI4YmY5ZmNjNDYzNjc3MzNmNWUxZTkzZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYTJhNzUwMzYzMGY0MTc3ZDg0MjdjYzNhYmQ5YTFlNTRjODM3MDQ0ZjBjODIxZmI0MGIyYmEzOTllZTRjMTMyOCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOTc5NjQxMmM2MDAzM2U4M2JlMjZmZTgxYWU0ZDY5MDBiNWZlMzFiOTllYmJhMjA2NGFkZjhiYmQzYWE4ZjcyYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_81324c7330104fa09af634076427c611",
+      "statement": "Initial provisioning starts ordinary Compose projects with docker compose up -d and builds server-monitor with docker compose up -d --build.",
+      "evidence": [
+        {
+          "resource": "repo://ansible/install-homelab.yml#L117-L138",
+          "version": "repo-lines-v1:sha256:eaf84b6127bb6ca6d0e5afb8e60d0381f40ad7c496d3dcc98a7e0acd0a2e04db:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE1NzgyMmNmMDc4ZWM5MGRjOWJjYTdkYjgwNzZmYjdkMjY5NWRkZTljMmQzMmJlNzI5MDA1ZjkyZWE5YjgxMDIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZiZWNmNDgxMDEzMGZmZWQwNjA1NDgyYTZlOTE4YjY0NjFhYTBmM2MwZTM4YjVlMmNkZGY1ODg4OTM4MDA1ZTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcxMmZlM2JjYzViODI2NjBkZjljY2EzZGY3M2VjMTE3NzFlZWU0ZTM4NmY4OWU3ZmQwYTdhNjhmOTBmYTI4YmQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_ebc031441c1f4da4b65c4ad5d34d4ab9",
+      "statement": "Maintenance pulls images and recreates each project with docker compose pull followed by docker compose up -d, and the maintenance playbook does not include the --build flag.",
+      "evidence": [
+        {
+          "resource": "repo://ansible/update-server.yml#L35-L39",
+          "version": "repo-lines-v1:sha256:b50963d6b8864266e0892a4f8d355b82c3831993c47d46f69e8bbd4bd9515556:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzQxZGRkMzdiMzVmMzAxNGZiYWVkYjQwMjcwODczNzUwM2FlNDdiZGFiZDA5MDFlYTYxYjc3YmE2M2NiZjYyYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYmQ2Yzc0ZTNlN2NhNTM3MjNkNWEzMmJmOWJmMmEwNTY2NjY0ZDA0Y2Y4NzliNWU0N2JlZDdjYzZjYmRiZjRhYyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDY4MzZhMDhlNTZlYzNlM2QxZWFiZGMyYmIxMTM3ZDE4M2QzNzQ1N2Y3ZTQwMGI2ZjVhNDE1N2NmNTQ1NWIwNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://ansible/update-server.yml#L6-L26",
+          "version": "repo-lines-v1:sha256:def716c48a3f803a3532a13398f037fdf5ba72284fca23c48759d191dafd87a8:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgyOGUwZmRlZTJlM2MwY2Y4ZWUzNzhjYzQ1ZjJjYWMyNTUzZGM4OTc0NjJhNDdmM2YyNTliMjgyZGUwN2I5NDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJkNmM3NGUzZTdjYTUzNzIzZDVhMzJiZjliZjJhMDU2NjY2NGQwNGNmODc5YjVlNDdiZWQ3Y2M2Y2JkYmY0YWMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY3ZWQxNDkyMGMxZmJlZDVkMTgwODRmZjlmMDVmOWM2NGRkOTFkYzk3MWE2ZjU2NWYxNDFjOWE1MjBjYWM2NmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA1OWI1MDE5NWE4YzI4NWU3MDc2NDhiZmZiNWUyNDY0YmY2N2ZmNmUyZjc4ZDA2YTI2MzNlNjU1MTEzM2EwZWMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_9e03a47cad4b4a338e828f0a4229606d",
+      "statement": "The install playbook creates selected runtime directories for Plex, monitoring, VPN, and server-monitor under homelab_path, assigning ownership to the homelab user.",
+      "evidence": [
+        {
+          "resource": "repo://ansible/install-homelab.yml#L85-L115",
+          "version": "repo-lines-v1:sha256:058349577a2a1d5faa17efaa3efc9280a1489ddde3d67302d15b24858267c8de:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg4ZmNhNzlhMTdkMjA0MTdhNzgzODhlOGE5NjhmOTYzOTJmYTQ0YjViYzY5YTEwY2JkNTIwMTkwNTViZTlmMDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZkYWI1YTAzZGQ3ZTI0MDg3MjEyYzRkMTc2MTQxZjlhNzk2YzJkYmI3NDRmNzBhNWJhMDM3MjJjYjQ1ZDMxNDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjIwNGY2YzA5OGEyOTQyNGI1NjQwMGJjZTkzNmUwM2NkNWFhMDFlYWUyMmZhMmE3NDNmMGMyYWQ4YTIwZjJiYzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImU4NTAyMDZlYTgxZTQzMTM2MjMxYjEzMjE5NzhhYzE0ZGVjMzIxYTc5NmZiNTQ4MmQyOTBiNmJjOTRiZjMwYzEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_70229057a3ea435e8db567a3dc965d66",
+      "statement": "The Docker Compose services documented here use restart: unless-stopped as their restart policy.",
+      "evidence": [
+        {
+          "resource": "repo://monitoring/alloy/docker-compose.yml#L13-L18",
+          "version": "repo-lines-v1:sha256:17db5288a2db7418f8bbb9c79c5ac6883ced802100db592fe7d2c32e0c32681c:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzg4YmE0NWY2Y2NhNzdlZTk3MjViYjliNGM0YzZhODYyYzZjNDVjOThkM2FlMGI4MTM0YTM2NGEwMjgxNTY1MyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTUzMWUyNjAzOThhZDYxMDkxNGRmYzI4ZjA0OGQzOTI2NGJhN2Q1MDMyNzhkZDJmOGJiMWM0YzE0YjQ5OWQ5OCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiODM5YmQ0NjYxZDZkNzk5YjUyOGNhN2M1Mzg3NzMyZDlkMzk1NDI2ZGNlMmQzMjBhMWM1N2ZiOWQwM2IwN2I2ZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNzAxZjU5ZGI0OWE3MDg1ZmVhYTI2NjUzOGVjZDRhMjliMTQ3ODZlMDQ0ZmIwNmQ3YjcxMzQ3OTA3ZWFkMTU1ZSJ9"
+        },
+        {
+          "resource": "repo://monitoring/grafana/docker-compose.yml#L8-L11",
+          "version": "repo-lines-v1:sha256:45384f649363f36725a9fb94946c386c02692700b0144bd67807fdff0de946ca:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZjQ4ODdkODhlMThmZDg3MWU3NzU2NTZkYmNjNTdjYTgzZDcwYTM5NzkwZTdiNWE3Y2E1MTM3MWRlNTQ0ZmI4MSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTUzMWUyNjAzOThhZDYxMDkxNGRmYzI4ZjA0OGQzOTI2NGJhN2Q1MDMyNzhkZDJmOGJiMWM0YzE0YjQ5OWQ5OCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiN2ZiOGE4YTRmOWExM2JlYzMyM2I2MTZlNTYyOWM5ZGI5Mzg5MDQwMTI3NGExZTZkZmYxMWFiYWM1MWQzM2YxZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNzAxZjU5ZGI0OWE3MDg1ZmVhYTI2NjUzOGVjZDRhMjliMTQ3ODZlMDQ0ZmIwNmQ3YjcxMzQ3OTA3ZWFkMTU1ZSJ9"
+        },
+        {
+          "resource": "repo://monitoring/loki/docker-compose.yml#L10-L13",
+          "version": "repo-lines-v1:sha256:a54d2494123fbcc276f7409b76adb8daaf90381f28261ac51d7970883ef113cc:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTRiMWQ4NTllYjFjNTM0NzU0YWU0YzViN2JhOWY0Nzg0MTkyOGM0YmQ2OWU0MWIyZjhkZjdmZWZkMjEzMWZkMSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTUzMWUyNjAzOThhZDYxMDkxNGRmYzI4ZjA0OGQzOTI2NGJhN2Q1MDMyNzhkZDJmOGJiMWM0YzE0YjQ5OWQ5OCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiN2JkMWU5M2QwMmE5YjZiMzZiY2YwNDZhMmIyZDVjMjI0OWFiZDlhZTlhNDVlNjlkNGRkNWY3YzZlMDEzNGY4YiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNzAxZjU5ZGI0OWE3MDg1ZmVhYTI2NjUzOGVjZDRhMjliMTQ3ODZlMDQ0ZmIwNmQ3YjcxMzQ3OTA3ZWFkMTU1ZSJ9"
+        },
+        {
+          "resource": "repo://monitoring/prometheus/docker-compose.yml#L13-L15",
+          "version": "repo-lines-v1:sha256:a734c7830ff2bc1dc531f3eee46a4b61b4f40dcabcdb5c67e147d02e91afb9c2:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDkwNTc5NDYxM2Q5MTc4MjM3MmJlZTRjZTBjY2I5Nzc0MzIxOTVmMjY0ZjE1MmJlNzFkYjI1ZTBmMDRhNjQ4ZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTUzMWUyNjAzOThhZDYxMDkxNGRmYzI4ZjA0OGQzOTI2NGJhN2Q1MDMyNzhkZDJmOGJiMWM0YzE0YjQ5OWQ5OCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZmQ2ZGFmZTMxYjY0MjJhNzYwNmFiN2I2YTgyYjk4MDcwZGFiMGU1OGI4OWMxMjk5MGRjNGIxYzM5YTViMzlmNCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTNlNWE4YTU5YThkOGU4YzYyYzJhNTY3YThmZWQ1OGYxOGI1ZGI0MzIwYjhmNWNhMjI2Y2UzMjc5NzIzNGY1MiJ9"
+        },
+        {
+          "resource": "repo://monitoring/smartctl-exporter/docker-compose.yml#L12-L15",
+          "version": "repo-lines-v1:sha256:a95443e3637384fb4019a3ff17c9203f3b3f8b970a74f10056d6cf5415dfd8ba:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzBmZDZlOTAyMzVjMmM3OWIzOTM4OTIzNGQ1MGY5NmIwNTVmNTk5Nzc3Y2I1MjhmYzNkOGEwNDRmMGNjMTM1NSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTUzMWUyNjAzOThhZDYxMDkxNGRmYzI4ZjA0OGQzOTI2NGJhN2Q1MDMyNzhkZDJmOGJiMWM0YzE0YjQ5OWQ5OCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOTBhODdjYzZhYjk4NThhNWVjMWM0ODIwM2YyMTg2MjhjNTQ2MjY5N2ZmZjg2OWYwYTA4ZGMzZTJlN2Y3MTZjZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNzAxZjU5ZGI0OWE3MDg1ZmVhYTI2NjUzOGVjZDRhMjliMTQ3ODZlMDQ0ZmIwNmQ3YjcxMzQ3OTA3ZWFkMTU1ZSJ9"
+        },
+        {
+          "resource": "repo://plex/docker-compose.yml#L13-L17",
+          "version": "repo-lines-v1:sha256:c4ad30675a1ab378a26cab95033149fb3254d7b7104d9366eaa6314b1f474949:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEzZjRkOTY2MWU5ZDJjM2UxYTI4OWU1ODMyMjk5YmVhMTRjZGI2NGJmODg2NjFkZjcxN2IxMmZhMDJkMDExZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTUzMWUyNjAzOThhZDYxMDkxNGRmYzI4ZjA0OGQzOTI2NGJhN2Q1MDMyNzhkZDJmOGJiMWM0YzE0YjQ5OWQ5OCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjk0ZmRmNTFmMjZkNWMzNTZkNDUyZGQ4MDU5NzFhMGE3ZjE1OTU4Zjc3NjIwNWUzYTQ3ZmQ4NGZlODdiMmE0MiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://server-monitor/docker-compose.yml#L20-L21",
+          "version": "repo-lines-v1:sha256:655fc291fccee66b2cbfbd2f4128206ce10ef14611b5c8b0bd154aa5a1e9e9da:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZjAyNDE0YzZiMGFjYjM0MTk1M2Y5ZDY0NTgyZDliMzBiNGM0MDEzMmJmZDhlNTQyYWJiMzY3OGI4ZGI5ODRlMCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTUzMWUyNjAzOThhZDYxMDkxNGRmYzI4ZjA0OGQzOTI2NGJhN2Q1MDMyNzhkZDJmOGJiMWM0YzE0YjQ5OWQ5OCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMmYzNDhhNWMyNjI1NzlmMDhlNDY3NjY0YTQ1MGQzZWM4OTI4ZTUzZGQ4NzZiYzliZWNhY2Y5NTQ2NmM5OTgxMiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNGYxYjVkYWI5N2E2ODk2Nzg0MGI3YzE0MjZkMGQ1Nzc4YmIxZjllM2Y1ODQ3ZGIyNTAxNjQ5MzY0OGEzNDU2NyJ9"
+        },
+        {
+          "resource": "repo://server-monitor/docker-compose.yml#L42-L44",
+          "version": "repo-lines-v1:sha256:43f1a1a78b85e6cfbaa6e28f2ed928a2029f2fa3ec198dec5043678439a66f00:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjI3NDYzMzRmZGJkNjUxMzIzOWYxMzI2ZGI4YjYxMjc1N2I1YjMyYzA4MDhiNTA4MWE5OTM3ZjY1MzNiOGRiOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTUzMWUyNjAzOThhZDYxMDkxNGRmYzI4ZjA0OGQzOTI2NGJhN2Q1MDMyNzhkZDJmOGJiMWM0YzE0YjQ5OWQ5OCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiODE3NDk5MjZiODY5OTE4N2MyYWFiZDgwZjRjOGMwMzE3MmQzMjhmZjMyNzFiNTkxYjI2NWQxNzBhN2Y5NzgwMSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://vpn/docker-compose.yml#L12-L14",
+          "version": "repo-lines-v1:sha256:d8cca68141c415379a6cb8c02856c632750d9e4ead49be26f380d6171dbebcc3:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEzZjRkOTY2MWU5ZDJjM2UxYTI4OWU1ODMyMjk5YmVhMTRjZGI2NGJmODg2NjFkZjcxN2IxMmZhMDJkMDExZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTUzMWUyNjAzOThhZDYxMDkxNGRmYzI4ZjA0OGQzOTI2NGJhN2Q1MDMyNzhkZDJmOGJiMWM0YzE0YjQ5OWQ5OCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMGI0YjUyMjlmYWRjYTc3YmJjNDE5Yjk5MWFiMjYwYzM4ZGMzYzJiYzUxZjA5NzQxYmQ4ZmUwOThkMmRkYmEzMSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDllODM0ZjRiNjIwNWQyYzQ4MDA0MGMyMmY1YmIzZjM4YzI5Yjk4MTI1N2E3NzgzNmNkMjBjNDM0MzRiNmZiMiJ9"
+        },
+        {
+          "resource": "repo://vpn/docker-compose.yml#L30-L34",
+          "version": "repo-lines-v1:sha256:c7bdca206764b7d586af3210387c036d55fa45a2b07c2cc94913da5ce27d4b30:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEzZjRkOTY2MWU5ZDJjM2UxYTI4OWU1ODMyMjk5YmVhMTRjZGI2NGJmODg2NjFkZjcxN2IxMmZhMDJkMDExZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMGFjYWIyZDFhYzBiNzc3MDBlMzAyYTA4Y2M4NjhjMTQ5NmI4YmYzYWU5MTA1MmNjMDZjNDEzZDYxZjQ5NmQzOSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNGViM2Y3Y2RhZGVmNzA5MjgxMTE1YTcxNDM4ZjNhOTI2MDU0MWZhM2IxZDYwZDMwNGRjNTIxNTM1NDVhYzAyZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjEsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTUzMWUyNjAzOThhZDYxMDkxNGRmYzI4ZjA0OGQzOTI2NGJhN2Q1MDMyNzhkZDJmOGJiMWM0YzE0YjQ5OWQ5OCJ9"
+        },
+        {
+          "resource": "repo://website/docker-compose.yml#L3-L9",
+          "version": "repo-lines-v1:sha256:a43231a3bbce782abd3554339a8cacb849727ce9c2f80572eca27a2ee38d0303:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjI2N2VlNWJhMGZhMGJiYjM3NTRiMGQ2NjY0ZTU3ZTE4NzA5ZmNlYWQxYmUxMzc3ODlhZTMyMjZiNjBiN2FhNSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYTJhNzUwMzYzMGY0MTc3ZDg0MjdjYzNhYmQ5YTFlNTRjODM3MDQ0ZjBjODIxZmI0MGIyYmEzOTllZTRjMTMyOCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjIsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMDY2MTk5NzM2ZDlkZDE3NTExNzc1MjFhYTEzYTc3MDdmMTdiZWE2OTYwNTkyODA2ZjA0OGM3ZGVmZDZkNzAxMCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.5.0",
+    "at": "2026-09-09T11:31:25.948Z"
+  }
+}

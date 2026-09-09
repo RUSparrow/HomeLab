@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:7ba219e5354c490b57625717e1ae171e7ae51737258790f8c8c69e95cab2f93f",
+  "claims": [
+    {
+      "id": "claim_7fea80c2f3594b62bb759d6eec379ab4",
+      "statement": "The repository has no focused automated test suite for the infrastructure, monitoring, or Server Monitor paths; validation therefore relies on narrow configuration and runtime smoke checks.",
+      "evidence": [
+        {
+          "resource": "repo://ansible/install-homelab.yml#L1-L138",
+          "version": "repo-lines-v1:sha256:73f894059c3b72b666f700dfe7372270c4ee2958af7ae6282fc6aa03a8230bfa:eyJzZWxlY3RlZExpbmVDb3VudCI6MTM4LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJmNTJkNzExMTAzZDUwYTQzNzgzMGM2ZmJjZDA0ZmI0YmFiNDlhMGY4MmY2ZDI2ZDFjNzkxYzZlODQ4OGRkMDkwIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJmYmVjZjQ4MTAxMzBmZmVkMDYwNTQ4MmE2ZTkxOGI2NDYxYWEwZjNjMGUzOGI1ZTJjZGRmNTg4ODkzODAwNWU2IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MCwicHJlY2VkaW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MCwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1In0"
+        },
+        {
+          "resource": "repo://server-monitor/backend/app/main.py#L1-L74",
+          "version": "repo-lines-v1:sha256:4f7cae77b67fc84541637c263cf56d7527f14a0acd216d126bac1865a41635fe:eyJzZWxlY3RlZExpbmVDb3VudCI6NzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM3MjdhZGZmNTI0ZTA2MTYwMjJlYWRkOGY0YWYyMWEwNzc4YjI5ZmM0Yzc3YmRmZWZkMWFmY2UyY2JmNWU0YjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU4MmQyNTUyYTdiODcwMDNkNTAwMzZmZmEyMDFiMmI1ZjhkYWRkNjEyMWMzZjYxN2NiNzYzMWE2ZWE4YWEzOWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_73cec5dad9314e6c8213620c90bdbc1b",
+      "statement": "The Ansible setup uses a single local-connection host named server and configures inventory.ini, disables host-key checking, and fixes Python to /usr/bin/python3.",
+      "evidence": [
+        {
+          "resource": "repo://ansible/ansible.cfg#L1-L4",
+          "version": "repo-lines-v1:sha256:b674a31bebcb52ea9dab144fdfbf1ec4c486611ee49787c5f1e8ce48b1513e57:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNmM3NmM4YTlmMWNkYTBjZTI0NDUzM2NkNGY1OGFkODJlNTE2Mjc4NGRhODkxNTU0NDcxM2ZkNGEwMzg5ZjBkMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZmFkODY3MWU0NzlkY2Y4YWJhMzUzYjI3NWUyNTM0OGU3ZWNiYmQ2ZTRiYzFkOTNjZjdlMDJmZDY2YTBhNDliNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://ansible/inventory.ini#L1-L2",
+          "version": "repo-lines-v1:sha256:0d412a889326cb2778150d9af385f0d12dd1042076f5a676d3accedc8d0c6bac:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDI4MGEyOTFlMDgwODg1MjFjNTEzMjc5MzQ5NmM0ZWJhZmZhYmQyMjM3YmQwYjdlYjFjZDY4OTUyNWUzMGQxNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOWI3NTlhZTA3ZmFhOTBiZDY3ZTQwYzRhOWI0NDkzOTE5YzhkOGZlNzkxNWRkOWRmODE5Mjg2OWU2YmY4ZDU4ZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_e58f30132e6f49cd966a7bd0ee16cfe8",
+      "statement": "The install playbook installs Docker and dependencies, creates runtime directories from homelab_path, starts a fixed set of Compose projects, and builds Server Monitor; homelab_path is not defined in the play itself.",
+      "evidence": [
+        {
+          "resource": "repo://ansible/install-homelab.yml#L16-L32",
+          "version": "repo-lines-v1:sha256:e40016f5bff86b4ed18fce852c0b5c558a861db3d28ba48d2da3979c6d514953:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFiM2FlYzg4NWFhM2JmMmFlNjQyZGE5Nzg0YzA3ODlmNGU3ODVkYmZlYmRiNTEyODE5YjEyNzhjMzQ4N2VmM2MiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA3MzY5ZmNlNTdiMDMyYjc5MDA2NGJhOTllNWQzZDFmOGExZmFiNjAzNTVjZDE0M2RmMzJlY2Y0MDIzZTE0OTAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ4MDkwNjkzYTU4NDI2Y2Q1MTkyY2E2YTkzZWZlMjZkNmNiYzllNWE0YmNjZDBlM2Q5ZWVhZTAxODA1MTJkYWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhlZjI5NzU1YjExYjM1NGUwM2FlZTc0ZTFiOTllMjFmYzAyMTQ1MTNhMGZhZmFmNTY5MTZiZjAzMjBlOWI5MDcifQ"
+        },
+        {
+          "resource": "repo://ansible/install-homelab.yml#L6-L8",
+          "version": "repo-lines-v1:sha256:d5488bc5e0ba82d4fa01f45edb710c149120d393e59e52d0e64aa72f4fe318f1:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODI4ZTBmZGVlMmUzYzBjZjhlZTM3OGNjNDVmMmNhYzI1NTNkYzg5NzQ2MmE0N2YzZjI1OWIyODJkZTA3Yjk0MCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjdlZDE0OTIwYzFmYmVkNWQxODA4NGZmOWYwNWY5YzY0ZGQ5MWRjOTcxYTZmNTY1ZjE0MWM5YTUyMGNhYzY2YSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMGRlZjM3N2Y1NDRlYWFhYjcyNjZhYWY4YjJiMDhhN2Q1Y2YxNTQ1YTlkNjZhNmUxOGM4NjI4YmUyYjJjNzljOCJ9"
+        },
+        {
+          "resource": "repo://ansible/install-homelab.yml#L85-L138",
+          "version": "repo-lines-v1:sha256:9035ca9e2c3404608c064d8acf037cf431a7a17e6adaa5fe55d4e516422c1df4:eyJzZWxlY3RlZExpbmVDb3VudCI6NTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg4ZmNhNzlhMTdkMjA0MTdhNzgzODhlOGE5NjhmOTYzOTJmYTQ0YjViYzY5YTEwY2JkNTIwMTkwNTViZTlmMDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZiZWNmNDgxMDEzMGZmZWQwNjA1NDgyYTZlOTE4YjY0NjFhYTBmM2MwZTM4YjVlMmNkZGY1ODg4OTM4MDA1ZTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjIwNGY2YzA5OGEyOTQyNGI1NjQwMGJjZTkzNmUwM2NkNWFhMDFlYWUyMmZhMmE3NDNmMGMyYWQ4YTIwZjJiYzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a74c0106a16a46969718e06285120461",
+      "statement": "The update playbook pulls and recreates a hard-coded set of /home/sparrow/HomeLab Compose projects, reports pull output, and is an applying operation rather than a dry run.",
+      "evidence": [
+        {
+          "resource": "repo://ansible/update-server.yml#L6-L38",
+          "version": "repo-lines-v1:sha256:6d89414d51a4ef64e1482db1042b8ae3eb9953c7c13c49682d247dfa86a5290c:eyJzZWxlY3RlZExpbmVDb3VudCI6MzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgyOGUwZmRlZTJlM2MwY2Y4ZWUzNzhjYzQ1ZjJjYWMyNTUzZGM4OTc0NjJhNDdmM2YyNTliMjgyZGUwN2I5NDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM5ZmQyNDYwNWEyOTcxNGViYzc3MTkzNGVkZDc1ODUzNzY2YWRlZjA2OTZhZjMyMDFiZTBkMTIwYjlmM2NmNmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY3ZWQxNDkyMGMxZmJlZDVkMTgwODRmZjlmMDVmOWM2NGRkOTFkYzk3MWE2ZjU2NWYxNDFjOWE1MjBjYWM2NmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJkNmM3NGUzZTdjYTUzNzIzZDVhMzJiZjliZjJhMDU2NjY2NGQwNGNmODc5YjVlNDdiZWQ3Y2M2Y2JkYmY0YWMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_1b853e76492d44828feb0e9e55832b9e",
+      "statement": "Prometheus scrapes node-exporter:9100, smartctl-exporter:9633, and fail2ban-exporter:9191 at a 15-second global interval.",
+      "evidence": [
+        {
+          "resource": "repo://monitoring/prometheus/prometheus.yml#L1-L15",
+          "version": "repo-lines-v1:sha256:ce9dc7f23b58cfc57a118d6cfb00ae560025ce250fb846f9d189d7726e2bfd3b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg0ZTNlZTk0MGFhZmZlMzgxYzg0NmZjZjIyN2IyMjMzMmZjYThiY2M2MjE5N2M3OTg5YjViY2FjOGQ5MWU0MmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY4MTNkMDdjMGZkOWM3ODc1M2U2NWY5NGViN2FmNmIwNTRjODkxN2QwOGQ1MTc5MzdiNzAzYzVkN2M3MmI1N2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_1682a1c6e4fe41c98d5a5cbce3520218",
+      "statement": "The Server Monitor metrics endpoint synchronously aggregates host, storage, Docker, WireGuard, and Plex information, while individual collectors expose degraded availability or omit unavailable storage rather than guaranteeing complete data.",
+      "evidence": [
+        {
+          "resource": "repo://server-monitor/backend/app/main.py#L34-L36",
+          "version": "repo-lines-v1:sha256:eeeea8183f2d6862b8021e2e1ee2d1db1e70b183338d81efadb287e08da32974:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNjYyMTU4NTNhODg0YjdkMWZjZWRmNzliODQ3ODYzYTJkMGI2OGJhNDQwMDc4NDE4ZDhkMGYwNjIwYzM2ZmZlZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjc1ODNjYTU5MmI0MThkMDI1MzJjOWRkZTIyNmYzMmQ1NTNmNjZlMWY0YzI3YmZkMmEyOTNlY2E2Y2U1MzE2NSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOGM4NjBiMDViMzVjZmM5MDcxMzlhMDg0MzZmNzc1NTgwNTIwMjUwYTFiOTNmOWMyYzI4MjVjZjVlZmRkODAwMyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMWFkNDhiNzYzZDg4MDY1NGQxMmQ4YTkxMjI3MGZkNGM2YmM1MTZkOGRlMDU0MjQ0Yjk3Mzg5ZmNjMTY0MDlmNiJ9"
+        },
+        {
+          "resource": "repo://server-monitor/backend/app/metrics.py#L169-L191",
+          "version": "repo-lines-v1:sha256:f3041c20663aff6584685bbc9761abd1eb3c454ded7a0b21defc5a70b7bd363c:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk1NjNmNTQ0YjY3MDczOGE2NGM0NWE2NTY4NzBlZWQ3Y2MwNzI1ZTg1MGIzNTc1OWQ2ODc4ZDVhOTdkODU5NWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEzYmU4OWQ3ZjI1Mjc0NzBiMjMwZTljMTljMDczNmNmOWViMGI5ZjE3YjlkMjBiYzliMThiOGI2NjdkNjQ3MDMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRmYmQwMDkzMTRiYzI3MDg0MTY3MzRhMDJhZTVmZjM5YTFlNDhhMDUwYmU5MWY0M2IyZmFhOTIwMDJjNjJiZmMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhlZmZlMWQ2YmFlYzJjOWQ0OGUyODczM2IwZjk0YTBiNTVmY2IxNWFlZDFjZWM1MjI5YjIwOWU3YTI1MWM2OWUifQ"
+        },
+        {
+          "resource": "repo://server-monitor/backend/app/metrics.py#L321-L337",
+          "version": "repo-lines-v1:sha256:1e4366299f42774c0fb7d32f46237f84b6e2a65c8d5be12e0f6b2522bec4ae1d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMyNDFhMmI1YTBjYzg1OGU1MzY1NTRhYmFlODM3Y2M2YjM4YTEzYjAxN2RhMTlkZmRiODU0Yzg3NDUyYjdhZDUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRmYmQwMDkzMTRiYzI3MDg0MTY3MzRhMDJhZTVmZjM5YTFlNDhhMDUwYmU5MWY0M2IyZmFhOTIwMDJjNjJiZmMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJlYzQ0NzBmZjYxZTE4NTNlNzM2NDBmN2Y2MjEyMWI0NDNhNmNiOGVjODEyOTExYmQxMzIwZGRmOTFkZmUzN2UifQ"
+        },
+        {
+          "resource": "repo://server-monitor/backend/app/metrics.py#L431-L444",
+          "version": "repo-lines-v1:sha256:d31961afbd03a4c9745f9eb0b0fd13bd968d73ec31f4abd77b0e1ce66acd79ae:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIyZGVhOWE2Yzk2ZmI1N2Q4Nzk1YzcwNzUxM2NmYTdiYTc2MDIxMWRiNGU1Mzg3NGQ1NGNmNjZlY2FlODNhNGIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjlhM2EzMDk5ODhjOWFhMzdkYTdmMTEyNWVhMTZhODU2OGVkZGJlZGI5N2U3NDQ1YmQ1ZDkyNjVlMzJjOGU3ZWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://server-monitor/backend/app/metrics.py#L99-L128",
+          "version": "repo-lines-v1:sha256:5f2c8719194580840e108990cc7b80ea7b8f2edfaae5be14daf4fd0937b2a5e0:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRiMmZkNWI4YjA5OTc2MGJjODlkMTA3OTVjNzVjZjRiNDBkM2YwMzdjOGUwMzM0ZmQzYjc5NTI1ODQ1MWU2ZGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRkY2IyY2MyMzZmYTMwOWU0YmU3ZDMyMzdlNjQ2ZGYyNmQyNDc3MWYyYzM0ZGFlZmNmOTYwMmQ1NjJmMjdiMTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ5YjU0MTlhMWE2Y2QyNjYxNjQ4YzBjNzM1YjUyNzg1YWRhYzJmYmQwMjNhYjE0YjM2NmZmNGM0MzNjN2ZmYmUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI1MGIwNDRlMjcxODM4NTU3ZGQ1NGJjYmY0MDkyYmNkM2MxYzQ1MTc3MjdiMzA1Y2Y2NGMxNjkxZDI1NjEzMmMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a57f72e159444c71b175b6c89471d70f",
+      "statement": "The Server Monitor backend exposes health, metrics, update action, and update status endpoints; update proxy calls use a five-second timeout and return HTTP 503 when deploy-agent is unavailable.",
+      "evidence": [
+        {
+          "resource": "repo://server-monitor/backend/app/main.py#L29-L58",
+          "version": "repo-lines-v1:sha256:7d5f25447247c3d02d24b7068138a73af9b9c63320c3c198fa64a066ad3b2879:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5YmFkZjBhN2RmYzYzNmZmMzJlOTQ2ZGJjMDRhODMwYTk0OTNjZjU4NGMxNDgyMzMyMzdlNzExMGJiZDI3YTEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhkOGMzYjM5ZGMwNGIxNWNhZTEwYjBkOTVkYjcyODI4NjZiOWVjNTNhMDM2ZDQ4OTUzMjE1MmMwOWYzZDcyYjUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjllZDY4M2M2OTMxMmZlNWU0N2FhMzU5MWExM2U1NDYwMjQ3YTAxOTk1NTNkY2ViNGFiNzZiN2M0OGNiOWUzMGIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJmMTgxMzNjZjljMDJmYmI1NDgyZGMwMzAyYmY0YTk4ZmNhMThlMTZkM2IyMWVlYzk5MTk5MjdhZGZjMzk0NWYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_9f1980f437fc4043b15ba4cd1e1a6a7d",
+      "statement": "The deploy agent persists JSON status atomically, prevents concurrent updates, starts the deployment script asynchronously, records completed or error outcomes, and marks an interrupted running update as an error on startup.",
+      "evidence": [
+        {
+          "resource": "repo://server-monitor/deploy-agent/app/main.py#L17-L48",
+          "version": "repo-lines-v1:sha256:6f57b21741f2f5beae712dea4ca25b588ae8b75ac6d71ecbc77171bf8d5d1a40:eyJzZWxlY3RlZExpbmVDb3VudCI6MzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMyYWU1ODNkYjA5OGFiYTgzYWVjODczNDY5ZjQxNzQ4NWIwN2U3MTc5YzU0NjZjZTVmNjkwOThmMTU2YTkxYzUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYxYzNjNTUzMjQ4OGU4ZDZkODU3MDkyZTYyZjc4OWQ0ZTViZDVhMjRkNzAzMjk5MjZiODA5YTc4NzhiNjRmZWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE1MzRkMjZhNjEyOWJlMWJjNzIzZDcxNWZmODBiMzE0NjU1MGQxNWMzODUwMDdkZmFiYjA5MGI4YTYxNzhmYWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM1NTQ0MDA5ZDAyMjUyNTA1NzZjNTJmYzZhYjZmYTQ5OTQyMTAyOWRkMGU2MWNiMWRlNjZhMjNkZjY0NmViZDIifQ"
+        },
+        {
+          "resource": "repo://server-monitor/deploy-agent/app/main.py#L51-L71",
+          "version": "repo-lines-v1:sha256:b7ac1c78f6bf7de9140b502713991e6f6ee84de1262dfbdc22bd38d8be086fad:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg3NWY2YTdmYmE2MzY1YjViNzdkNGJkMGRiZTlkNjU2YzVhZDQ4ZjBkNTgxOWQyNmJjN2E0ZmI3Mjc5ZGNkZjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVmMGU2MDQ5MmNlNjA3NGJkYTBkMjcyNjU4Nzk0ZWUzM2E1NWY4M2RjOTMwNGU0OGVjODVjMjM4OGYxOTQwYWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYyMDI4MjkwYmEyZjQ0OWY5Y2EzNmMyYmE1N2Y2NGQ5NjhhZmQzNDZmNzdmNGFiNDM5NDZhYjgzMWMwNDQ2MjQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_1df7d0ed6bdb4b4c8af0e6643432e834",
+      "statement": "The Server Monitor Compose deployment depends on host bind mounts and host integrations including Docker, proc/sys, storage mounts, D-Bus, WireGuard files and binary, the HomeLab tree, and SSH configuration; it also runs with host PID visibility and restarts unless stopped.",
+      "evidence": [
+        {
+          "resource": "repo://server-monitor/docker-compose.yml#L31-L44",
+          "version": "repo-lines-v1:sha256:dc9788eef59c774099c0a4d550f6ed850cee9de921f9ffb4a350b06540c5bbea:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmNWI4MGM5NmNiZmIwOTc1NWM3NjAwYzNkM2I1MDkzYzBiZjA5ZWFlODgwYmQ3OTdjN2QxMDdmYmQ3ODljOWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1MzFlMjYwMzk4YWQ2MTA5MTRkZmMyOGYwNDhkMzkyNjRiYTdkNTAzMjc4ZGQyZjhiYjFjNGMxNGI0OTlkOTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg2ZTZmMzZhMDk0YzAxY2NkOWZmZjk2NmQyNGU0NWNiY2E4OWY4ZjYzYWYyYmYxNWM5MTA1ZmE2YzczZGVhNzEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://server-monitor/docker-compose.yml#L7-L29",
+          "version": "repo-lines-v1:sha256:1a524c9e7985a59ad6f0f8b1510a97ba81d88c508aff73cf5dc0690d1446f7b8:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJjMTZlZDIzOWEzNjUxYjUwNzljMGU0ZTdmMDc4NDRlYTMyOWM4NzYyOGJmOWZjYzQ2MzY3NzMzZjVlMWU5M2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk0OWY5OGYxMjljMjAzZmJjYjQwNDg5ZDUzYjg0ZDgyZTgwZTI5NWMxNjkyZjdiMjYxNWJlYzNjMjExMWUwMWIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImMwYzFiZTQzNWRiNmQyMzkzZmMzMWU4NTllNmMwMDUzMzc0NjNmNjE3MTRhMDQ5MDRiMDJiNGZhN2FlMmE3ZTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjljMGIwNmU4OTg2YWJmN2MzOTk2MjYyMjBjNDU5MGFkYTc2ZTZhYTZmM2IyZDM5NDc4NWU4M2ViNzEzNGVmZDgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_66e9ecb11c27487f8a9f14a73fa111ec",
+      "statement": "The Minecraft Compose deployment persists server data and backups on host directories, publishes host port 55555 to container port 25565, and makes the backup service depend on the Minecraft health condition while mounting server data read-only.",
+      "evidence": [
+        {
+          "resource": "repo://minecraft/docker-compose.yml#L1-L34",
+          "version": "repo-lines-v1:sha256:95c3a1af21fbae9b88aff9da715ca2ac794c1592b5ec7275445f6a654380dff9:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhNzNmY2NkYzk5ZWE4MzU5NjdjN2RlZTdlZmJlZDFmM2NhODcyNjBkOTI5MzE4NTBmZGQ2NmRhOGNiMTJmMWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1MzFlMjYwMzk4YWQ2MTA5MTRkZmMyOGYwNDhkMzkyNjRiYTdkNTAzMjc4ZGQyZjhiYjFjNGMxNGI0OTlkOTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.5.0",
+    "at": "2026-09-09T11:31:25.948Z"
+  }
+}

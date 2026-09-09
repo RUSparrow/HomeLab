@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:b058ca21ca20594c538e7626771436d93e8df9e5c5d7b1052ce0ab1e87f72978",
+  "claims": [
+    {
+      "id": "claim_4c781b710d06459dafc5e8a2d867d60f",
+      "statement": "The vpn Compose project runs a DuckDNS updater and a WireGuard server; DuckDNS uses the configured subdomain and persists under ./duckdns, while WireGuard advertises the DuckDNS hostname, listens on UDP 51820, requests seven peers on 10.13.13.0/24, and persists its configuration under ./wireguard.",
+      "evidence": [
+        {
+          "resource": "repo://vpn/docker-compose.yml#L1-L34",
+          "version": "repo-lines-v1:sha256:f9280a4bf9c3676be4bf32ea297a4d79c4532e41775746cba09dc21387ea099e:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhNzNmY2NkYzk5ZWE4MzU5NjdjN2RlZTdlZmJlZDFmM2NhODcyNjBkOTI5MzE4NTBmZGQ2NmRhOGNiMTJmMWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBhY2FiMmQxYWMwYjc3NzAwZTMwMmEwOGNjODY4YzE0OTZiOGJmM2FlOTEwNTJjYzA2YzQxM2Q2MWY0OTZkMzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE1MzFlMjYwMzk4YWQ2MTA5MTRkZmMyOGYwNDhkMzkyNjRiYTdkNTAzMjc4ZGQyZjhiYjFjNGMxNGI0OTlkOTgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_2cf4c3e6473c44d8af1d4dd69470555c",
+      "statement": "The declared Internet-facing WireGuard boundary is the container's published UDP mapping 51820:51820/udp; the repository does not declare upstream router or firewall forwarding.",
+      "evidence": [
+        {
+          "resource": "repo://vpn/docker-compose.yml#L15-L34",
+          "version": "repo-lines-v1:sha256:b3b1eef78f578e756e756b9ecb3ea3e8f9470e14d0f6bd6f76c4c5ccc70fb7c6:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhmYjMzNDY2ZGFkODllMzAyZmNjNjVkNmZhZGI4ODY3NTM4YmFmMGEyMzU3ZTA2ZWM2MTVjYmU5MmRkYjQ3ZDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBhY2FiMmQxYWMwYjc3NzAwZTMwMmEwOGNjODY4YzE0OTZiOGJmM2FlOTEwNTJjYzA2YzQxM2Q2MWY0OTZkMzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ4Y2NhNjgxNDFjNDE1Mzc5YTZjYjhjMDI4NTZjNjMyNzUwZDllNGVhZDQ5YmUyNmYzODBkNjE3MWRiZWJjYzMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE1MzFlMjYwMzk4YWQ2MTA5MTRkZmMyOGYwNDhkMzkyNjRiYTdkNTAzMjc4ZGQyZjhiYjFjNGMxNGI0OTlkOTgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_6a2a098619a845449162106e5491367a",
+      "statement": "The WireGuard server template assigns the server interface address from the interface prefix with a .1 suffix, listens on port 51820, and adds/removes forwarding and eth+ masquerade rules on interface up/down.",
+      "evidence": [
+        {
+          "resource": "repo://vpn/wireguard/.donoteditthisfile#L1-L6",
+          "version": "repo-lines-v1:sha256:5c7524c851f68dfc6ea456438e6e0a47faa04951f88489a2b471893cfe642e62:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDY5OWE4NDgxZDkwM2FjYzdmNWIyNGM2MDljNmFhMDE5ODY0ZTJiOWM0OTRmMTVhZGJlNDljOTNjNWM5YzhkMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYTU5YzkxNmYxYzE0YmNhZGRhY2VjMWJjOGI5MzE5ZDgwMGEzM2RjYTFmM2QxNzAxNjkzYTQ1ZjM2ZTY0ZmE5MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjEsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDQwODFlODUwYjkxNTI3ZGM2MWU1YmM1ZTFkZmYyNDY1NDc4M2IxY2JkZTIwN2FhNTA4OTkzYzI2MzM5Nzc3MiJ9"
+        },
+        {
+          "resource": "repo://vpn/wireguard/templates/server.conf#L1-L6",
+          "version": "repo-lines-v1:sha256:97f7be1d21141a0d825d6caf49af0564b53668cf5b3b1ae7a63bd0129cc72452:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZWEzMWM3NzQ3OGYzM2Q1MDc3NTFkOWIxMzRjMWE4YTQ0MDAwZjIzYjlmMWIxN2Y0YTZiZGU2MDc5NDUzNWFjYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYjU2ZmY3YzVjYTNiMTBkZWI4NjNhMjdhZDRiMzI2ODMzNWIzOTkyMTQyN2VlYjc3MmI4NmVhMjM5YWMzZTE4NyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_64342bb8b76e4f54876499b98523a870",
+      "statement": "The peer template establishes the client/server boundary: a peer gets a client address and peer-specific private and preshared material, references the server public key, and connects to the configured server endpoint with the configured allowed-IP policy.",
+      "evidence": [
+        {
+          "resource": "repo://vpn/wireguard/.donoteditthisfile#L1-L6",
+          "version": "repo-lines-v1:sha256:5c7524c851f68dfc6ea456438e6e0a47faa04951f88489a2b471893cfe642e62:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDY5OWE4NDgxZDkwM2FjYzdmNWIyNGM2MDljNmFhMDE5ODY0ZTJiOWM0OTRmMTVhZGJlNDljOTNjNWM5YzhkMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYTU5YzkxNmYxYzE0YmNhZGRhY2VjMWJjOGI5MzE5ZDgwMGEzM2RjYTFmM2QxNzAxNjkzYTQ1ZjM2ZTY0ZmE5MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjEsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDQwODFlODUwYjkxNTI3ZGM2MWU1YmM1ZTFkZmYyNDY1NDc4M2IxY2JkZTIwN2FhNTA4OTkzYzI2MzM5Nzc3MiJ9"
+        },
+        {
+          "resource": "repo://vpn/wireguard/templates/peer.conf#L1-L11",
+          "version": "repo-lines-v1:sha256:1f2e03b323075f5511498dd7b518760d73bd696a64af92a9dff158944b6200d2:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVhMzFjNzc0NzhmMzNkNTA3NzUxZDliMTM0YzFhOGE0NDAwMGYyM2I5ZjFiMTdmNGE2YmRlNjA3OTQ1MzVhY2IiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE4M2VkOTFmYWUxOWMwMGVhZmU3ZjYxOWY1NzBlMDJlZTEwNDU1ZDk1ZTJjM2FmYTBiMGVmYjUzYWRiMjRmZmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_e4fce8c834f04650bdc75043b11941ae",
+      "statement": "WireGuard runtime state is intentionally private and generated: vpn/wireguard/server/, vpn/wireguard/peer*/, and vpn/wireguard/wg_confs/ are excluded by .openwikiignore, while the Compose volume maps ./wireguard to /config.",
+      "evidence": [
+        {
+          "resource": "repo://.openwikiignore#L45-L50",
+          "version": "repo-lines-v1:sha256:a691512687b5e725e283ed22879b3442692644fb89f6e8b7b043e41b9b7cf408:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTU5MDQ3MzUwZjVjYTZjNzkwYjVkZjI0MWVhMzQ3NDNlMTQxZWEzM2YwMjI1MjgyNjBhNTNhYmRmZDgwN2M5ZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDM0Y2E3Yjk4YWI0NzlmZGJhMmY0ZDFhYWQyNDhiNWY1NjdkYTQ5NDM2YWQzNDljMzFlYjFjMmE4ODA2MTBhZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiODVlZjFmN2Q4OGI3YWI3ODdhNzFkNDA4ZjEwMzZiYzNhYTg4YWVlOWQzYTgzY2ExYWQ0ZWY1ZjU3OGMxYmFlMSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYmQ2ZmIyNDExNjQ0NGZjOGZmZWZlNTJhYzM2NjY5MzIzMjkwNWVlZGE2NGNkOGNlNjMwZmRmMGViZTFjNWY5ZSJ9"
+        },
+        {
+          "resource": "repo://vpn/docker-compose.yml#L30-L32",
+          "version": "repo-lines-v1:sha256:1d1919ac1b38bd6204929b4a2a9c50831c29f685dedad0f10cf5784a87390e36:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEzZjRkOTY2MWU5ZDJjM2UxYTI4OWU1ODMyMjk5YmVhMTRjZGI2NGJmODg2NjFkZjcxN2IxMmZhMDJkMDExZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDYwZmE2NGE0ZTRmNTUyMTgyNzMzODZjNjg5ZjQ4NzI4YzMxMmI0YmZhYmYyNDE4NDhjNGM4MWQxYzg2NDA4NyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNGViM2Y3Y2RhZGVmNzA5MjgxMTE1YTcxNDM4ZjNhOTI2MDU0MWZhM2IxZDYwZDMwNGRjNTIxNTM1NDVhYzAyZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNTNmYzAxNGRkZmEzYmU3ZWM2OTZlNzY4YTAxODgwMzRhZDNkYmRhMDRmMjc1ZTY1MzQzMGQwODcyMzRlNWY5NCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_f3270a4900bb46e2b0cf0b3433e2854e",
+      "statement": "The server monitor observes WireGuard through a read-only host-directory mount at /wireguard, a read-only Docker socket, and Docker exec of wg show wg0 dump in the wireguard container; its default configuration path is /wireguard/wg_confs/wg0.conf.",
+      "evidence": [
+        {
+          "resource": "repo://server-monitor/backend/app/metrics.py#L29-L34",
+          "version": "repo-lines-v1:sha256:580ac4398fef38bd7584becb30b4569a2ee414cd355964e2a27da7fd93fee6f3:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTgyNWZmZWUwNjM3OTVjNzVlNDdhNTdkMTRkYzg1MzIxZmJhNDVjZTFlYTgzNjgzOWQ0ODM4N2IxYjhhYTJiMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZmFmYmEwNTI3YzM5NTNjNGI2ZTBlNWI1NzM5YmE4MzYxMmY4MDUzYmNkYzk0NjY3MzAxOTNjZDFkNTkwYjQwOCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMGEwNmY0ZWUwMDMzMWYwNTk0OGEzNDU4MmU0NTcyMDRmMWM3MDRjZTk1OGQ5MjUxNDhiMDUwMWFkMjhlNmJlNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMGViMTQ1ODBlY2I2ZjRmZTg4YzhiYzJjOTFkNmIwZGZjYmIyNjA2OGMxYjdmMDQ1M2I3MTY1NGRlYjJiMmRkZCJ9"
+        },
+        {
+          "resource": "repo://server-monitor/backend/app/metrics.py#L340-L356",
+          "version": "repo-lines-v1:sha256:4920ca5e6a69a566b50ed4b978bcb854a492150303734980090e397e0fb8999f:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5ZjVjMjNjNjEyZGI0MDZmN2E2N2FmYzgyNWViYjIzOWIwMWY2YzcxMDY3MTY2NGZmNjg2MjA2YTYzZGNkYjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBhYjBlMTViMWZlNTQ0MjM0MjY0ZTA1OGEzOWQwMWUxMzE4NmM3ZDI2NjRjMjNmYzViM2E0MDlmNGRkYjEwOWIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRmYmQwMDkzMTRiYzI3MDg0MTY3MzRhMDJhZTVmZjM5YTFlNDhhMDUwYmU5MWY0M2IyZmFhOTIwMDJjNjJiZmMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYzZGM2NDFhNzRkYjQwNDE5ZTYwZDFiYTMwOGY2YjUyMDQxYjliOTU0NTQxODRiMWVhN2IxNzA4NzcxNzEyYjcifQ"
+        },
+        {
+          "resource": "repo://server-monitor/docker-compose.yml#L7-L20",
+          "version": "repo-lines-v1:sha256:208c2d536e950884ddef097043735f58fab009f58781f37dd2dbf2b491d7a743:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJjMTZlZDIzOWEzNjUxYjUwNzljMGU0ZTdmMDc4NDRlYTMyOWM4NzYyOGJmOWZjYzQ2MzY3NzMzZjVlMWU5M2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYwMjQxNGM2YjBhY2IzNDE5NTNmOWQ2NDU4MmQ5YjMwYjRjNDAxMzJiZmQ4ZTU0MmFiYjM2NzhiOGRiOTg0ZTAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImMwYzFiZTQzNWRiNmQyMzkzZmMzMWU4NTllNmMwMDUzMzc0NjNmNjE3MTRhMDQ5MDRiMDJiNGZhN2FlMmE3ZTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRkNTA2ZmZmMTdiMjc4N2RmZGZhYTdjMWFhMTUyNGY4NTc5YjRkMzU4YTdjMTViYmM2MWM2YzRlY2I5ODdjZGUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_ae4bae2aeec642a8966bf66cbdda477f",
+      "statement": "The server monitor reports only peers with nonzero handshake or traffic counters, labels them by observed index, and reports availability failures for missing containers, failed commands, empty responses, or exceptions.",
+      "evidence": [
+        {
+          "resource": "repo://server-monitor/backend/app/metrics.py#L346-L414",
+          "version": "repo-lines-v1:sha256:c4b244d723e1bb8186f4cf64b6203d9d4c8787341dc6049e3394595cf44ca3a7:eyJzZWxlY3RlZExpbmVDb3VudCI6NjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRmMDJiNGExNzlmNmVmMzgzY2JiN2NiMTg0OGM1M2M2ZDM5NDM5ZTczMmY2NzQ1MTg4YmMzNGU0ZmIzYzgwNTgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2YjA0NDkxNDY5NzIyZTgzNjNhOTRlNDA0NDUzOGUwMTNhMmEyMTdlMzZiMWU1NjhiYTYwYWNiN2I0YzhmMmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYxODNmM2E3MWQ1ZDMwNWY4OGMyMTY2YmFjNDk2YjM2NzgxMzIxMWFmNWQwZjBmZThkOTk3ZGIwMWQ4N2Y0OGIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJjZTA3ZmFiMmNhNDIyYzI1MGNjN2NmYTIyMDkzMjVlYjVmMmExOGFkMmNjMWJhOTk5MmY2Zjg5MmYzNmFkZjIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_7634a84857af445fac0cdcb29da41ff0",
+      "statement": "The WireGuard container requires NET_ADMIN and SYS_MODULE capabilities and mounts /lib/modules, so its server-side networking lifecycle is container-managed rather than equivalent to exposing every host service.",
+      "evidence": [
+        {
+          "resource": "repo://vpn/docker-compose.yml#L15-L32",
+          "version": "repo-lines-v1:sha256:d53f13160c8cbbb82ef05391430d5465a9dfae4bfbde5180bdbf7f3de5d694f3:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhmYjMzNDY2ZGFkODllMzAyZmNjNjVkNmZhZGI4ODY3NTM4YmFmMGEyMzU3ZTA2ZWM2MTVjYmU5MmRkYjQ3ZDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ2MGZhNjRhNGU0ZjU1MjE4MjczMzg2YzY4OWY0ODcyOGMzMTJiNGJmYWJmMjQxODQ4YzRjODFkMWM4NjQwODciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ4Y2NhNjgxNDFjNDE1Mzc5YTZjYjhjMDI4NTZjNjMyNzUwZDllNGVhZDQ5YmUyNmYzODBkNjE3MWRiZWJjYzMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjUzZmMwMTRkZGZhM2JlN2VjNjk2ZTc2OGEwMTg4MDM0YWQzZGJkYTA0ZjI3NWU2NTM0MzBkMDg3MjM0ZTVmOTQifQ"
+        },
+        {
+          "resource": "repo://vpn/wireguard/templates/server.conf#L1-L6",
+          "version": "repo-lines-v1:sha256:97f7be1d21141a0d825d6caf49af0564b53668cf5b3b1ae7a63bd0129cc72452:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZWEzMWM3NzQ3OGYzM2Q1MDc3NTFkOWIxMzRjMWE4YTQ0MDAwZjIzYjlmMWIxN2Y0YTZiZGU2MDc5NDUzNWFjYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYjU2ZmY3YzVjYTNiMTBkZWI4NjNhMjdhZDRiMzI2ODMzNWIzOTkyMTQyN2VlYjc3MmI4NmVhMjM5YWMzZTE4NyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_9fa71f6083c647958bbdcda10828831c",
+      "statement": "The Compose configuration supplies peer DNS as 8.8.8.8 and uses the configured internal subnet 10.13.13.0/24; the peer template places the DNS value into each generated client configuration.",
+      "evidence": [
+        {
+          "resource": "repo://vpn/docker-compose.yml#L21-L31",
+          "version": "repo-lines-v1:sha256:2ef13828ce0bd6cc88188b502085129963669ac4f01a078463650c6509f999de:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIyNzQ2MzM0ZmRiZDY1MTMyMzlmMTMyNmRiOGI2MTI3NTdiNWIzMmMwODA4YjUwODFhOTkzN2Y2NTMzYjhkYjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIzYWMzMmQ2NTY2YzliMGNkYmYyZTlhOWNiZDQ0NGQ4Y2Q2ZjI2MTA4OGMzMzZmMDlmNDY2NzlhYzczYWM3MWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ4NzUzNGVhMmU0YWM4NDgzYzBhNTM4YmM5ZDU5MTFhYzIwMTExY2ZiYzA4OTBhNTU5ODA1MzY5NmQzYzIxNmMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjllM2UwY2ZiMDMxM2M2MWQ4YmUxZTQzMDc3M2Q2OTEyYjAyZmIxZDQyNWYzYjkxNzYwOWVkYjQ0YmEzYTdjM2QifQ"
+        },
+        {
+          "resource": "repo://vpn/wireguard/templates/peer.conf#L1-L11",
+          "version": "repo-lines-v1:sha256:1f2e03b323075f5511498dd7b518760d73bd696a64af92a9dff158944b6200d2:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVhMzFjNzc0NzhmMzNkNTA3NzUxZDliMTM0YzFhOGE0NDAwMGYyM2I5ZjFiMTdmNGE2YmRlNjA3OTQ1MzVhY2IiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE4M2VkOTFmYWUxOWMwMGVhZmU3ZjYxOWY1NzBlMDJlZTEwNDU1ZDk1ZTJjM2FmYTBiMGVmYjUzYWRiMjRmZmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.5.0",
+    "at": "2026-09-09T11:31:25.948Z"
+  }
+}

@@ -1,0 +1,5 @@
+# Files
+
+- [Plex and Minecraft Services](media-and-games.md) - Documents the host-networked Plex deployment, its persistent media and configuration boundaries, and the Forge-based Minecraft runtime with its read-only backup consumer. Use this page to understand ports, state ownership, startup dependencies, retention, and safe operational changes.
+- [Metrics, Logs, and Monitoring Stack](monitoring.md) - Describes how Prometheus scrapes host, disk-health, and Fail2ban metrics, while Alloy discovers Docker containers and forwards their logs to Loki for Grafana-facing analysis. Documents the shared external monitoring network, persistent state, host-access boundaries, and failure signals to check during operations.
+- [Website, Syncthing, Portainer, and Fail2ban Services](web-and-sync.md) - Documents the standalone Compose services for the static nginx website, Syncthing, Portainer, and Fail2ban metrics export, including published ports, persistence and host-access boundaries. Highlights the website source-to-container path mismatch and the checks required before deployment.

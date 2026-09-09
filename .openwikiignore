@@ -1,0 +1,60 @@
+# Git and generated wiki
+.git/
+openwiki/
+
+# Monitoring runtime data
+monitoring/grafana/data/
+monitoring/loki/data/
+monitoring/alloy/data/
+monitoring/prometheus/data/
+
+# Portainer runtime
+portainer/data/
+
+# Minecraft runtime
+minecraft/backups/
+minecraft/data/world/
+minecraft/data/world_nether/
+minecraft/data/world_the_end/
+minecraft/data/logs/
+minecraft/data/libraries/
+minecraft/data/.cache/
+minecraft/data/crash-reports/
+minecraft/data/config/spark/tmp/
+
+# Minecraft sensitive/runtime files
+minecraft/data/.run-forge.env
+minecraft/data/.rcon-cli.env
+minecraft/data/.rcon-cli.yaml
+minecraft/data/ops.json
+minecraft/data/whitelist.json
+minecraft/data/banned-players.json
+minecraft/data/banned-ips.json
+minecraft/data/usercache.json
+minecraft/data/usernamecache.json
+
+# Plex
+plex/config/
+plex/transcode/
+plex/cache/
+
+# Syncthing
+syncthing/data/
+syncthing/config/
+.stfolder/
+
+# VPN runtime and private configuration
+vpn/wireguard/server/
+vpn/wireguard/peer*/
+vpn/wireguard/wg_confs/
+vpn/duckdns/
+amnezia/clients/
+amnezia/configs/
+
+# Logs and caches
+**/*.log
+**/__pycache__/
+**/.cache/
+
+# Installer binaries
+amnezia/installer/

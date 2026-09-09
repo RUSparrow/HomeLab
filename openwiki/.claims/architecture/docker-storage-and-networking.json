@@ -1,0 +1,242 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:a475dae97413c67dfb0087fe8b0c3fe41d7f8e6f0f739df5ae6a2ac1f71e8ef9",
+  "claims": [
+    {
+      "id": "claim_cec460dccdf54be59435da6e1d1a7be8",
+      "statement": "The supplied Compose definitions use bind mounts and do not declare Docker-managed named volumes, so service state is owned by repository-relative directories or explicit host paths.",
+      "evidence": [
+        {
+          "resource": "repo://minecraft/docker-compose.yml#L15-L16",
+          "version": "repo-lines-v1:sha256:50a2636c606bb6175c1d81afd7e5be42232bf2019e20291b058343eef227de40:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEzZjRkOTY2MWU5ZDJjM2UxYTI4OWU1ODMyMjk5YmVhMTRjZGI2NGJmODg2NjFkZjcxN2IxMmZhMDJkMDExZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTBmNDBlNmI3MjMxYmJiYzdmYWVlYzAyM2FjN2E5N2ZjYTllNmJhNTkyYjNjMmQ0NDVjNjBjOGE5OGZmYjFlYSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTE1MTA2ZDVjNGRlYjNhNTcxODVkMzU4ODRjNjlhYzNmMGU4NGEwMTU4ZDU5ZDBkOTIzMTQ5MjFmY2MzZWMxOSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzcyYjA4NGYxYzdiMGQyNmVkNzJlMWNmZjVmNmRiNzkyYjk3ZDRlMWZhM2JkMjQxYzRkMjg2MmZkODM2MDk1NSJ9"
+        },
+        {
+          "resource": "repo://monitoring/grafana/docker-compose.yml#L7-L8",
+          "version": "repo-lines-v1:sha256:920898eda0f2a70e32fdac043228ba96f65cec9a14478357c9062a1ede6f0da7:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEzZjRkOTY2MWU5ZDJjM2UxYTI4OWU1ODMyMjk5YmVhMTRjZGI2NGJmODg2NjFkZjcxN2IxMmZhMDJkMDExZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZjQ4ODdkODhlMThmZDg3MWU3NzU2NTZkYmNjNTdjYTgzZDcwYTM5NzkwZTdiNWE3Y2E1MTM3MWRlNTQ0ZmI4MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjM3ZmI4MDcwYzZmMTRmYWVjYTNlNTRhODAyOTRmM2UyZjNiOTVmYTY0OWQ1MmQ3YThiZjUxOGI3MWZhYzliYSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYTczNGM3ODMwZmYyYmMxZGM1MzFmM2VlZTQ2YTRiNjFiNGY0MGRjYWJjZGI1YzY3ZTE0N2QwMmU5MWFmYjljMiJ9"
+        },
+        {
+          "resource": "repo://monitoring/prometheus/docker-compose.yml#L8-L10",
+          "version": "repo-lines-v1:sha256:674b547a17068039a62bbf745deb23703be02e65c6edfdfa99ef2808383c07ab:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEzZjRkOTY2MWU5ZDJjM2UxYTI4OWU1ODMyMjk5YmVhMTRjZGI2NGJmODg2NjFkZjcxN2IxMmZhMDJkMDExZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTZkZDBmZmI4OWE3YzdjMTdmYTkxOTZiYzM1OWNiMjUxODYxYzk2NjRjMmNhMmZjYTg3MmY4MGRjNGZmYjE5YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjczYTliZjdlYjM0MTM2Y2VmMDM2NGMxYmI3YjZmZjc5OGQxMzBiY2VjMmM0MTM0YzRkNzdjYTFkODZhMGY5OSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZWIyNDJjZTgyNDc2MDg2MWFlNzFmNmEyMDY2ZTYyMGVkNTYyYjI4OWIzOTk2ZDNkOGNiMTRjZGZiMTVjYzE4YSJ9"
+        },
+        {
+          "resource": "repo://plex/docker-compose.yml#L13-L15",
+          "version": "repo-lines-v1:sha256:885b261422bab9e6896d8d2d89fca271b02cb9e8be6d0f03c6cadb137353d1fd:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEzZjRkOTY2MWU5ZDJjM2UxYTI4OWU1ODMyMjk5YmVhMTRjZGI2NGJmODg2NjFkZjcxN2IxMmZhMDJkMDExZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNTFlY2E3NDk3ZDE5MTk5YjBiMzRiMDIyOWI4NWU1NjMxODkyY2VjMzM1MDY1NjllODdjZTdkOWMxYmVjMzEyYyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjk0ZmRmNTFmMjZkNWMzNTZkNDUyZGQ4MDU5NzFhMGE3ZjE1OTU4Zjc3NjIwNWUzYTQ3ZmQ4NGZlODdiMmE0MiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjIsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMzIwYzIwZjA1NWVkNGRlMDViZTkyMmY4NjdjMDI5NWVhYmQ1MjQxZTEzNzU3NjZjMWM2YmFkYWE4ZTY0YTFmOSJ9"
+        },
+        {
+          "resource": "repo://server-monitor/docker-compose.yml#L11-L19",
+          "version": "repo-lines-v1:sha256:e41a323282d6d30178d89476db6b0abfe81431b952686db043f8b198ef56ec7f:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEzZjRkOTY2MWU5ZDJjM2UxYTI4OWU1ODMyMjk5YmVhMTRjZGI2NGJmODg2NjFkZjcxN2IxMmZhMDJkMDExZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYTk4Yjk4MDUzODU5ZDY4ZTU5MzhiOWI1OGYwNjM4ZjNiNjc4MDQ4YTg2ODE2YTVhZDk5YzA3NjVkMWFhYjIyNiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzFjYzdiZDFhYjQyYTg5OTdjOTY1Y2EzZjc3OGM3NjU0NTA3Y2JkY2E2NzAzOGEyNTkxYWRjM2VjZGIzMDk2MCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOWE3YTMyYWE4YWJiNmMyYTNlZDA1M2YxYTI1ZjU5MmZjYmExYTgwNTE4YjFjNmYxZDUxMzU3MTJmNjM1YWIwOSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_8e79f65a143549398e828494f05cc029",
+      "statement": "Alloy, Grafana, Loki, Prometheus, node-exporter, and smartctl-exporter attach to an externally managed Docker network named monitoring.",
+      "evidence": [
+        {
+          "resource": "repo://monitoring/alloy/docker-compose.yml#L16-L22",
+          "version": "repo-lines-v1:sha256:616d7376269168d85ce9b9160aa1a71a9c677a2cb5d341f3191832d6e0971042:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDkwNTc5NDYxM2Q5MTc4MjM3MmJlZTRjZTBjY2I5Nzc0MzIxOTVmMjY0ZjE1MmJlNzFkYjI1ZTBmMDRhNjQ4ZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZGJhZWI2OTNjNGU4NzBmYzg4YmRkYjdhZjdjMjA5YWE4OWI5YTgzN2NlNWQyOTM0OWUzNDEyOWVhNTBjMTRhNiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiN2Q0YTQyYTg2MWJkMDUxNGE0NTk5NzhmZjM5ZTExNGZkZGM5OWU3ZDhlMGM3MDMxMDcyY2IyNDdiZDU0OGE1OCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://monitoring/grafana/docker-compose.yml#L9-L15",
+          "version": "repo-lines-v1:sha256:616d7376269168d85ce9b9160aa1a71a9c677a2cb5d341f3191832d6e0971042:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDkwNTc5NDYxM2Q5MTc4MjM3MmJlZTRjZTBjY2I5Nzc0MzIxOTVmMjY0ZjE1MmJlNzFkYjI1ZTBmMDRhNjQ4ZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZGJhZWI2OTNjNGU4NzBmYzg4YmRkYjdhZjdjMjA5YWE4OWI5YTgzN2NlNWQyOTM0OWUzNDEyOWVhNTBjMTRhNiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjM3N2U2ODk5MGI5MjhmYjQwYjI3OGU3ODNiNjA0ZGY3MWQ1M2NhZGYwMzk5YzZlYWIwOTc2NjkwOWYwYzgwMiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://monitoring/loki/docker-compose.yml#L11-L17",
+          "version": "repo-lines-v1:sha256:616d7376269168d85ce9b9160aa1a71a9c677a2cb5d341f3191832d6e0971042:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDkwNTc5NDYxM2Q5MTc4MjM3MmJlZTRjZTBjY2I5Nzc0MzIxOTVmMjY0ZjE1MmJlNzFkYjI1ZTBmMDRhNjQ4ZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZGJhZWI2OTNjNGU4NzBmYzg4YmRkYjdhZjdjMjA5YWE4OWI5YTgzN2NlNWQyOTM0OWUzNDEyOWVhNTBjMTRhNiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDlhMTA3Nzg0NGM4ZWQ2OGNkZDQ5NzdkOTIyMjkyMzgwMGYxNTlhYjUyYjkyNTNiM2VjMDkxZjBjZGI3YmVjMCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://monitoring/prometheus/docker-compose.yml#L13-L30",
+          "version": "repo-lines-v1:sha256:34d32bdbcf5ce20d530e6bce6368efe672109de5b099f90f0c5cc234b77f231a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ5MDU3OTQ2MTNkOTE3ODIzNzJiZWU0Y2UwY2NiOTc3NDMyMTk1ZjI2NGYxNTJiZTcxZGIyNWUwZjA0YTY0OGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRiYWViNjkzYzRlODcwZmM4OGJkZGI3YWY3YzIwOWFhODliOWE4MzdjZTVkMjkzNDllMzQxMjllYTUwYzE0YTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZkNmRhZmUzMWI2NDIyYTc2MDZhYjdiNmE4MmI5ODA3MGRhYjBlNThiODljMTI5OTBkYzRiMWMzOWE1YjM5ZjQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://monitoring/smartctl-exporter/docker-compose.yml#L13-L19",
+          "version": "repo-lines-v1:sha256:616d7376269168d85ce9b9160aa1a71a9c677a2cb5d341f3191832d6e0971042:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDkwNTc5NDYxM2Q5MTc4MjM3MmJlZTRjZTBjY2I5Nzc0MzIxOTVmMjY0ZjE1MmJlNzFkYjI1ZTBmMDRhNjQ4ZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZGJhZWI2OTNjNGU4NzBmYzg4YmRkYjdhZjdjMjA5YWE4OWI5YTgzN2NlNWQyOTM0OWUzNDEyOWVhNTBjMTRhNiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZDFkMzJkNzZlZGRmYmIyOWJjM2I1ZDI3OWU0MjJhM2Y2MWZmM2Y2MTEzNGY0YTNmZjcwNzQ5MjBjNGVkZDI0MyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_5a9a8f26ce14458781c5c16638409565",
+      "statement": "Alloy discovers Docker containers and collects their logs through the Docker socket, relabels the container name as service_name, and forwards logs to Loki at http://loki:3100/loki/api/v1/push.",
+      "evidence": [
+        {
+          "resource": "repo://monitoring/alloy/config.alloy#L1-L24",
+          "version": "repo-lines-v1:sha256:a7450937e001d7405d14119d3c3fbc647adf112c3e4fda0b7b21774c9cecafc1:eyJzZWxlY3RlZExpbmVDb3VudCI6MjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdmOTU0MmJlMmNlYWZkOTRmMjU1NDUxZGVkM2YyODk3OWU4ZjMyNzBmNTc3YTg4ZTc5NWY4YzZiOGRlY2EyZjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEifQ"
+        },
+        {
+          "resource": "repo://monitoring/alloy/docker-compose.yml#L10-L13",
+          "version": "repo-lines-v1:sha256:09fe9ac2f93088ccca1ebc8306705cdb79bb437efbe827cbe349dcf50783c6b6:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEzZjRkOTY2MWU5ZDJjM2UxYTI4OWU1ODMyMjk5YmVhMTRjZGI2NGJmODg2NjFkZjcxN2IxMmZhMDJkMDExZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzg4YmE0NWY2Y2NhNzdlZTk3MjViYjliNGM0YzZhODYyYzZjNDVjOThkM2FlMGI4MTM0YTM2NGEwMjgxNTY1MyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMWFjZTIzYTQxYjg0ZTBhZTc0Y2U4NDNhMTIzZTZlZjczNzdmNzFmNzJlN2YwNjVlNzBiY2M5YTdkMTUxZTNlOCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjE1NGQyYjExZDBkY2MxMTcyNzBjMTEzMDk4OTkwMzA0YmQ5OWYwYTVhYzg4ZmRlOTljMmQ0YjE4ZWE2NzgxOSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_344dbded791d4949a58324d474cdab62",
+      "statement": "Prometheus scrapes node-exporter:9100, smartctl-exporter:9633, and fail2ban-exporter:9191 every 15 seconds using service-name targets.",
+      "evidence": [
+        {
+          "resource": "repo://monitoring/prometheus/prometheus.yml#L1-L14",
+          "version": "repo-lines-v1:sha256:3d542d7bba6b16590bd80804c3ffb5e60772310677c4907040b013496fcd0432:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg0ZTNlZTk0MGFhZmZlMzgxYzg0NmZjZjIyN2IyMjMzMmZjYThiY2M2MjE5N2M3OTg5YjViY2FjOGQ5MWU0MmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA4ZDIzN2Y0MjQxZTY5NDJlODY1ZGUyYzA4YTZhNTliM2QwNzAzZjUyNWViNWRhZDMxNGQ5NmFjZTc0NjE2MDQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY4MTNkMDdjMGZkOWM3ODc1M2U2NWY5NGViN2FmNmIwNTRjODkxN2QwOGQ1MTc5MzdiNzAzYzVkN2M3MmI1N2IifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_d3aabebbd0194f3b90d8d313191dd912",
+      "statement": "Monitoring persistence is bind-backed: Alloy stores state at /var/lib/alloy/data, Grafana at /var/lib/grafana, Loki at /loki, and Prometheus at /prometheus, while their configuration files are mounted read-only.",
+      "evidence": [
+        {
+          "resource": "repo://monitoring/alloy/docker-compose.yml#L5-L13",
+          "version": "repo-lines-v1:sha256:eb9d00b45737a97275ff4289e4f287f391270704e1fef8ff80f4419e6ba16e10:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiN2Y2YmE0MjU1ZDAxYzZkMmMwMTI1ZmQ3YTFhYjE2YTcxZmY3YTBiOThkYWZiNTQxYzNiMzA4YjIxN2Q4MmM2MiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzg4YmE0NWY2Y2NhNzdlZTk3MjViYjliNGM0YzZhODYyYzZjNDVjOThkM2FlMGI4MTM0YTM2NGEwMjgxNTY1MyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjY1ZDM4ZTU2N2U1NDM0ZjA3MzA5ZjRkNjQyMWJhNzE3MjE5MmE0MzQ1YWU4ODFmNDJiYzE4YWVjMDdlMjgzNCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjE1NGQyYjExZDBkY2MxMTcyNzBjMTEzMDk4OTkwMzA0YmQ5OWYwYTVhYzg4ZmRlOTljMmQ0YjE4ZWE2NzgxOSJ9"
+        },
+        {
+          "resource": "repo://monitoring/grafana/docker-compose.yml#L7-L8",
+          "version": "repo-lines-v1:sha256:920898eda0f2a70e32fdac043228ba96f65cec9a14478357c9062a1ede6f0da7:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEzZjRkOTY2MWU5ZDJjM2UxYTI4OWU1ODMyMjk5YmVhMTRjZGI2NGJmODg2NjFkZjcxN2IxMmZhMDJkMDExZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZjQ4ODdkODhlMThmZDg3MWU3NzU2NTZkYmNjNTdjYTgzZDcwYTM5NzkwZTdiNWE3Y2E1MTM3MWRlNTQ0ZmI4MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjM3ZmI4MDcwYzZmMTRmYWVjYTNlNTRhODAyOTRmM2UyZjNiOTVmYTY0OWQ1MmQ3YThiZjUxOGI3MWZhYzliYSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYTczNGM3ODMwZmYyYmMxZGM1MzFmM2VlZTQ2YTRiNjFiNGY0MGRjYWJjZGI1YzY3ZTE0N2QwMmU5MWFmYjljMiJ9"
+        },
+        {
+          "resource": "repo://monitoring/loki/docker-compose.yml#L5-L10",
+          "version": "repo-lines-v1:sha256:83a8d1095ce5691d0c1e004cc241cc436a7d90612931f3c236c00de702286de3:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODJhODA1NDMzOGYzOGUwZWQ1MzZjYjhhNDhmNjc3MjkxZjNhNDNhNTVlZWFkNjM5NWVhMDVmOGM4YzEwY2NhZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZTRiMWQ4NTllYjFjNTM0NzU0YWU0YzViN2JhOWY0Nzg0MTkyOGM0YmQ2OWU0MWIyZjhkZjdmZWZkMjEzMWZkMSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNzM3YzU0ZTA1MzY0N2QxNDY0OWY0MWMxODcxOTUzZTY5MTI1ZmI4MDQ4Njg1Y2Y0Mjc4YWZhOGY5Y2IwYjFmNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYTczNGM3ODMwZmYyYmMxZGM1MzFmM2VlZTQ2YTRiNjFiNGY0MGRjYWJjZGI1YzY3ZTE0N2QwMmU5MWFmYjljMiJ9"
+        },
+        {
+          "resource": "repo://monitoring/prometheus/docker-compose.yml#L5-L10",
+          "version": "repo-lines-v1:sha256:a5074255c5eddbcc9de94be78af271a0ad3057fde45281d71a8b1ac26a613018:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiN2Y2YmE0MjU1ZDAxYzZkMmMwMTI1ZmQ3YTFhYjE2YTcxZmY3YTBiOThkYWZiNTQxYzNiMzA4YjIxN2Q4MmM2MiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTZkZDBmZmI4OWE3YzdjMTdmYTkxOTZiYzM1OWNiMjUxODYxYzk2NjRjMmNhMmZjYTg3MmY4MGRjNGZmYjE5YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiN2NiYWE5ZTU0ZjI1NGY4N2M4ZDkyMTY5Yjc4OWExZDdmYzA0YzgwZTc0ZjM2NmM1NmRiNWQ0OWZhZWVkZGQ4ZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZWIyNDJjZTgyNDc2MDg2MWFlNzFmNmEyMDY2ZTYyMGVkNTYyYjI4OWIzOTk2ZDNkOGNiMTRjZGZiMTVjYzE4YSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_93fc56fd051b48afac8f75c338fe5f88",
+      "statement": "Loki uses filesystem storage under /loki, replication factor 1 with an in-memory ring, and a 30-day retention period with retention enabled in the compactor.",
+      "evidence": [
+        {
+          "resource": "repo://monitoring/loki/config/config.yml#L25-L38",
+          "version": "repo-lines-v1:sha256:d0f2df906045e0b0bf9c08b36fa18c346970884255c51f058428e92719bb81f6:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFlY2IxMmU1YTgxMjFkOTI0ZTZkYTU3OTQ5M2YxYjJiZWJhMDA1OTg3ZmNmMjU5MDFmYWIzNGVmYTg1Y2M4YWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgwNzQ0OTc2ZmQ4YjFkYzNlNDU1M2E3MjI2NmI1MDIzNzExN2EwMWJlNzVlZGZhNzdmZjc0Mjg0ZjdjMTY0NDYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE1M2ViMjczYjI2NGViYTU0ZmEyYTZmMzE1ODdmMGNlMzQwNTUyNjNlMTEzMzUwZDliZTk1NTY5Yzc3NTM4NjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg4YzBiNzE5ZWIxNzUzNDE5NDVmZjk4ZGM5ZjBjZjUxNThjYWUzYWZiYmU2ZGUyNmRiMWU3YmE2NzRhYjhmNDYifQ"
+        },
+        {
+          "resource": "repo://monitoring/loki/config/config.yml#L7-L13",
+          "version": "repo-lines-v1:sha256:28fcefc2cc75e5a98755d782d13722beee14513127ca73110192d9d4bd9a9902:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNWQxOGQ5NmMxOWEyNzRkNjMzNTBkMjFjN2IzMzgyZTNkNjVmNWI5NGY5ZGMxODZmNzZhMDk4YTZjY2VhZWM4ZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjNiZmZmNjdlNzUxM2M1ODdmYWQwYjcyYjUyNDE1OTZkMGY0YWRlMWNiZTA5YTY2OGUxNmU0NzY5ZTFlYWRhNCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNzc1NGVhOGJjYzM4YjRhOTA1ZjE0MzVkN2EwMTk3MDM1Njc5YzRhOTJiODA1Y2JiYmY0MDRmODQ3YmQ1NzQzNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiN2QzMGQ4MzhhN2E2OTczNDliY2I5ZGM3ZDllYzNmNzg5NTVkYjVkYWE2MTc1ODM0MjE0ZmRmYmZjMmIyZjhjMyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_0aee9c334e304905b8376b1c375c60f6",
+      "statement": "Minecraft and minecraft-backup use the Compose default network; backup reaches the server using RCON_HOST=minecraft, waits for a healthy Minecraft service, mounts the server data read-only, writes to ./backups, and runs hourly with a 24-backup prune count.",
+      "evidence": [
+        {
+          "resource": "repo://minecraft/docker-compose.yml#L1-L3",
+          "version": "repo-lines-v1:sha256:a9dd23eb7eb589af401003435e969f684130cd5ea9be3bcae6890101978c8ed1:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZmE3M2ZjY2RjOTllYTgzNTk2N2M3ZGVlN2VmYmVkMWYzY2E4NzI2MGQ5MjkzMTg1MGZkZDY2ZGE4Y2IxMmYxZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiM2FjMzY4MjZhNzgzMWVhYjliM2QwZTNiNTJiMGQ3MDE1NDhmNjlmZDY3NDIxZDFkZmZkMTY4MWNmYjU2OWVkYSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZDQwYjFjMDY0ZThhOGIwODIyMmMzMzQ5NTU2YzY1MjE5MTY5N2MyOTcyNGRhMmJhODEyNjEyODkwNDZjYmYyOCJ9"
+        },
+        {
+          "resource": "repo://minecraft/docker-compose.yml#L19-L34",
+          "version": "repo-lines-v1:sha256:c580d7d080f1a0bf23508290cab6ffeaf19fbd307d3007b386ffde2ea4d2f116:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI2NTRjODg3Y2E0ZmY0MzhhYjZkZmI0Mzk1YWE3YTk1MTAyMWNlNjAxODc0ZjhhNGU0YTg2ZTMwMWFkODYxOTgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1MzFlMjYwMzk4YWQ2MTA5MTRkZmMyOGYwNDhkMzkyNjRiYTdkNTAzMjc4ZGQyZjhiYjFjNGMxNGI0OTlkOTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJjMGIxZjgxYmUyMWJhNmI3NjJlYzFlZjA5M2YxM2I2YTc1NTQ3YTA1NWUwNzI1MGRhY2VhZjUxZDlmY2RjYTgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a901a9500e7a4a47a4c462b2f41263e4",
+      "statement": "Minecraft publishes host port 55555 to container port 25565, while minecraft-backup publishes no port.",
+      "evidence": [
+        {
+          "resource": "repo://minecraft/docker-compose.yml#L19-L34",
+          "version": "repo-lines-v1:sha256:c580d7d080f1a0bf23508290cab6ffeaf19fbd307d3007b386ffde2ea4d2f116:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI2NTRjODg3Y2E0ZmY0MzhhYjZkZmI0Mzk1YWE3YTk1MTAyMWNlNjAxODc0ZjhhNGU0YTg2ZTMwMWFkODYxOTgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1MzFlMjYwMzk4YWQ2MTA5MTRkZmMyOGYwNDhkMzkyNjRiYTdkNTAzMjc4ZGQyZjhiYjFjNGMxNGI0OTlkOTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJjMGIxZjgxYmUyMWJhNmI3NjJlYzFlZjA5M2YxM2I2YTc1NTQ3YTA1NWUwNzI1MGRhY2VhZjUxZDlmY2RjYTgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://minecraft/docker-compose.yml#L7-L8",
+          "version": "repo-lines-v1:sha256:64cb7a9241a388bb22ff7495f82f9198d342d67acf320bafdde6422c94857e04:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYmMxNmVkMjM5YTM2NTFiNTA3OWMwZTRlN2YwNzg0NGVhMzI5Yzg3NjI4YmY5ZmNjNDYzNjc3MzNmNWUxZTkzZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOWM0ZjFlNjc3MDAyZGQyZTg3NTdjNzhhNzI1YmM5OTdmNjFjZjFjZThjM2QyNDBiYjJlZjczNzkwNjI5YzM0OCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZDQwYjFjMDY0ZThhOGIwODIyMmMzMzQ5NTU2YzY1MjE5MTY5N2MyOTcyNGRhMmJhODEyNjEyODkwNDZjYmYyOCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNWRlNzE5OWI2ZmU4NmM0YTQ5NTIxMjQyYzg0ZjUxNDlkZjY2OTZiMjdhMmY2YWY5ZmRjMWM5MDgyMzIzNGUyYyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_a2680a866f454650b0c9e2a89551b743",
+      "statement": "Plex uses host networking, mounts its host-specific configuration directory to /config and /mnt/media to /media, and therefore has no container port mapping in its Compose definition.",
+      "evidence": [
+        {
+          "resource": "repo://plex/docker-compose.yml#L1-L15",
+          "version": "repo-lines-v1:sha256:01d3fbe53df06ec4068d3da1c1537ee10f0ff76f4982a161d64beb556aa7278c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhNzNmY2NkYzk5ZWE4MzU5NjdjN2RlZTdlZmJlZDFmM2NhODcyNjBkOTI5MzE4NTBmZGQ2NmRhOGNiMTJmMWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUxZWNhNzQ5N2QxOTE5OWIwYjM0YjAyMjliODVlNTYzMTg5MmNlYzMzNTA2NTY5ZTg3Y2U3ZDljMWJlYzMxMmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoyLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjMyMGMyMGYwNTVlZDRkZTA1YmU5MjJmODY3YzAyOTVlYWJkNTI0MWUxMzc1NzY2YzFjNmJhZGFhOGU2NGExZjkifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a5f6d982869b460badcf83f3a2c255a0",
+      "statement": "Server-monitor reaches Plex through host.docker.internal mapped to the host gateway and reaches deploy-agent through the Compose service URL http://deploy-agent:9000.",
+      "evidence": [
+        {
+          "resource": "repo://server-monitor/docker-compose.yml#L22-L29",
+          "version": "repo-lines-v1:sha256:62d7e9b066868f7a568bcd543699372c2d37c414d70bad511824fc1b457d65f9:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjI3NDYzMzRmZGJkNjUxMzIzOWYxMzI2ZGI4YjYxMjc1N2I1YjMyYzA4MDhiNTA4MWE5OTM3ZjY1MzNiOGRiOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTQ5Zjk4ZjEyOWMyMDNmYmNiNDA0ODlkNTNiODRkODJlODBlMjk1YzE2OTJmN2IyNjE1YmVjM2MyMTExZTAxYiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYTUxZDFlOGU0MzFiMmI4NjE5ZDMzNmJjZGYzYTA4ZTQyYzhmNjdmNGVmZmJjZTMzNTZmN2EzMTViYTI3M2E2NiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOWMwYjA2ZTg5ODZhYmY3YzM5OTYyNjIyMGM0NTkwYWRhNzZlNmFhNmYzYjJkMzk0Nzg1ZTgzZWI3MTM0ZWZkOCJ9"
+        },
+        {
+          "resource": "repo://server-monitor/docker-compose.yml#L31-L37",
+          "version": "repo-lines-v1:sha256:9b4828a5e3c989de546837c41e31ae0f874e2d7c2ffce3ddd15146840a25a603:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYmY1YjgwYzk2Y2JmYjA5NzU1Yzc2MDBjM2QzYjUwOTNjMGJmMDllYWU4ODBiZDc5N2M3ZDEwN2ZiZDc4OWM5YiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzY2YjIwYzkzY2I4MWE2NDY4OWQzMDY4MDNlYzY3ZDViZmI0OTBiMDM3NDhjZDdhY2NiM2M4YzcxNzgwN2JlZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiODZlNmYzNmEwOTRjMDFjY2Q5ZmZmOTY2ZDI0ZTQ1Y2JjYTg5ZjhmNjNhZjJiZjE1YzkxMDVmYTZjNzNkZWE3MSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYmM4ZjczYWRhNmVjM2NlNzc5MTY0ZGE2YjdiMzVlZTNiYzY3ZTA0ODlhZjFiN2NmOTdmZGFiMjFlOTE5ODZlZCJ9"
+        },
+        {
+          "resource": "repo://server-monitor/docker-compose.yml#L7-L10",
+          "version": "repo-lines-v1:sha256:97944c0c059255d558a0f1be98219b076e479ff944be8a8b37aba75db7ef09e7:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYmMxNmVkMjM5YTM2NTFiNTA3OWMwZTRlN2YwNzg0NGVhMzI5Yzg3NjI4YmY5ZmNjNDYzNjc3MzNmNWUxZTkzZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNmQ2MzI5Y2E5MmU3NDFhZDI5OTRlMzY4OWY1MWNlNWNhYzE1NGMwYTA5M2JlOWY3NTBkMDA3Yjk2MjlhMzVhNiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYzBjMWJlNDM1ZGI2ZDIzOTNmYzMxZTg1OWU2YzAwNTMzNzQ2M2Y2MTcxNGEwNDkwNGIwMmI0ZmE3YWUyYTdlNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjc1NzI4NjdmOTg4NDE3MzAxMTU5ZDk1MGQzOWJjM2MyYjlmNTQ1YjU4OWUyOTRjYWYwNjhlZmQ3MDljZDYyOSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_5909756f6ef64170b26b2529021d10a3",
+      "statement": "Node-exporter reads the host filesystem through a read-only /:/host:rslave mount and --path.rootfs=/host, while smartctl-exporter runs as root with privileged mode and accesses host devices through /dev:/hostdev.",
+      "evidence": [
+        {
+          "resource": "repo://monitoring/prometheus/docker-compose.yml#L17-L25",
+          "version": "repo-lines-v1:sha256:cce1e58c3ae908775c9bb0cb76284fcf98b47eb0b522af0862fd5eab22eee38a:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZjRhODMyODEwNTA0NjRjMzdjNjAzOGRlYWQ0ZDZkZTdhYzYzODUxOTMyYWU2ZmJkYTg3NjQwYTgyZTdkZTA4ZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzU3YjJkYTMzYTIwMjY2NTRjMzYwNDU3ZjM2YzJkNWZmZTcyOWJlMjhmZmNiNzYxODc4ZmRmZTJiZGZjOTY4YSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjBhYzZlYmQ2ODhlOTE3M2ZhY2U3MDg1MzQ1YTg2MjYyYzk3NDk2OTZlMzBkOWEzODExOGRjYjJjYzZlNzJkZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjVlNGJkOTkyODk0ZmNmOGUzNmE1ZmZhYzhmZDFiNDQ3MDhmNzM0MDA4NjA2MzNhNWJiMTQ4ODgzMjZhZTQ1MiJ9"
+        },
+        {
+          "resource": "repo://monitoring/smartctl-exporter/docker-compose.yml#L1-L12",
+          "version": "repo-lines-v1:sha256:6f55f9b13cd3d5f840d8a83ab0aaa00528ea8ec9edb9c5513e8d1f9e0670d500:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhNzNmY2NkYzk5ZWE4MzU5NjdjN2RlZTdlZmJlZDFmM2NhODcyNjBkOTI5MzE4NTBmZGQ2NmRhOGNiMTJmMWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMwZmQ2ZTkwMjM1YzJjNzliMzkzODkyMzRkNTBmOTZiMDU1ZjU5OTc3N2NiNTI4ZmMzZDhhMDQ0ZjBjYzEzNTUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE3MzRjNzgzMGZmMmJjMWRjNTMxZjNlZWU0NmE0YjYxYjRmNDBkY2FiY2RiNWM2N2UxNDdkMDJlOTFhZmI5YzIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_13631b2bd02e4f7889cce960657838d0",
+      "statement": "Server-monitor uses host PID mode and read-only mounts for Docker, proc, sysfs, both monitored disk paths, the system D-Bus socket, WireGuard state, and the wg binary; its environment maps sda and sdb to /mnt/disk1 and /mnt/disk2 and identifies sdc as the root block device.",
+      "evidence": [
+        {
+          "resource": "repo://server-monitor/docker-compose.yml#L11-L29",
+          "version": "repo-lines-v1:sha256:183c8cc2bdcbbe30e84619acf4ecdfb3dd28459beb9fd95ea982a1cd6cf3b928:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxM2Y0ZDk2NjFlOWQyYzNlMWEyODllNTgzMjI5OWJlYTE0Y2RiNjRiZjg4NjYxZGY3MTdiMTJmYTAyZDAxMWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk0OWY5OGYxMjljMjAzZmJjYjQwNDg5ZDUzYjg0ZDgyZTgwZTI5NWMxNjkyZjdiMjYxNWJlYzNjMjExMWUwMWIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMxY2M3YmQxYWI0MmE4OTk3Yzk2NWNhM2Y3NzhjNzY1NDUwN2NiZGNhNjcwMzhhMjU5MWFkYzNlY2RiMzA5NjAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjljMGIwNmU4OTg2YWJmN2MzOTk2MjYyMjBjNDU5MGFkYTc2ZTZhYTZmM2IyZDM5NDc4NWU4M2ViNzEzNGVmZDgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_cd1814faa05942928d1f517ac9d68daf",
+      "statement": "Deploy-agent has read-write access to the host Docker socket and the HomeLab tree, read-only access to the host SSH directory, and persists deployment status at /home/sparrow/HomeLab/server-monitor/.deploy-status.json.",
+      "evidence": [
+        {
+          "resource": "repo://server-monitor/docker-compose.yml#L31-L44",
+          "version": "repo-lines-v1:sha256:dc9788eef59c774099c0a4d550f6ed850cee9de921f9ffb4a350b06540c5bbea:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmNWI4MGM5NmNiZmIwOTc1NWM3NjAwYzNkM2I1MDkzYzBiZjA5ZWFlODgwYmQ3OTdjN2QxMDdmYmQ3ODljOWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1MzFlMjYwMzk4YWQ2MTA5MTRkZmMyOGYwNDhkMzkyNjRiYTdkNTAzMjc4ZGQyZjhiYjFjNGMxNGI0OTlkOTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg2ZTZmMzZhMDk0YzAxY2NkOWZmZjk2NmQyNGU0NWNiY2E4OWY4ZjYzYWYyYmYxNWM5MTA1ZmE2YzczZGVhNzEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a80376b1079947148a2c56a1a6a31318",
+      "statement": "The monitoring and application service Compose projects expose distinct host ports, while internal monitoring communication uses the external monitoring network and service names rather than the published host ports.",
+      "evidence": [
+        {
+          "resource": "repo://monitoring/alloy/docker-compose.yml#L14-L17",
+          "version": "repo-lines-v1:sha256:ef321a1d52deda6d3146a308964fbd41ad4899bca51ae4af194d7a99f8413c13:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYmMxNmVkMjM5YTM2NTFiNTA3OWMwZTRlN2YwNzg0NGVhMzI5Yzg3NjI4YmY5ZmNjNDYzNjc3MzNmNWUxZTkzZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzU3YjJkYTMzYTIwMjY2NTRjMzYwNDU3ZjM2YzJkNWZmZTcyOWJlMjhmZmNiNzYxODc4ZmRmZTJiZGZjOTY4YSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiY2JmNTc3MThmZDU2OWViOWNiY2Y3ZTg1NjRjYzA2OTUyYmYyOTIzNDFiY2EyNTNlMGYwMmExMTNiMzNiNTgyMSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjVlNGJkOTkyODk0ZmNmOGUzNmE1ZmZhYzhmZDFiNDQ3MDhmNzM0MDA4NjA2MzNhNWJiMTQ4ODgzMjZhZTQ1MiJ9"
+        },
+        {
+          "resource": "repo://monitoring/grafana/docker-compose.yml#L5-L10",
+          "version": "repo-lines-v1:sha256:353ef6f63c6b4f761a8ee2bc11de07b9c29444eb05852ee415cab857bc327696:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYmMxNmVkMjM5YTM2NTFiNTA3OWMwZTRlN2YwNzg0NGVhMzI5Yzg3NjI4YmY5ZmNjNDYzNjc3MzNmNWUxZTkzZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzU3YjJkYTMzYTIwMjY2NTRjMzYwNDU3ZjM2YzJkNWZmZTcyOWJlMjhmZmNiNzYxODc4ZmRmZTJiZGZjOTY4YSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiN2U3NTg5ODgzN2NjOGVjYTI5ZTdiMTk0ODJiZmMxYTMyNjI1ZjQzZDNjYWE2Mjk4NjlhZTA3MmYxMTYzYWQ2YSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjVlNGJkOTkyODk0ZmNmOGUzNmE1ZmZhYzhmZDFiNDQ3MDhmNzM0MDA4NjA2MzNhNWJiMTQ4ODgzMjZhZTQ1MiJ9"
+        },
+        {
+          "resource": "repo://monitoring/loki/docker-compose.yml#L6-L12",
+          "version": "repo-lines-v1:sha256:f629bc583c6bd81f739b2abffbc51b59c4b7b9f02efa426addb99341b3d00150:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYmMxNmVkMjM5YTM2NTFiNTA3OWMwZTRlN2YwNzg0NGVhMzI5Yzg3NjI4YmY5ZmNjNDYzNjc3MzNmNWUxZTkzZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzU3YjJkYTMzYTIwMjY2NTRjMzYwNDU3ZjM2YzJkNWZmZTcyOWJlMjhmZmNiNzYxODc4ZmRmZTJiZGZjOTY4YSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDE4YzdhMWVmMjIwYWIwYTk3OThmYzI3N2NlNWM0OWNjYzlhNTdlNzQ1MWFiMGZjN2FiM2FiMjBiYTJhNzAwNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjVlNGJkOTkyODk0ZmNmOGUzNmE1ZmZhYzhmZDFiNDQ3MDhmNzM0MDA4NjA2MzNhNWJiMTQ4ODgzMjZhZTQ1MiJ9"
+        },
+        {
+          "resource": "repo://monitoring/prometheus/docker-compose.yml#L11-L14",
+          "version": "repo-lines-v1:sha256:932414673e119152ec7d037e91349d3aa14cc0e2e9abe70553aeb0353ae71683:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYmMxNmVkMjM5YTM2NTFiNTA3OWMwZTRlN2YwNzg0NGVhMzI5Yzg3NjI4YmY5ZmNjNDYzNjc3MzNmNWUxZTkzZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzU3YjJkYTMzYTIwMjY2NTRjMzYwNDU3ZjM2YzJkNWZmZTcyOWJlMjhmZmNiNzYxODc4ZmRmZTJiZGZjOTY4YSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjc0YjU0N2ExNzA2ODAzOWE2MmJiZjc0NWRlYjIzNzAzYmUwMmU2NWM2ZWRmZGZhOTllZjI4MDgzODNjMDdhYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZWQwZWEwYTc0ODBmYjJhOWVjOWM1ZDE2ZWM0YTA5YzQ0NzM5OTRmNDhhMGI5NmU0MjBiY2E0MTU3Y2QxMWViOCJ9"
+        },
+        {
+          "resource": "repo://monitoring/prometheus/prometheus.yml#L4-L11",
+          "version": "repo-lines-v1:sha256:61359c217f155444dfe88cf5170c8a32689ef0b9605ed403e9bd175009c9f82c:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiY2I0OWU1OTU1ZDBkYmExMzJjMzMwZDU5MjI5NDgyYmU2NTdhM2Q4OGYyY2NjZDlhMmQ5NzM1YjFiOGQ1YjA0OSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiN2VhMDVkN2NiMTRkOGUwOTY2ZWU4MDE0MjJlYTZkMTZhOGI3MWI3ZjRjMjNmNjI3Yjk5NWI0MzhmMTUzZDI0ZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMjQzYWE0MTUxM2MxNzQ2YWFkMDkzNTg4Mzc4ZjZiZDEwYWMwNjhmZDBiMGEyYTY2ZDQ3OTU1MGYzZDQ3MThjMyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiM2M5NGM2YmIxZjU2MDIwMjljZWEzNmYzYTBhNWYxZjE3ZWZhZTA4ZTZjYTUxOWY0ZjA2OGJkZjU5Yjg0OTg0ZSJ9"
+        },
+        {
+          "resource": "repo://monitoring/smartctl-exporter/docker-compose.yml#L10-L14",
+          "version": "repo-lines-v1:sha256:7846240120783becabfa239795e705019cd0df092efe35d09e5fb3f866a3deca:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiM2M2YzVjODRkOWYxOWJlNDUyZmJlNmQ3MDVlMmM0NjkyNDAwOGJiZGY2MmU4NmM5ZWE0MmQ2M2JjYWMxYTBjMSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzU3YjJkYTMzYTIwMjY2NTRjMzYwNDU3ZjM2YzJkNWZmZTcyOWJlMjhmZmNiNzYxODc4ZmRmZTJiZGZjOTY4YSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOTFmOWM1NTRiODk2ZDJiOWI3OTU2NTdiZDMxZjBiNzI5MmQwYWFiNjkwM2I1NjhhNWI2N2U1NDQ5MWE0YzA1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjVlNGJkOTkyODk0ZmNmOGUzNmE1ZmZhYzhmZDFiNDQ3MDhmNzM0MDA4NjA2MzNhNWJiMTQ4ODgzMjZhZTQ1MiJ9"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.5.0",
+    "at": "2026-09-09T11:31:25.948Z"
+  }
+}

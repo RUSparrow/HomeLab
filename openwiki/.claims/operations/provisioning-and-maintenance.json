@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:c24ec90b1dfa0000de4e5d9e6e68eaf8605ffde777abc010a07e69db3110b412",
+  "claims": [
+    {
+      "id": "claim_8f46886903b6485d9fe0993ec76a6db0",
+      "statement": "The repository's default Ansible configuration uses inventory.ini, disables host-key checking, and selects /usr/bin/python3; the default inventory places localhost in the server group with a local connection.",
+      "evidence": [
+        {
+          "resource": "repo://ansible/ansible.cfg#L1-L4",
+          "version": "repo-lines-v1:sha256:b674a31bebcb52ea9dab144fdfbf1ec4c486611ee49787c5f1e8ce48b1513e57:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNmM3NmM4YTlmMWNkYTBjZTI0NDUzM2NkNGY1OGFkODJlNTE2Mjc4NGRhODkxNTU0NDcxM2ZkNGEwMzg5ZjBkMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZmFkODY3MWU0NzlkY2Y4YWJhMzUzYjI3NWUyNTM0OGU3ZWNiYmQ2ZTRiYzFkOTNjZjdlMDJmZDY2YTBhNDliNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://ansible/inventory.ini#L1-L2",
+          "version": "repo-lines-v1:sha256:0d412a889326cb2778150d9af385f0d12dd1042076f5a676d3accedc8d0c6bac:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDI4MGEyOTFlMDgwODg1MjFjNTEzMjc5MzQ5NmM0ZWJhZmZhYmQyMjM3YmQwYjdlYjFjZDY4OTUyNWUzMGQxNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOWI3NTlhZTA3ZmFhOTBiZDY3ZTQwYzRhOWI0NDkzOTE5YzhkOGZlNzkxNWRkOWRmODE5Mjg2OWU2YmY4ZDU4ZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_3c42c8bc5dec4f9c889ed52f6789ed51",
+      "statement": "ansible/install-homelab.yml bootstraps an existing checkout: it updates apt, installs the listed Ubuntu and host packages, configures Docker's apt key and repository, installs Docker Engine and Compose packages, enables and starts Docker, and adds homelab_user to the docker group.",
+      "evidence": [
+        {
+          "resource": "repo://ansible/install-homelab.yml#L11-L32",
+          "version": "repo-lines-v1:sha256:9468739ff3ca63f21e9e7b34386fec0ef21c7dc538ff435043abd7534070b9c0:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRhNGNkYjZkMjFmODFmZmYyZmI2OTc2NjQ1MDljNWI4ZTAxNDk1NjliM2I1NjE5NmRlZDAwYmU5NDQ0NjllYTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA3MzY5ZmNlNTdiMDMyYjc5MDA2NGJhOTllNWQzZDFmOGExZmFiNjAzNTVjZDE0M2RmMzJlY2Y0MDIzZTE0OTAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU1YzIxNzlmODYyNDM3NTcxN2JjMzRlYzIwYjc2MWVjMmZhMmViOTZiY2Q3ZjZiNjg0MzNmNWFiMDUxYzMwYmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhlZjI5NzU1YjExYjM1NGUwM2FlZTc0ZTFiOTllMjFmYzAyMTQ1MTNhMGZhZmFmNTY5MTZiZjAzMjBlOWI5MDcifQ"
+        },
+        {
+          "resource": "repo://ansible/install-homelab.yml#L34-L83",
+          "version": "repo-lines-v1:sha256:8d72d87e6ed415875567323c63f0dfce3f1dfb72efc43242abf5eebcb325792a:eyJzZWxlY3RlZExpbmVDb3VudCI6NTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFmODk2YTNkOTM0MTkyMjRlZDA4ZjA2YjQ3NDZjYjhmYmFlNTVmYjQ1MGIxZDg1MzljYzAxNTliNWY5YWUxMTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVmM2NhNTVjNDNmMDQ3Nzc2MDQ3ZmYyNTYyMzM1OWM1Y2QwZTI4NjFiZWY1Nzg5YmFlZDg4ZjQ1Y2U1YTFlZGMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZlNjhkMzBiZTBhNjRkZDM5ZTAyYTIwYjJhNWM0NDUyODZmYTllZTg5MGJhOTJiMjNlNDIwNjMxYWM5ODc1MWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJhYzAzZWI3ZjNhMmM5MzZhZmRhYzk1YTQ3ODIyZWUwNWY5MmQ1Zjc5ODlkYzg2YWUwNTM1NTNiOGViMzBiMjEifQ"
+        },
+        {
+          "resource": "repo://ansible/install-homelab.yml#L6-L7",
+          "version": "repo-lines-v1:sha256:21311e5fba54c8f32f149318cade6a89c777b9a6405857c44ba8b80826142789:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODI4ZTBmZGVlMmUzYzBjZjhlZTM3OGNjNDVmMmNhYzI1NTNkYzg5NzQ2MmE0N2YzZjI1OWIyODJkZTA3Yjk0MCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTE1ZmNhZmI4YTVjYzcyNmViNjA0YmM0NTJjZWQxYmE3MDVmZGJlYjBlZDIxMzhlNjM5NzZlZDgwMjkzMTdlZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjdlZDE0OTIwYzFmYmVkNWQxODA4NGZmOWYwNWY5YzY0ZGQ5MWRjOTcxYTZmNTY1ZjE0MWM5YTUyMGNhYzY2YSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNTVjMjE3OWY4NjI0Mzc1NzE3YmMzNGVjMjBiNzYxZWMyZmEyZWI5NmJjZDdmNmI2ODQzM2Y1YWIwNTFjMzBiZiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_d1e91250a7d145fc9b93b8923a471e46",
+      "statement": "The existing-checkout installer requires homelab_path from outside its vars block, creates a fixed set of application runtime directories beneath it owned by homelab_user with mode 0755, and does not clone the repository.",
+      "evidence": [
+        {
+          "resource": "repo://ansible/install-homelab.yml#L6-L7",
+          "version": "repo-lines-v1:sha256:21311e5fba54c8f32f149318cade6a89c777b9a6405857c44ba8b80826142789:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODI4ZTBmZGVlMmUzYzBjZjhlZTM3OGNjNDVmMmNhYzI1NTNkYzg5NzQ2MmE0N2YzZjI1OWIyODJkZTA3Yjk0MCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTE1ZmNhZmI4YTVjYzcyNmViNjA0YmM0NTJjZWQxYmE3MDVmZGJlYjBlZDIxMzhlNjM5NzZlZDgwMjkzMTdlZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjdlZDE0OTIwYzFmYmVkNWQxODA4NGZmOWYwNWY5YzY0ZGQ5MWRjOTcxYTZmNTY1ZjE0MWM5YTUyMGNhYzY2YSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNTVjMjE3OWY4NjI0Mzc1NzE3YmMzNGVjMjBiNzYxZWMyZmEyZWI5NmJjZDdmNmI2ODQzM2Y1YWIwNTFjMzBiZiJ9"
+        },
+        {
+          "resource": "repo://ansible/install-homelab.yml#L85-L115",
+          "version": "repo-lines-v1:sha256:058349577a2a1d5faa17efaa3efc9280a1489ddde3d67302d15b24858267c8de:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg4ZmNhNzlhMTdkMjA0MTdhNzgzODhlOGE5NjhmOTYzOTJmYTQ0YjViYzY5YTEwY2JkNTIwMTkwNTViZTlmMDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZkYWI1YTAzZGQ3ZTI0MDg3MjEyYzRkMTc2MTQxZjlhNzk2YzJkYmI3NDRmNzBhNWJhMDM3MjJjYjQ1ZDMxNDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjIwNGY2YzA5OGEyOTQyNGI1NjQwMGJjZTkzNmUwM2NkNWFhMDFlYWUyMmZhMmE3NDNmMGMyYWQ4YTIwZjJiYzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImU4NTAyMDZlYTgxZTQzMTM2MjMxYjEzMjE5NzhhYzE0ZGVjMzIxYTc5NmZiNTQ4MmQyOTBiNmJjOTRiZjMwYzEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_14c6ecfcd6fb497b9c4429294ffe0cb0",
+      "statement": "The existing-checkout installer starts Compose projects sequentially in the declared order with docker compose up -d, then separately runs docker compose up -d --build for server-monitor.",
+      "evidence": [
+        {
+          "resource": "repo://ansible/install-homelab.yml#L117-L138",
+          "version": "repo-lines-v1:sha256:eaf84b6127bb6ca6d0e5afb8e60d0381f40ad7c496d3dcc98a7e0acd0a2e04db:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE1NzgyMmNmMDc4ZWM5MGRjOWJjYTdkYjgwNzZmYjdkMjY5NWRkZTljMmQzMmJlNzI5MDA1ZjkyZWE5YjgxMDIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZiZWNmNDgxMDEzMGZmZWQwNjA1NDgyYTZlOTE4YjY0NjFhYTBmM2MwZTM4YjVlMmNkZGY1ODg4OTM4MDA1ZTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcxMmZlM2JjYzViODI2NjBkZjljY2EzZGY3M2VjMTE3NzFlZWU0ZTM4NmY4OWU3ZmQwYTdhNjhmOTBmYTI4YmQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_d6915526b8d94c939851a7a9c2591084",
+      "statement": "ansible/install-homelab.ymlyy is a first-install variant that defines the HomeLab repository and path, creates the parent directory, clones the main branch as the non-root user, adds that user to the docker group, and enables and starts Docker, but does not create runtime directories or start Compose projects.",
+      "evidence": [
+        {
+          "resource": "repo://ansible/install-homelab.ymlyy#L6-L10",
+          "version": "repo-lines-v1:sha256:366bb5c9fbd1c8c0bcf08d01c092cd8744b7580131c11e28b80ce2048c83ddc2:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODI4ZTBmZGVlMmUzYzBjZjhlZTM3OGNjNDVmMmNhYzI1NTNkYzg5NzQ2MmE0N2YzZjI1OWIyODJkZTA3Yjk0MCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjdlZDE0OTIwYzFmYmVkNWQxODA4NGZmOWYwNWY5YzY0ZGQ5MWRjOTcxYTZmNTY1ZjE0MWM5YTUyMGNhYzY2YSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMGRlZjM3N2Y1NDRlYWFhYjcyNjZhYWY4YjJiMDhhN2Q1Y2YxNTQ1YTlkNjZhNmUxOGM4NjI4YmUyYjJjNzljOCJ9"
+        },
+        {
+          "resource": "repo://ansible/install-homelab.ymlyy#L72-L98",
+          "version": "repo-lines-v1:sha256:9346f890719c84252d862ff49d3e7a4a4521d28cde4474814c9d5bccfd0e9b2b:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg2MjE0NWMzNzdlOWFlM2E1MmQxOTI5YTA5ODI0OTFmMzU1NWI5ZjU4MTRkYmQ4NjY3NDNjMzViZjQ4MDgxYzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFhZTVmNzBjYmI2NTUwZGVmMDdlZmYxMDhiMDIxODMyM2QyNmZjODIzZDA2MWYxZDdkMzkxNzZkOTk5ODU0ZjYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImIwOWQwMjE4NjY3OWY5NmQyYmEzY2E5ZDRiNWEwNzg0ZDkwNjg5YjdmY2FmOWU5N2M5NDVmOTgzNjU5OGE5OGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_cf1d691ec1114a3b8eb9c6a7329fc9a8",
+      "statement": "The two installer variants differ in Docker repository architecture handling: install-homelab.yml derives architecture from Ansible facts, while install-homelab.ymlyy hard-codes amd64; they also use different Ansible variable expressions for the Ubuntu release.",
+      "evidence": [
+        {
+          "resource": "repo://ansible/install-homelab.yml#L46-L56",
+          "version": "repo-lines-v1:sha256:d5411582974ebe5e033ebe955e40613b0039cb62ab4494617481794033c89bdd:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc0ZWFmMDNjMWE4ZjM2YTk4NmM0MGFiOGEzMjViN2VlNzJmM2RkYzE4ZDZhYzNiYjdiMDYwMzQ1YTYyMDVjYmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJhMzQ5ZDJkNDBmNmVmNzBiNTMxZjYwMDM3NDZlOTQ5YTRkZGNjMTFkNjc4ZmMwOWVhNTdjYzZiOTZiZmJiZDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJmODY5OTY2MjVhMGFiMWZiMGRmMzY2ZjI0M2ViYTc0OTVmMzNjN2IxNzU3NTMzNDVlNDc3YzBiOTgxYzI2MTIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjcyNjQzM2JiYTYxNDI2NjUzYjQyNWRmYjc4MDkyNjIyNzRmOWEyOWFiMTkzODc1NGU4ODZiMGM2MGFkOWE5YmYifQ"
+        },
+        {
+          "resource": "repo://ansible/install-homelab.ymlyy#L48-L58",
+          "version": "repo-lines-v1:sha256:93f28857b32dde64d299dce28e347e38ff8fd4a128378bc1413e8974938e4223:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc0ZWFmMDNjMWE4ZjM2YTk4NmM0MGFiOGEzMjViN2VlNzJmM2RkYzE4ZDZhYzNiYjdiMDYwMzQ1YTYyMDVjYmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJhMzQ5ZDJkNDBmNmVmNzBiNTMxZjYwMDM3NDZlOTQ5YTRkZGNjMTFkNjc4ZmMwOWVhNTdjYzZiOTZiZmJiZDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJmODY5OTY2MjVhMGFiMWZiMGRmMzY2ZjI0M2ViYTc0OTVmMzNjN2IxNzU3NTMzNDVlNDc3YzBiOTgxYzI2MTIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImIwMjUwYjA3YzBlNjJiZDkzZGJiMzk3Njk5MTdhNzUxOWVlOTA1ODEzNGZmY2RkOGVhN2QyMWRjNDVkY2M4YmEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_e252965714b94c9aa0b1c14224025d59",
+      "statement": "ansible/update-server.yml refreshes images and recreates services for an explicit list of Compose project directories rooted at /home/sparrow/HomeLab: it runs docker compose pull for each project, reports the registered output, and then runs docker compose up -d in list order without building server-monitor.",
+      "evidence": [
+        {
+          "resource": "repo://ansible/update-server.yml#L21-L38",
+          "version": "repo-lines-v1:sha256:c353d0145388500504f6e4479c2bf8398113d260866dbe09834cb5a1f85e7609:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZiN2FiMjUzYWQ2NzAyYmFiYmU4OTYzM2U1NzUzOGRlYzJjZDQ0NTUzYjdlYmZjYTI2MTIxYjQxOTYyOGQyM2EiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM5ZmQyNDYwNWEyOTcxNGViYzc3MTkzNGVkZDc1ODUzNzY2YWRlZjA2OTZhZjMyMDFiZTBkMTIwYjlmM2NmNmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYyYWY2ZmYyMjExZDY0MGJlZWE2MGUzMGI4YTk2ZDJkNTZhMTY4N2U2YWFjZDhmYjcyOGNiMTFkNGMxNjk3ZWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJkNmM3NGUzZTdjYTUzNzIzZDVhMzJiZjliZjJhMDU2NjY2NGQwNGNmODc5YjVlNDdiZWQ3Y2M2Y2JkYmY0YWMifQ"
+        },
+        {
+          "resource": "repo://ansible/update-server.yml#L6-L20",
+          "version": "repo-lines-v1:sha256:eaddce15ad07a39840fcbcfa964f58643e27576ee3f40295db2a3458b428ba3b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgyOGUwZmRlZTJlM2MwY2Y4ZWUzNzhjYzQ1ZjJjYWMyNTUzZGM4OTc0NjJhNDdmM2YyNTliMjgyZGUwN2I5NDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ4MDBmZGNhYzRmMTA0OTNkMmYyZmEwOGQ3ZWUyYzgxYzBlNTc0OWU1ZDMzMGI2ZDgxNzQyOTI3M2NiNzEzYTUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY3ZWQxNDkyMGMxZmJlZDVkMTgwODRmZjlmMDVmOWM2NGRkOTFkYzk3MWE2ZjU2NWYxNDFjOWE1MjBjYWM2NmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjljNmU0ZDBiMWRlOGJkZWJkZWY4ZWYzZWNlOTdkOWIyZTNiYzllNWE1MzNhMDc2OTA4MGJhNTdjMzY1Njk0MWUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a0114c064fc54c7796a9ed5f3b5d11c8",
+      "statement": "The server-monitor Compose project relies on host integration paths and devices including the Docker socket, /proc, /sys, /mnt/disk1, /mnt/disk2, the system D-Bus socket, and a HomeLab WireGuard path, so those host contracts must be verified before startup.",
+      "evidence": [
+        {
+          "resource": "repo://server-monitor/docker-compose.yml#L11-L20",
+          "version": "repo-lines-v1:sha256:033f1af0748940b0f6dcd3e7aa062d875188cd64feea2deb1e6495ccdc0a3499:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxM2Y0ZDk2NjFlOWQyYzNlMWEyODllNTgzMjI5OWJlYTE0Y2RiNjRiZjg4NjYxZGY3MTdiMTJmYTAyZDAxMWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYwMjQxNGM2YjBhY2IzNDE5NTNmOWQ2NDU4MmQ5YjMwYjRjNDAxMzJiZmQ4ZTU0MmFiYjM2NzhiOGRiOTg0ZTAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMxY2M3YmQxYWI0MmE4OTk3Yzk2NWNhM2Y3NzhjNzY1NDUwN2NiZGNhNjcwMzhhMjU5MWFkYzNlY2RiMzA5NjAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRkNTA2ZmZmMTdiMjc4N2RmZGZhYTdjMWFhMTUyNGY4NTc5YjRkMzU4YTdjMTViYmM2MWM2YzRlY2I5ODdjZGUifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.5.0",
+    "at": "2026-09-09T11:31:25.948Z"
+  }
+}

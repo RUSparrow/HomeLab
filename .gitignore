@@ -38,6 +38,9 @@ minecraft/data/logs/
 minecraft/data/libraries/
 minecraft/data/.cache/
 minecraft/data/config/spark/tmp/
+minecraft/data/HomeLab/
+minecraft/data/world_old/
+
 
 # Server monitor runtime
 server-monitor/__pycache__/
@@ -66,3 +69,7 @@ syncthing/config/
 plex/config/
 plex/transcode/
 plex/cache/
+
+amnezia/installer/
+tv/
+minecraft/data/modernfix/

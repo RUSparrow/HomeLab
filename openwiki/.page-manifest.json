@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "pages": {
+    "/openwiki/architecture/docker-storage-and-networking.md": {
+      "pageVersion": "sha256:a475dae97413c67dfb0087fe8b0c3fe41d7f8e6f0f739df5ae6a2ac1f71e8ef9",
+      "completedBy": "openwiki/0.5.0",
+      "completedRunId": "fc28c38e-9b2e-4562-b361-54fa26e4dd79",
+      "gitHead": "954c33f34cf838a5a0a9f45a34fa681d17260290",
+      "sourceFingerprint": "sha256:9842a8347a206013b3ead5ed9bc0e5bf25413fc97d98e81da60fdcff32a9f64f"
+    },
+    "/openwiki/architecture/overview.md": {
+      "pageVersion": "sha256:dbbbfc228b8abc3aa4528c9940cc2a4a5f918da89af1ea2210927556eda9af94",
+      "completedBy": "openwiki/0.5.0",
+      "completedRunId": "fc28c38e-9b2e-4562-b361-54fa26e4dd79",
+      "gitHead": "954c33f34cf838a5a0a9f45a34fa681d17260290",
+      "sourceFingerprint": "sha256:9842a8347a206013b3ead5ed9bc0e5bf25413fc97d98e81da60fdcff32a9f64f"
+    },
+    "/openwiki/integrations/networking-and-vpn.md": {
+      "pageVersion": "sha256:b058ca21ca20594c538e7626771436d93e8df9e5c5d7b1052ce0ab1e87f72978",
+      "completedBy": "openwiki/0.5.0",
+      "completedRunId": "fc28c38e-9b2e-4562-b361-54fa26e4dd79",
+      "gitHead": "954c33f34cf838a5a0a9f45a34fa681d17260290",
+      "sourceFingerprint": "sha256:9842a8347a206013b3ead5ed9bc0e5bf25413fc97d98e81da60fdcff32a9f64f"
+    },
+    "/openwiki/integrations/server-monitor.md": {
+      "pageVersion": "sha256:e8aa88a2d9b3753b71396afafbcf5f7fd07c20a74ebe5ef228ca2e774cee7414",
+      "completedBy": "openwiki/0.5.0",
+      "completedRunId": "fc28c38e-9b2e-4562-b361-54fa26e4dd79",
+      "gitHead": "954c33f34cf838a5a0a9f45a34fa681d17260290",
+      "sourceFingerprint": "sha256:9842a8347a206013b3ead5ed9bc0e5bf25413fc97d98e81da60fdcff32a9f64f"
+    },
+    "/openwiki/operations/provisioning-and-maintenance.md": {
+      "pageVersion": "sha256:c24ec90b1dfa0000de4e5d9e6e68eaf8605ffde777abc010a07e69db3110b412",
+      "completedBy": "openwiki/0.5.0",
+      "completedRunId": "fc28c38e-9b2e-4562-b361-54fa26e4dd79",
+      "gitHead": "954c33f34cf838a5a0a9f45a34fa681d17260290",
+      "sourceFingerprint": "sha256:9842a8347a206013b3ead5ed9bc0e5bf25413fc97d98e81da60fdcff32a9f64f"
+    },
+    "/openwiki/quickstart.md": {
+      "pageVersion": "sha256:989089d9dc55d1d7e5687bacd644450db8c6bf373ec8fe79aaf190d97400f10c",
+      "completedBy": "openwiki/0.5.0",
+      "completedRunId": "fc28c38e-9b2e-4562-b361-54fa26e4dd79",
+      "gitHead": "954c33f34cf838a5a0a9f45a34fa681d17260290",
+      "sourceFingerprint": "sha256:9842a8347a206013b3ead5ed9bc0e5bf25413fc97d98e81da60fdcff32a9f64f"
+    },
+    "/openwiki/services/media-and-games.md": {
+      "pageVersion": "sha256:e9f07dcc8b14dad2473b0c87ee821bf509118676194f1f2866f97c28758afdb9",
+      "completedBy": "openwiki/0.5.0",
+      "completedRunId": "fc28c38e-9b2e-4562-b361-54fa26e4dd79",
+      "gitHead": "954c33f34cf838a5a0a9f45a34fa681d17260290",
+      "sourceFingerprint": "sha256:9842a8347a206013b3ead5ed9bc0e5bf25413fc97d98e81da60fdcff32a9f64f"
+    },
+    "/openwiki/services/monitoring.md": {
+      "pageVersion": "sha256:05a52622a9cf12cdf46992edb0c1d52cc162c48629372b6ca49f9797dfaa54dc",
+      "completedBy": "openwiki/0.5.0",
+      "completedRunId": "fc28c38e-9b2e-4562-b361-54fa26e4dd79",
+      "gitHead": "954c33f34cf838a5a0a9f45a34fa681d17260290",
+      "sourceFingerprint": "sha256:9842a8347a206013b3ead5ed9bc0e5bf25413fc97d98e81da60fdcff32a9f64f"
+    },
+    "/openwiki/services/web-and-sync.md": {
+      "pageVersion": "sha256:9ed7b5ca7a68788d5608c10d8e60ce698a383ecb0ab6576ba3be39f0df5c60fb",
+      "completedBy": "openwiki/0.5.0",
+      "completedRunId": "fc28c38e-9b2e-4562-b361-54fa26e4dd79",
+      "gitHead": "954c33f34cf838a5a0a9f45a34fa681d17260290",
+      "sourceFingerprint": "sha256:9842a8347a206013b3ead5ed9bc0e5bf25413fc97d98e81da60fdcff32a9f64f"
+    },
+    "/openwiki/testing/validation.md": {
+      "pageVersion": "sha256:7ba219e5354c490b57625717e1ae171e7ae51737258790f8c8c69e95cab2f93f",
+      "completedBy": "openwiki/0.5.0",
+      "completedRunId": "fc28c38e-9b2e-4562-b361-54fa26e4dd79",
+      "gitHead": "954c33f34cf838a5a0a9f45a34fa681d17260290",
+      "sourceFingerprint": "sha256:9842a8347a206013b3ead5ed9bc0e5bf25413fc97d98e81da60fdcff32a9f64f"
+    },
+    "/openwiki/workflows/deploy-and-update.md": {
+      "pageVersion": "sha256:4a257eda22301ecb6b1a8ad87a583755c95e670bbb5cd1efb9a58228cf789d70",
+      "completedBy": "openwiki/0.5.0",
+      "completedRunId": "fc28c38e-9b2e-4562-b361-54fa26e4dd79",
+      "gitHead": "954c33f34cf838a5a0a9f45a34fa681d17260290",
+      "sourceFingerprint": "sha256:9842a8347a206013b3ead5ed9bc0e5bf25413fc97d98e81da60fdcff32a9f64f"
+    }
+  }
+}
