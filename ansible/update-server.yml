@@ -5,14 +5,14 @@
 
   vars:
     compose_projects:
-      - /home/sparrow/HomeLab/syncthing
-      - /home/sparrow/HomeLab/website
-      - /home/sparrow/HomeLab/plex
-      - /home/sparrow/HomeLab/portainer
-      - /home/sparrow/HomeLab/vpn
-      - /home/sparrow/HomeLab/minecraft
-      - /home/sparrow/HomeLab/fail2ban
-      - /home/sparrow/HomeLab/server-monitor
+      - /home/sparrow/HomeLab/vpn/duckdns
+      - /home/sparrow/HomeLab/web/gateway
+      - /home/sparrow/HomeLab/web/pricefinder
+      - /home/sparrow/HomeLab/web/server-monitor
+      - /home/sparrow/HomeLab/tools/syncthing
+      - /home/sparrow/HomeLab/tools/portainer
+      - /home/sparrow/HomeLab/games/minecraft
+      - /home/sparrow/HomeLab/monitoring/fail2ban-exporter
       - /home/sparrow/HomeLab/monitoring/loki
       - /home/sparrow/HomeLab/monitoring/grafana
       - /home/sparrow/HomeLab/monitoring/smartctl-exporter

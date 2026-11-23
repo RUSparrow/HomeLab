@@ -90,49 +90,46 @@
         group: "{{ homelab_user }}"
         mode: "0755"
       loop:
-        - "{{ homelab_path }}/plex/config"
-        - "{{ homelab_path }}/plex/transcode"
-        - "{{ homelab_path }}/plex/cache"
+        - "{{ homelab_path }}/media/plex/config"
+        - "{{ homelab_path }}/media/plex/transcode"
+        - "{{ homelab_path }}/media/plex/cache"
 
         - "{{ homelab_path }}/monitoring/grafana/data"
         - "{{ homelab_path }}/monitoring/loki/data"
         - "{{ homelab_path }}/monitoring/prometheus/data"
         - "{{ homelab_path }}/monitoring/alloy/data"
 
-        - "{{ homelab_path }}/portainer/data"
+        - "{{ homelab_path }}/tools/portainer/data"
 
-        - "{{ homelab_path }}/syncthing/data"
-        - "{{ homelab_path }}/syncthing/config"
+        - "{{ homelab_path }}/tools/syncthing/data"
 
-        - "{{ homelab_path }}/minecraft/data"
-        - "{{ homelab_path }}/minecraft/backups"
+        - "{{ homelab_path }}/games/minecraft/data"
+        - "{{ homelab_path }}/games/minecraft/backups"
 
-        - "{{ homelab_path }}/vpn/wireguard/server"
-        - "{{ homelab_path }}/vpn/wireguard/peer1"
-        - "{{ homelab_path }}/vpn/wireguard/wg_confs"
-        - "{{ homelab_path }}/vpn/duckdns"
+        - "{{ homelab_path }}/vpn/duckdns/config"
 
-        - "{{ homelab_path }}/server-monitor"
+        - "{{ homelab_path }}/security/clamav/database"
+        - "{{ homelab_path }}/security/clamav/reports"
 
     - name: Start Docker Compose projects
       ansible.builtin.command:
-        cmd: docker compose up -d
-        chdir: "{{ item }}"
+        cmd: docker compose up -d --build
+        chdir: "{{ homelab_path }}/{{ item }}"
       loop:
-        - "{{ homelab_path }}/syncthing"
-        - "{{ homelab_path }}/website"
-        - "{{ homelab_path }}/plex"
-        - "{{ homelab_path }}/portainer"
-        - "{{ homelab_path }}/vpn"
-        - "{{ homelab_path }}/minecraft"
-        - "{{ homelab_path }}/fail2ban"
-        - "{{ homelab_path }}/monitoring/loki"
-        - "{{ homelab_path }}/monitoring/grafana"
-        - "{{ homelab_path }}/monitoring/smartctl-exporter"
-        - "{{ homelab_path }}/monitoring/alloy"
-        - "{{ homelab_path }}/monitoring/prometheus"
+        - vpn/duckdns
+        - web/gateway
+        - web/pricefinder
+        - tools/syncthing
+        - tools/portainer
+        - games/minecraft
+        - monitoring/fail2ban-exporter
+        - monitoring/loki
+        - monitoring/grafana
+        - monitoring/smartctl-exporter
+        - monitoring/alloy
+        - monitoring/prometheus
 
     - name: Build and start Server Monitor
       ansible.builtin.command:
         cmd: docker compose up -d --build
-        chdir: "{{ homelab_path }}/server-monitor"
+        chdir: "{{ homelab_path }}/web/server-monitor"

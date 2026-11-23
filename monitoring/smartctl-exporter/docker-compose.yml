@@ -1,3 +1,5 @@
+name: smartctl-exporter
+
 services:
   smartctl-exporter:
     image: prometheuscommunity/smartctl-exporter:latest

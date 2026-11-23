@@ -1,0 +1,10 @@
+name: price-watcher
+
+services:
+  pricefinder-api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    container_name: pricefinder-api
+    network_mode: host
+    restart: unless-stopped

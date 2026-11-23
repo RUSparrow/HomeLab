@@ -1,3 +1,5 @@
+name: loki
+
 services:
   loki:
     image: grafana/loki:latest

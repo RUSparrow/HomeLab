@@ -1,0 +1,56 @@
+name: server-monitor
+
+services:
+  server-monitor:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: server-monitor
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /sys:/sys:ro
+      - /mnt/disk1:/mnt/disk1:ro
+      - /mnt/disk2:/mnt/disk2:ro
+      - /run/dbus/system_bus_socket:/run/dbus/system_bus_socket:ro
+      - /etc/hostname:/host/etc/hostname:ro
+    pid: host
+    restart: unless-stopped
+    environment:
+      SYSFS_PATH: /sys
+      DBUS_SYSTEM_BUS_ADDRESS: unix:path=/run/dbus/system_bus_socket
+      PLEX_WEB_HOST: host.docker.internal
+      PLEX_WEB_PORT: "32400"
+      DEPLOY_AGENT_URL: http://deploy-agent:9000
+      ROOT_BLOCK_DEVICE: sdc
+      STORAGE_DISKS: sda:/mnt/disk1,sdb:/mnt/disk2
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  deploy-agent:
+    build:
+      context: .
+      dockerfile: deploy-agent/Dockerfile
+    container_name: deploy-agent
+    # Порт наружу не публикуется: агент нужен только панели,
+    # которая обращается к нему по внутренней сети Docker.
+    expose:
+      - "9000"
+    volumes:
+      - "/home/sparrow/HomeLab:/home/sparrow/HomeLab"
+      - "/home/sparrow/.ssh:/root/.ssh:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    environment:
+      DEPLOY_STATUS_FILE: /home/sparrow/HomeLab/web/server-monitor/.deploy-status.json
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:9000/status', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    restart: unless-stopped

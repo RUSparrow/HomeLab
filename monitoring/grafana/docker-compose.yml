@@ -1,3 +1,5 @@
+name: grafana
+
 services:
   grafana:
     image: grafana/grafana:latest
