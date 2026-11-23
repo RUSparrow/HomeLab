@@ -5,10 +5,9 @@ import threading
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
-#testv4
 
 DEPLOY_SCRIPT = Path(__file__).resolve().parent.parent / "scripts" / "deploy.sh"
-STATUS_FILE = Path(os.getenv("DEPLOY_STATUS_FILE", "/home/sparrow/site/server-monitor/.deploy-status.json"))
+STATUS_FILE = Path(os.getenv("DEPLOY_STATUS_FILE", "/home/sparrow/HomeLab/server-monitor/.deploy-status.json"))
 status_lock = threading.Lock()
 
 app = FastAPI(title="Deploy Agent")

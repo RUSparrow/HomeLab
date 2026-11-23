@@ -1,0 +1,57 @@
+# Generated Graphify output
+graphify-out/
+
+# Git internals
+.git/
+
+# Minecraft runtime
+minecraft/data/HomeLab/
+minecraft/data/world/
+minecraft/data/world_old/
+minecraft/data/world_nether/
+minecraft/data/world_the_end/
+minecraft/data/logs/
+minecraft/data/libraries/
+minecraft/data/.cache/
+minecraft/data/crash-reports/
+minecraft/data/modernfix/
+
+# Minecraft generated/runtime files
+minecraft/backups/
+
+# Plex runtime
+plex/config/
+plex/transcode/
+plex/cache/
+
+# Monitoring runtime data
+monitoring/grafana/data/
+monitoring/loki/data/
+monitoring/prometheus/data/
+monitoring/alloy/data/
+
+# Portainer runtime
+portainer/data/
+
+# Syncthing runtime
+syncthing/data/
+syncthing/config/
+
+# Amnezia private/runtime data and installer
+amnezia/clients/
+amnezia/configs/
+amnezia/installer/
+
+# Old WireGuard runtime/private data
+vpn/wireguard/server/
+vpn/wireguard/peer*/
+vpn/wireguard/wg_confs/
+vpn/duckdns/
+
+# Installers / binaries not useful for architecture
+tv/
+
+# Caches and logs
+**/*.log
+**/__pycache__/
+**/.cache/

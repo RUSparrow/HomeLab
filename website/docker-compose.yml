@@ -2,6 +2,8 @@ services:
   web:
     image: nginx:latest
     container_name: website
+    profiles:
+      - legacy
     ports:
       - "8081:80"
     volumes:

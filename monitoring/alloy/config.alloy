@@ -7,6 +7,12 @@ discovery.relabel "containers" {
 
   rule {
     source_labels = ["__meta_docker_container_name"]
+    regex         = "/amnezia-awg2"
+    action        = "drop"
+  }
+
+  rule {
+    source_labels = ["__meta_docker_container_name"]
     regex         = "/(.*)"
     target_label  = "service_name"
   }
@@ -22,4 +28,19 @@ loki.write "default" {
   endpoint {
     url = "http://loki:3100/loki/api/v1/push"
   }
+}
+
+
+// ClamAV scan reports
+local.file_match "clamav_reports" {
+  path_targets = [{
+    "__path__"     = "/var/log/clamav/scan-*.log",
+    "job"          = "clamav",
+    "service_name" = "clamav",
+  }]
+}
+
+loki.source.file "clamav_reports" {
+  targets    = local.file_match.clamav_reports.targets
+  forward_to = [loki.write.default.receiver]
 }

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Поиск товаров и цен в интернет-магазинах">
+  <meta name="theme-color" content="#0b1020">
+  <title>PriceFinder — поиск товаров</title>
+  <link rel="stylesheet" href="/css/style.css?v=7">
+</head>
+<body>
+  <header class="header">
+    <nav class="nav container">
+      <a class="nav__logo" href="/" aria-label="PriceFinder — главная">
+        <span class="logo-icon" aria-hidden="true">⌕</span>
+        <span>Price<span class="accent">Finder</span></span>
+      </a>
+
+      <a class="nav__back" id="monitor-link" href="http://localhost:8080">
+        Server Monitor <span aria-hidden="true">↗</span>
+      </a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <h1 class="hero__title">
+        Найди товар<br>
+        <span class="accent">Сравни варианты</span>
+      </h1>
+
+      <p class="hero__description">
+        Ищи товары в магазинах разных стран и открывай найденные предложения
+        в один клик.
+      </p>
+
+      <form class="search" id="search-form">
+        <label class="visually-hidden" for="search-input">Что ищем?</label>
+        <input
+          id="search-input"
+          name="q"
+          type="search"
+          placeholder="Например, Ryzen 7 9800X3D"
+          autocomplete="off"
+          required
+        >
+        <button class="search__button" type="submit" aria-label="Найти товары">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="10.8" cy="10.8" r="6.8"></circle>
+            <path d="m16 16 5 5"></path>
+          </svg>
+          <span>Найти</span>
+        </button>
+      </form>
+
+      <div class="popular">
+        <span class="popular__label">Примеры запросов</span>
+        <div class="popular__items">
+          <button type="button" class="query-chip" data-query="Ryzen 7 9800X3D">Процессоры</button>
+          <button type="button" class="query-chip" data-query="RTX 5070 Ti">Видеокарты</button>
+          <button type="button" class="query-chip" data-query="Samsung 990 PRO 2TB">SSD</button>
+          <button type="button" class="query-chip" data-query="DDR5 6000 CL30 32GB">Оперативная память</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="results container" id="results" aria-live="polite">
+      <div class="results__heading">
+        <div>
+          <h2>Результаты поиска</h2>
+          <p id="results-description">Найденные товары будут отображаться здесь</p>
+        </div>
+        <span class="results__count" id="results-count">0 предложений</span>
+      </div>
+
+      <div class="empty-state" id="empty-state">
+        <div class="empty-state__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <circle cx="10.8" cy="10.8" r="6.8"></circle>
+            <path d="m16 16 5 5"></path>
+          </svg>
+        </div>
+        <h3>Что будем искать?</h3>
+        <p>Введи название товара в поле выше. Подключение реального поиска будет следующим этапом.</p>
+      </div>
+
+      <div class="offers" id="offers"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <a class="footer__logo" href="/">PriceFinder</a>
+      <span>Твой поиск товаров в интернете по магазинам Эстонии, Финляндии, Швеции, Германии и других стран</span>
+    </div>
+  </footer>
+
+  <script src="/js/main.js?v=6"></script>
+</body>
+</html>

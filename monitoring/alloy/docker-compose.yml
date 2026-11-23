@@ -10,12 +10,18 @@ services:
     volumes:
       - ./config.alloy:/etc/alloy/config.alloy:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /home/sparrow/HomeLab/clamav/reports:/var/log/clamav:ro
       - ./data:/var/lib/alloy/data
     ports:
       - "12345:12345"
     networks:
       - monitoring
     restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 networks:
   monitoring:

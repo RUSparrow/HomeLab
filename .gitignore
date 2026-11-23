@@ -1,75 +1,54 @@
 # =========================
-# Runtime / application data
+# Секреты — никогда не коммитим (репозиторий публичный)
 # =========================
-
-# Portainer
-portainer/data/
-
-# Grafana
-monitoring/grafana/data/
-
-# Loki
-monitoring/loki/data/
-
-# Alloy
-monitoring/alloy/data/
-
-# Prometheus
-monitoring/prometheus/data/
-
-# Minecraft runtime
-minecraft/backups/
-minecraft/data/crash-reports/
-minecraft/data/hs_err_pid*.log
-minecraft/data/.run-forge.env
-minecraft/data/.rcon-cli.env
-minecraft/data/.rcon-cli.yaml
-minecraft/data/banned-players.json
-minecraft/data/banned-ips.json
-minecraft/data/ops.json
-minecraft/data/whitelist.json
-minecraft/data/usercache.json
-minecraft/data/usernamecache.json
-minecraft/data/eula.txt
-minecraft/data/world/
-minecraft/data/world_nether/
-minecraft/data/world_the_end/
-minecraft/data/logs/
-minecraft/data/libraries/
-minecraft/data/.cache/
-minecraft/data/config/spark/tmp/
-minecraft/data/HomeLab/
-minecraft/data/world_old/
-
-
-# Server monitor runtime
-server-monitor/__pycache__/
-server-monitor/*.log
-server-monitor/.deploy-status.json
-
-# VPN runtime
-vpn/wireguard/server/
-vpn/wireguard/peer*/
-vpn/wireguard/wg_confs/
-vpn/duckdns/
+.env
+*.env
+!*.env.example
+**/server.properties
 
 # =========================
+# Python / Node
+# =========================
+__pycache__/
+*.pyc
+.venv/
+venv/
+node_modules/
+
+# =========================
+# Данные сервисов (runtime)
+# =========================
+# Почти у всех сервисов данные лежат в ./data рядом с docker-compose.yml.
+# Уже отслеживаемые конфиги модов Minecraft остаются в git.
+**/data/
+**/backups/
+*.log
+.deploy-status.json
+
+# Plex
+**/plex/config/
+**/plex/transcode/
+**/plex/cache/
+
+# ClamAV: сигнатуры и отчёты
+**/clamav/database/
+**/clamav/reports/
+
+# VPN: ключи и конфиги клиентов
+vpn/duckdns/config/
+vpn/amnezia/installer/
+vpn/amnezia/clients/
+vpn/amnezia/configs/
+vpn/archive/
+
 # Syncthing
-# =========================
-
-syncthing/data/
-syncthing/config/
 .stfolder/
 .stignore
 
 # =========================
-# Plex runtime
+# Локальные файлы, не относящиеся к инфраструктуре
 # =========================
-
-plex/config/
-plex/transcode/
-plex/cache/
-
-amnezia/installer/
-tv/
-minecraft/data/modernfix/
+tools/tv/
+graph.html
+graphify-out/
+openwiki/

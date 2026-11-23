@@ -3,166 +3,91 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
   <title>Server Monitor</title>
-  <link rel="stylesheet" href="/static/css/style.css?v=3">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23131720'/%3E%3Cpath d='M6 20l5-6 5 4 5-8 5 6' fill='none' stroke='%233b82f6' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/static/css/style.css?v=21">
 </head>
-<body>
-  <div class="dashboard">
+<body class="is-loading">
+  <div class="dashboard" id="dashboard">
     <header class="header">
       <div class="header__left">
         <h1 class="header__title">Server Monitor</h1>
+        <p class="header__host" id="host-name">&nbsp;</p>
       </div>
       <div class="header__right">
-        <button class="update-button" id="update-project" type="button">Обновить проект</button>
-        <span class="status-dot" id="status-dot"></span>
-        <span class="header__status" id="connection-status">Подключение...</span>
-        <span class="header__updated" id="last-updated"></span>
+        <a class="icon-link" id="pricefinder-link" href="#" title="PriceFinder" aria-label="Открыть PriceFinder">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg>
+        </a>
+        <button class="btn btn--primary" id="update-project" type="button" title="git pull и пересборка панели">Обновить проект</button>
+        <div class="conn" id="conn" role="status" aria-live="polite">
+          <span class="conn__dot" aria-hidden="true"></span>
+          <span class="conn__text" id="conn-text">Подключение…</span>
+        </div>
       </div>
     </header>
 
-    <section class="metrics-grid">
-      <article class="metric-card" id="card-cpu">
-        <div class="metric-card__header">
-          <span class="metric-card__icon">CPU</span>
-        </div>
-        <div class="metric-card__value" id="cpu-value">—</div>
-        <div class="progress">
-          <div class="progress__bar" id="cpu-bar"></div>
-        </div>
-        <p class="metric-card__meta" id="cpu-meta">—</p>
-      </article>
+    <section class="section" aria-labelledby="sys-title">
+      <h2 class="section__title" id="sys-title">Система</h2>
+      <div class="cards cards--system">
+        <article class="card" id="card-cpu">
+          <div class="card__head"><span class="card__label">Процессор</span><span class="card__hint">10 мин</span></div>
+          <div class="card__value" id="cpu-value">—</div>
+          <svg class="spark" id="cpu-spark" viewBox="0 0 100 28" preserveAspectRatio="none" aria-hidden="true"></svg>
+          <div class="bar"><div class="bar__fill" id="cpu-bar"></div></div>
+          <p class="card__meta" id="cpu-meta">&nbsp;</p>
+        </article>
 
-      <article class="metric-card" id="card-ram">
-        <div class="metric-card__header">
-          <span class="metric-card__icon">RAM</span>
-        </div>
-        <div class="metric-card__value" id="ram-value">—</div>
-        <div class="progress">
-          <div class="progress__bar" id="ram-bar"></div>
-        </div>
-        <p class="metric-card__meta" id="ram-meta">—</p>
-      </article>
+        <article class="card" id="card-ram">
+          <div class="card__head"><span class="card__label">Память</span><span class="card__hint">10 мин</span></div>
+          <div class="card__value" id="ram-value">—</div>
+          <svg class="spark" id="ram-spark" viewBox="0 0 100 28" preserveAspectRatio="none" aria-hidden="true"></svg>
+          <div class="bar"><div class="bar__fill" id="ram-bar"></div></div>
+          <p class="card__meta" id="ram-meta">&nbsp;</p>
+        </article>
 
-      <article class="metric-card" id="card-disk">
-        <div class="metric-card__header">
-          <span class="metric-card__icon">DISK</span>
-        </div>
-        <div class="metric-card__value" id="disk-value">—</div>
-        <div class="progress">
-          <div class="progress__bar" id="disk-bar"></div>
-        </div>
-        <p class="metric-card__meta" id="disk-meta">—</p>
-      </article>
+        <article class="card" id="card-temp">
+          <div class="card__head"><span class="card__label">Температура</span><span class="card__hint">10 мин</span></div>
+          <div class="card__value" id="temp-value">—</div>
+          <svg class="spark" id="temp-spark" viewBox="0 0 100 28" preserveAspectRatio="none" aria-hidden="true"></svg>
+          <div class="bar"><div class="bar__fill" id="temp-bar"></div></div>
+          <p class="card__meta" id="temp-meta">&nbsp;</p>
+        </article>
 
-      <div class="metrics-grid__dynamic" id="storage-disks"></div>
-
-      <article class="metric-card metric-card--info" id="card-uptime">
-        <div class="metric-card__header">
-          <span class="metric-card__icon">UPTIME</span>
-        </div>
-        <div class="metric-card__value metric-card__value--large" id="uptime-value">—</div>
-      </article>
-
-      <article class="metric-card metric-card--info" id="card-temp">
-        <div class="metric-card__header">
-          <span class="metric-card__icon">PC TEMP</span>
-        </div>
-        <div class="metric-card__value metric-card__value--large" id="temp-value">—</div>
-      </article>
+        <article class="card" id="card-uptime">
+          <div class="card__head"><span class="card__label">Время работы</span></div>
+          <div class="card__value" id="uptime-value">—</div>
+          <p class="card__meta" id="uptime-meta">&nbsp;</p>
+        </article>
+      </div>
     </section>
 
-    <section class="plex-section" id="plex-section">
-      <div class="plex-section__header">
-        <h2 class="plex-section__title">Plex Media Server</h2>
-        <span class="status-badge" id="plex-status-badge">—</span>
+    <section class="section" aria-labelledby="disk-title">
+      <h2 class="section__title" id="disk-title">Хранилище</h2>
+      <div class="cards cards--disks" id="disks">
+        <article class="card card--skeleton"><div class="card__value">—</div></article>
       </div>
-      <div class="plex-grid" id="plex-grid">
-        <div class="plex-stat">
-          <span class="plex-stat__label">Сервис</span>
-          <span class="plex-stat__value" id="plex-service">plexmediaserver.service</span>
-        </div>
-        <div class="plex-stat">
-          <span class="plex-stat__label">Статус</span>
-          <span class="plex-stat__value" id="plex-status">—</span>
-        </div>
-        <div class="plex-stat">
-          <span class="plex-stat__label">Uptime</span>
-          <span class="plex-stat__value" id="plex-uptime">—</span>
-        </div>
-        <div class="plex-stat">
-          <span class="plex-stat__label">Веб-интерфейс</span>
-          <span class="plex-stat__value" id="plex-web">—</span>
-        </div>
-        <div class="plex-stat">
-          <span class="plex-stat__label">Порт</span>
-          <span class="plex-stat__value" id="plex-port">32400</span>
-        </div>
-        <div class="plex-stat">
-          <span class="plex-stat__label">PID</span>
-          <span class="plex-stat__value" id="plex-pid">—</span>
-        </div>
-      </div>
-      <p class="plex-empty" id="plex-empty" hidden>Сервис plexmediaserver.service не найден</p>
     </section>
-    
-<section class="wireguard-section">
-  <div class="wireguard-section__header">
-    <h2 class="wireguard-section__title">WireGuard VPN</h2>
-    <span class="status-badge" id="wireguard-status">—</span>
-  </div>
 
-  <div class="wireguard-info">
-    <div class="plex-stat">
-      <span class="plex-stat__label">Clients</span>
-      <span class="plex-stat__value" id="wireguard-count">—</span>
-    </div>
-  </div>
-
-  <div class="table-wrap">
-    <table class="wireguard-table">
-      <thead>
-        <tr>
-          <th>Key</th>
-          <th>Endpoint</th>
-          <th>Handshake</th>
-          <th>Traffic</th>
-        </tr>
-      </thead>
-      <tbody id="wireguard-tbody">
-        <tr>
-          <td colspan="4">Загрузка...</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-    <section class="docker-section">
-      <div class="docker-section__header">
-        <h2 class="docker-section__title">Docker контейнеры</h2>
-        <span class="docker-section__count" id="docker-count">0</span>
+    <section class="section panel" aria-labelledby="docker-title">
+      <div class="panel__head">
+        <h2 class="section__title" id="docker-title">Docker</h2>
+        <div class="docker-summary" id="docker-summary"></div>
       </div>
-      <div class="table-wrap">
-        <table class="wireguard-table">
-          <thead>
-            <tr>
-              <th>Имя</th>
-              <th>Статус</th>
-              <th>Образ</th>
-              <th>ID</th>
-            </tr>
-          </thead>
-          <tbody id="docker-tbody">
-            <tr>
-              <td colspan="4" class="docker-table__empty">Загрузка...</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="stack-head" aria-hidden="true">
+        <span>Проект</span><span>Контейнеры</span><span>Веб-интерфейс</span><span>Порты</span><span></span>
       </div>
-      <p class="docker-error" id="docker-error" hidden></p>
+      <div class="stacks" id="stacks">
+        <div class="stack stack--skeleton"></div>
+        <div class="stack stack--skeleton"></div>
+        <div class="stack stack--skeleton"></div>
+      </div>
+      <p class="panel__error" id="docker-error" hidden></p>
     </section>
   </div>
 
-  <script src="/static/js/app.js?v=3"></script>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="/static/js/app.js?v=21"></script>
 </body>
 </html>
