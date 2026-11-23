@@ -21,12 +21,43 @@ document.querySelectorAll("[data-query]").forEach((button) => {
 });
 
 const stages = [
-  { title: "Подготавливаем поиск", description: "Отправляем запрос серверу." },
-  { title: "Ищем магазины", description: "Поисковый бот обрабатывает запрос." },
-  { title: "Проверяем страницы", description: "Ожидаем результаты от сервера." },
-  { title: "Собираем информацию", description: "Получаем найденные предложения." },
-  { title: "Подготавливаем результаты", description: "Формируем список для отображения." },
+  { title: "Подготавливаем поиск", description: "Задача поставлена в очередь." },
+  { title: "Ищем магазины", description: "Опрашиваем поисковик по магазинам разных стран." },
+  { title: "Проверяем страницы", description: "Открываем найденные страницы и ищем цены." },
+  { title: "Сохраняем результаты", description: "Записываем предложения в базу." },
+  { title: "Готово", description: "Формируем список." },
 ];
+
+const STAGE_INDEX = { queued: 0, search: 1, pages: 2, save: 3, done: 4 };
+
+/** Реальный прогресс из бота: поиск 0–40 %, страницы 40–90 %, сохранение 95 %. */
+function applyProgress(progress) {
+  if (!progress) return;
+  const index = STAGE_INDEX[progress.stage] ?? 0;
+  updateStage(index);
+
+  const ratio = progress.total ? progress.done / progress.total : 0;
+  const percent = progress.stage === "search" ? 40 * ratio
+    : progress.stage === "pages" ? 40 + 50 * ratio
+    : progress.stage === "save" ? 95
+    : progress.stage === "done" ? 100 : 2;
+
+  const bar = document.getElementById("pf-progress-bar");
+  const label = document.getElementById("pf-progress-percent");
+  const description = document.getElementById("pf-stage-description");
+  if (bar) {
+    bar.style.width = `${percent.toFixed(0)}%`;
+    bar.parentElement.setAttribute("aria-valuenow", percent.toFixed(0));
+  }
+  if (label) label.textContent = `${percent.toFixed(0)} %`;
+  if (description && progress.total) {
+    if (progress.stage === "search") {
+      description.textContent = `Поисковых запросов: ${progress.done} из ${progress.total} · найдено ссылок: ${progress.found ?? 0}`;
+    } else if (progress.stage === "pages") {
+      description.textContent = `Проверено страниц: ${progress.done} из ${progress.total} · с ценой: ${progress.priced ?? 0}`;
+    }
+  }
+}
 
 function makeGearSvg(teeth) {
   const points = [];
@@ -252,16 +283,28 @@ function renderOffers(items) {
     if (item.price !== null && item.price !== undefined && item.price !== "") {
       const numericPrice = Number(item.price);
       price.textContent = Number.isFinite(numericPrice)
-        ? `${new Intl.NumberFormat("ru-RU", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          }).format(numericPrice)} ${item.currency || "€"}`
+        ? formatPrice(numericPrice, item.currency)
         : "Цена не указана";
     } else {
       price.textContent = "Цена не указана";
     }
 
     right.appendChild(price);
+
+    if (item.price_eur != null && item.currency && item.currency.toUpperCase() !== "EUR") {
+      const eur = document.createElement("div");
+      eur.className = "offer__eur";
+      eur.textContent = `≈ ${formatPrice(item.price_eur, "EUR")}`;
+      right.appendChild(eur);
+    }
+
+    if (item.price != null && item.confirmed === false) {
+      card.classList.add("offer--unconfirmed");
+      const note = document.createElement("div");
+      note.className = "offer__note";
+      note.textContent = "Цена найдена в тексте страницы — проверьте на сайте";
+      details.appendChild(note);
+    }
 
     if (item.url) {
       try {
@@ -283,6 +326,19 @@ function renderOffers(items) {
     card.append(details, right);
     offers.appendChild(card);
   }
+}
+
+function formatPrice(value, currency) {
+  const code = String(currency || "").toUpperCase();
+  try {
+    if (/^[A-Z]{3}$/.test(code)) {
+      return new Intl.NumberFormat("ru-RU", { style: "currency", currency: code }).format(value);
+    }
+  } catch {
+    // Неизвестный код валюты — покажем как есть.
+  }
+  const number = new Intl.NumberFormat("ru-RU", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value);
+  return code ? `${number} ${code}` : number;
 }
 
 function formatCount(count) {
@@ -336,7 +392,6 @@ searchForm.addEventListener("submit", async (event) => {
     }
 
     let job;
-    let pollCount = 0;
 
     while (runId === currentSearch) {
       await sleep(1500);
@@ -349,8 +404,7 @@ searchForm.addEventListener("submit", async (event) => {
 
       if (job.status === "completed" || job.status === "failed") break;
 
-      pollCount += 1;
-      updateStage(job.status === "queued" ? 0 : Math.min(1 + Math.floor(pollCount / 4), 3));
+      applyProgress(job.progress);
     }
 
     if (runId !== currentSearch) return;
@@ -374,6 +428,7 @@ searchForm.addEventListener("submit", async (event) => {
     }
 
     resultsCount.textContent = formatCount(found.length);
+    loadHistory();
 
     if (job.log) {
       console.info("PriceFinder search log:", job.log);
@@ -397,3 +452,51 @@ searchForm.addEventListener("submit", async (event) => {
     }
   }
 });
+
+
+/* ---------- Недавние запросы ---------- */
+
+const historyBox = document.getElementById("history");
+const historyItems = document.getElementById("history-items");
+
+async function showSavedOffers(item) {
+  ++currentSearch;
+  searchInput.value = item.query;
+  resultsDescription.textContent = `Запрос: «${item.query}» · сохранённые результаты`;
+  try {
+    const data = await readJson(await fetch(`/api/products/${item.product_id}/offers`, { cache: "no-store" }));
+    renderOffers(data.offers || []);
+    resultsCount.textContent = formatCount(data.count || 0);
+    if (data.count) {
+      emptyState.hidden = true;
+    } else {
+      showMessage("Предложений нет", "Нажмите «Найти», чтобы поискать заново.", "!");
+    }
+    document.getElementById("results").scrollIntoView({ behavior: "smooth", block: "start" });
+  } catch (error) {
+    showMessage("Не удалось загрузить результаты", error.message, "!");
+  }
+}
+
+async function loadHistory() {
+  if (!historyBox) return;
+  try {
+    const items = await readJson(await fetch("/api/history", { cache: "no-store" }));
+    historyItems.replaceChildren();
+    for (const item of items) {
+      const chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = "query-chip query-chip--history";
+      const price = item.min_price != null ? ` · от ${formatPrice(item.min_price, item.currency)}` : "";
+      chip.textContent = `${item.query}${price}`;
+      chip.title = `${formatCount(item.offers)} — показать сохранённые результаты`;
+      chip.addEventListener("click", () => showSavedOffers(item));
+      historyItems.appendChild(chip);
+    }
+    historyBox.hidden = items.length === 0;
+  } catch {
+    historyBox.hidden = true;
+  }
+}
+
+loadHistory();

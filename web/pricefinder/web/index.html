@@ -6,7 +6,7 @@
   <meta name="description" content="Поиск товаров и цен в интернет-магазинах">
   <meta name="theme-color" content="#0b1020">
   <title>PriceFinder — поиск товаров</title>
-  <link rel="stylesheet" href="/css/style.css?v=7">
+  <link rel="stylesheet" href="/css/style.css?v=9">
 </head>
 <body>
   <header class="header">
@@ -16,7 +16,7 @@
         <span>Price<span class="accent">Finder</span></span>
       </a>
 
-      <a class="nav__back" id="monitor-link" href="http://localhost:8080">
+      <a class="nav__back" id="monitor-link" href="/">
         Server Monitor <span aria-hidden="true">↗</span>
       </a>
     </nav>
@@ -53,6 +53,11 @@
         </button>
       </form>
 
+      <div class="popular" id="history" hidden>
+        <span class="popular__label">Недавние запросы</span>
+        <div class="popular__items" id="history-items"></div>
+      </div>
+
       <div class="popular">
         <span class="popular__label">Примеры запросов</span>
         <div class="popular__items">
@@ -81,7 +86,7 @@
           </svg>
         </div>
         <h3>Что будем искать?</h3>
-        <p>Введи название товара в поле выше. Подключение реального поиска будет следующим этапом.</p>
+        <p>Введи название товара — бот проверит магазины Эстонии, Латвии, Литвы, Финляндии, Скандинавии, Германии и Польши. Поиск занимает 1–3 минуты.</p>
       </div>
 
       <div class="offers" id="offers"></div>
@@ -95,6 +100,6 @@
     </div>
   </footer>
 
-  <script src="/js/main.js?v=6"></script>
+  <script src="/js/main.js?v=8"></script>
 </body>
 </html>

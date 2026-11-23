@@ -1,1215 +1,509 @@
+"""PriceFinder — поиск товара по магазинам и извлечение цен.
 
+Запуск: python bot.py "Ryzen 7 9800X3D"
+
+Скрипт печатает в stdout служебные строки вида
+    @@progress {"stage": "search", "done": 3, "total": 52}
+по которым API показывает реальный прогресс поиска.
+"""
+
+import json
+import os
 import re
-import psycopg2
 import sys
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from urllib.parse import urlparse
 
+import psycopg2
 import requests
 from bs4 import BeautifulSoup
 from ddgs import DDGS
 
-
 HEADERS = {
     "User-Agent": (
-        "Mozilla/5.0 (X11; Linux x86_64) "
-        "AppleWebKit/537.36 "
-        "(KHTML, like Gecko) "
-        "Chrome/140.0 Safari/537.36"
-    )
+        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+        "(KHTML, like Gecko) Chrome/140.0 Safari/537.36"
+    ),
+    "Accept-Language": "en;q=0.9,et;q=0.8,ru;q=0.7",
 }
 
 DB_CONFIG = {
-    "host": "localhost",
-    "port": 5432,
-    "database": "pricewatcher",
-    "user": "pricewatcher",
-    "password": " ",
+    "host": os.getenv("PRICEFINDER_DB_HOST", "localhost"),
+    "port": int(os.getenv("PRICEFINDER_DB_PORT", "5432")),
+    "database": os.getenv("PRICEFINDER_DB_NAME", "pricewatcher"),
+    "user": os.getenv("PRICEFINDER_DB_USER", "pricewatcher"),
+    "password": os.getenv("PRICEFINDER_DB_PASSWORD", " "),
 }
 
-# Сайты, которые не являются магазинами
-EXCLUDED_DOMAINS = {
-    "wikipedia.org",
-    "grokipedia.com",
-    "amd.com",
-    "reddit.com",
-    "hardforum.com",
-    "idc.com",
-    "userbenchmark.com",
+SEARCH_WORKERS = 4      # DuckDuckGo не любит много параллельных запросов
+PAGE_WORKERS = 10
+RESULTS_PER_QUERY = 10
+PAGE_TIMEOUT = 12
+
+# Сайты, которые не являются магазинами.
+NON_STORE_DOMAINS = {
+    "wikipedia.org", "grokipedia.com", "reddit.com", "hardforum.com", "idc.com",
+    "userbenchmark.com", "youtube.com", "youtu.be", "tomshardware.com",
+    "videocardz.com", "wccftech.com", "pcpartpicker.com", "gputracker.eu",
+    "techpowerup.com", "anandtech.com", "notebookcheck.net", "amd.com",
+    "intel.com", "nvidia.com", "facebook.com", "x.com", "twitter.com",
+    "instagram.com", "tiktok.com", "quora.com", "medium.com",
 }
+
+SEARCH_PAGE_MARKERS = ("/search", "searchpage", "?q=", "&q=", "?query=", "?keyword=", "/pl?", "?s=")
+
+# (суффикс запроса или site:домен, регион DuckDuckGo)
+SEARCH_PROFILES = [
+    ("{q}", "us-en"), ("{q} price", "us-en"), ("{q} buy", "us-en"),
+    # Эстония
+    ("{q} hind", "ee-et"), ("{q} osta", "ee-et"),
+    ("site:arvutitark.ee {q}", "ee-et"), ("site:1a.ee {q}", "ee-et"),
+    ("site:kaup24.ee {q}", "ee-et"), ("site:galador.ee {q}", "ee-et"),
+    ("site:photopoint.ee {q}", "ee-et"), ("site:hinnavaatlus.ee {q}", "ee-et"),
+    # Латвия
+    ("{q} cena", "lv-lv"), ("site:1a.lv {q}", "lv-lv"), ("site:dateks.lv {q}", "lv-lv"),
+    ("site:rdveikals.lv {q}", "lv-lv"),
+    # Литва
+    ("{q} kaina", "lt-lt"), ("site:varle.lt {q}", "lt-lt"), ("site:skytech.lt {q}", "lt-lt"),
+    ("site:kilobaitas.lt {q}", "lt-lt"),
+    # Финляндия
+    ("{q} hinta", "fi-fi"), ("site:verkkokauppa.com {q}", "fi-fi"), ("site:jimms.fi {q}", "fi-fi"),
+    ("site:gigantti.fi {q}", "fi-fi"), ("site:proshop.fi {q}", "fi-fi"),
+    # Швеция / Норвегия / Дания
+    ("{q} pris", "se-sv"), ("site:inet.se {q}", "se-sv"), ("site:webhallen.com {q}", "se-sv"),
+    ("site:komplett.se {q}", "se-sv"), ("site:komplett.no {q}", "no-no"),
+    ("site:proshop.dk {q}", "dk-da"),
+    # Германия
+    ("{q} Preis", "de-de"), ("{q} kaufen", "de-de"), ("site:mindfactory.de {q}", "de-de"),
+    ("site:alternate.de {q}", "de-de"), ("site:caseking.de {q}", "de-de"),
+    ("site:computeruniverse.net {q}", "de-de"), ("site:geizhals.eu {q}", "de-de"),
+    # Польша
+    ("{q} cena", "pl-pl"), ("site:x-kom.pl {q}", "pl-pl"), ("site:morele.net {q}", "pl-pl"),
+    # Русскоязычные
+    ("{q} цена", "ru-ru"), ("{q} купить", "ru-ru"),
+]
+
+CURRENCY_SYMBOLS = {"€": "EUR", "$": "USD", "£": "GBP", "zł": "PLN", "₽": "RUB", "kr": "SEK"}
+CURRENCY_CODES = {"EUR", "USD", "GBP", "PLN", "SEK", "NOK", "DKK", "RUB", "CHF", "CZK"}
+
+IN_STOCK_MARKERS = ("instock", "in_stock", "limitedavailability", "onlineonly", "presale", "preorder")
+OUT_OF_STOCK_MARKERS = ("outofstock", "out_of_stock", "soldout", "discontinued")
+
+
+def progress(stage, done=0, total=0, **extra):
+    print("@@progress " + json.dumps({"stage": stage, "done": done, "total": total, **extra}), flush=True)
+
+
+def log(*args):
+    print(*args, flush=True)
 
 
 # ---------------------------------------------------------
-# ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+# Вспомогательное
 # ---------------------------------------------------------
-
-def save_results(product_name, results):
-
-    conn = psycopg2.connect(**DB_CONFIG)
-
-    try:
-        with conn:
-            with conn.cursor() as cur:
-
-                # Получаем или создаём товар
-                cur.execute(
-                    """
-                    SELECT id
-                    FROM products
-                    WHERE search_query = %s
-                    """,
-                    (product_name,)
-                )
-
-                product = cur.fetchone()
-
-                if product:
-
-                    product_id = product[0]
-
-                else:
-
-                    cur.execute(
-                        """
-                        INSERT INTO products
-                            (name, search_query)
-                        VALUES
-                            (%s, %s)
-                        RETURNING id
-                        """,
-                        (
-                            product_name,
-                            product_name,
-                        )
-                    )
-
-                    product_id = cur.fetchone()[0]
-
-                saved = 0
-
-                for offer in results:
-
-                    url = offer["url"]
-                    store = offer["domain"]
-                    title = offer.get("title", "")
-
-                    price_data = offer.get("price")
-
-                    if price_data:
-
-                        price = price_data["price"]
-                        currency = price_data["currency"]
-
-                    else:
-
-                        price = None
-                        currency = None
-
-                    status = offer.get(
-                        "status",
-                        "unknown",
-                    )
-
-                    # Пока статус страницы:
-                    # ok / blocked / error
-                    if status == "ok":
-                        in_stock = None
-                    else:
-                        in_stock = False
-
-                    cur.execute(
-                        """
-                        INSERT INTO offers
-                        (
-                            product_id,
-                            store,
-                            title,
-                            price,
-                            currency,
-                            in_stock,
-                            url,
-                            last_seen
-                        )
-                        VALUES
-                        (
-                            %s,
-                            %s,
-                            %s,
-                            %s,
-                            %s,
-                            %s,
-                            %s,
-                            NOW()
-                        )
-
-                        ON CONFLICT
-                            (product_id, store, url)
-
-                        DO UPDATE SET
-                            title = EXCLUDED.title,
-                            price = EXCLUDED.price,
-                            currency = EXCLUDED.currency,
-                            in_stock = EXCLUDED.in_stock,
-                            last_seen = NOW()
-                        """,
-                        (
-                            product_id,
-                            store,
-                            title,
-                            price,
-                            currency,
-                            in_stock,
-                            url,
-                        )
-                    )
-
-                    saved += 1
-
-                print()
-                print(
-                    f"Сохранено/обновлено предложений: {saved}"
-                )
-
-    finally:
-
-        conn.close()
 
 def get_domain(url):
     domain = urlparse(url).netloc.lower()
-
-    if domain.startswith("www."):
-        domain = domain[4:]
-
-    return domain
-
-
-def is_excluded(url):
-    domain = get_domain(url)
-
-    return any(
-        domain == excluded or domain.endswith("." + excluded)
-        for excluded in EXCLUDED_DOMAINS
-    )
-
-
-# ---------------------------------------------------------
-# ПОИСК
-# ---------------------------------------------------------
-
-def search(query, max_results=8):
-    """
-    Многоязычный и региональный поиск товара.
-
-    Ищем:
-    - международно
-    - на языках стран Балтии
-    - на языках Скандинавии
-    - на немецком и польском
-    - по конкретным местным магазинам
-
-    Результаты объединяются и дубли удаляются.
-    """
-
-    search_profiles = [
-
-        # =================================================
-        # INTERNATIONAL
-        # =================================================
-
-        {
-            "query": query,
-            "region": "us-en",
-            "label": "International / English",
-        },
-
-        {
-            "query": f"{query} price",
-            "region": "us-en",
-            "label": "International price",
-        },
-
-        {
-            "query": f"{query} buy",
-            "region": "us-en",
-            "label": "International buy",
-        },
-
-
-        # =================================================
-        # ESTONIA 🇪🇪
-        # =================================================
-
-        {
-            "query": f"{query} hind",
-            "region": "ee-et",
-            "label": "Estonia / Estonian",
-        },
-
-        {
-            "query": f"{query} osta",
-            "region": "ee-et",
-            "label": "Estonia / Buy",
-        },
-
-        {
-            "query": f"{query} hind osta",
-            "region": "ee-et",
-            "label": "Estonia / Price",
-        },
-
-        {
-            "query": f"site:arvutitark.ee {query}",
-            "region": "ee-et",
-            "label": "Arvutitark",
-        },
-
-        {
-            "query": f"site:1a.ee {query}",
-            "region": "ee-et",
-            "label": "1a.ee",
-        },
-
-        {
-            "query": f"site:kaup24.ee {query}",
-            "region": "ee-et",
-            "label": "Kaup24",
-        },
-
-        {
-            "query": f"site:galador.ee {query}",
-            "region": "ee-et",
-            "label": "Galador",
-        },
-
-        {
-            "query": f"site:photopoint.ee {query}",
-            "region": "ee-et",
-            "label": "Photopoint",
-        },
-
-
-        # =================================================
-        # LATVIA 🇱🇻
-        # =================================================
-
-        {
-            "query": f"{query} cena",
-            "region": "lv-lv",
-            "label": "Latvia / Latvian",
-        },
-
-        {
-            "query": f"{query} pirkt",
-            "region": "lv-lv",
-            "label": "Latvia / Buy",
-        },
-
-        {
-            "query": f"site:1a.lv {query}",
-            "region": "lv-lv",
-            "label": "1a.lv",
-        },
-
-        {
-            "query": f"site:dateks.lv {query}",
-            "region": "lv-lv",
-            "label": "Dateks",
-        },
-
-        {
-            "query": f"site:rdveikals.lv {query}",
-            "region": "lv-lv",
-            "label": "RD Electronics",
-        },
-
-        {
-            "query": f"site:m79.lv {query}",
-            "region": "lv-lv",
-            "label": "M79",
-        },
-
-
-        # =================================================
-        # LITHUANIA 🇱🇹
-        # =================================================
-
-        {
-            "query": f"{query} kaina",
-            "region": "lt-lt",
-            "label": "Lithuania / Lithuanian",
-        },
-
-        {
-            "query": f"{query} pirkti",
-            "region": "lt-lt",
-            "label": "Lithuania / Buy",
-        },
-
-        {
-            "query": f"site:varle.lt {query}",
-            "region": "lt-lt",
-            "label": "Varle",
-        },
-
-        {
-            "query": f"site:skytech.lt {query}",
-            "region": "lt-lt",
-            "label": "Skytech",
-        },
-
-        {
-            "query": f"site:kilobaitas.lt {query}",
-            "region": "lt-lt",
-            "label": "Kilobaitas",
-        },
-
-        {
-            "query": f"site:1a.lt {query}",
-            "region": "lt-lt",
-            "label": "1a.lt",
-        },
-
-
-        # =================================================
-        # FINLAND 🇫🇮
-        # =================================================
-
-        {
-            "query": f"{query} hinta",
-            "region": "fi-fi",
-            "label": "Finland / Finnish",
-        },
-
-        {
-            "query": f"{query} osta",
-            "region": "fi-fi",
-            "label": "Finland / Buy",
-        },
-
-        {
-            "query": f"site:verkkokauppa.com {query}",
-            "region": "fi-fi",
-            "label": "Verkkokauppa",
-        },
-
-        {
-            "query": f"site:jimms.fi {query}",
-            "region": "fi-fi",
-            "label": "Jimm's",
-        },
-
-        {
-            "query": f"site:gigantti.fi {query}",
-            "region": "fi-fi",
-            "label": "Gigantti Finland",
-        },
-
-        {
-            "query": f"site:proshop.fi {query}",
-            "region": "fi-fi",
-            "label": "Proshop Finland",
-        },
-
-
-        # =================================================
-        # SWEDEN 🇸🇪
-        # =================================================
-
-        {
-            "query": f"{query} pris",
-            "region": "se-sv",
-            "label": "Sweden / Swedish",
-        },
-
-        {
-            "query": f"{query} köpa",
-            "region": "se-sv",
-            "label": "Sweden / Buy",
-        },
-
-        {
-            "query": f"site:inet.se {query}",
-            "region": "se-sv",
-            "label": "Inet",
-        },
-
-        {
-            "query": f"site:webhallen.com {query}",
-            "region": "se-sv",
-            "label": "Webhallen",
-        },
-
-        {
-            "query": f"site:elgiganten.se {query}",
-            "region": "se-sv",
-            "label": "Elgiganten Sweden",
-        },
-
-        {
-            "query": f"site:komplett.se {query}",
-            "region": "se-sv",
-            "label": "Komplett Sweden",
-        },
-
-
-        # =================================================
-        # NORWAY 🇳🇴
-        # =================================================
-
-        {
-            "query": f"{query} pris",
-            "region": "no-no",
-            "label": "Norway / Norwegian",
-        },
-
-        {
-            "query": f"{query} kjøpe",
-            "region": "no-no",
-            "label": "Norway / Buy",
-        },
-
-        {
-            "query": f"site:komplett.no {query}",
-            "region": "no-no",
-            "label": "Komplett Norway",
-        },
-
-        {
-            "query": f"site:elkjop.no {query}",
-            "region": "no-no",
-            "label": "Elkjøp",
-        },
-
-        {
-            "query": f"site:proshop.no {query}",
-            "region": "no-no",
-            "label": "Proshop Norway",
-        },
-
-
-        # =================================================
-        # DENMARK 🇩🇰
-        # =================================================
-
-        {
-            "query": f"{query} pris",
-            "region": "dk-da",
-            "label": "Denmark / Danish",
-        },
-
-        {
-            "query": f"{query} køb",
-            "region": "dk-da",
-            "label": "Denmark / Buy",
-        },
-
-        {
-            "query": f"site:proshop.dk {query}",
-            "region": "dk-da",
-            "label": "Proshop Denmark",
-        },
-
-        {
-            "query": f"site:elgiganten.dk {query}",
-            "region": "dk-da",
-            "label": "Elgiganten Denmark",
-        },
-
-
-        # =================================================
-        # GERMANY 🇩🇪
-        # =================================================
-
-        {
-            "query": f"{query} Preis",
-            "region": "de-de",
-            "label": "Germany / German",
-        },
-
-        {
-            "query": f"{query} kaufen",
-            "region": "de-de",
-            "label": "Germany / Buy",
-        },
-
-        {
-            "query": f"site:mindfactory.de {query}",
-            "region": "de-de",
-            "label": "Mindfactory",
-        },
-
-        {
-            "query": f"site:alternate.de {query}",
-            "region": "de-de",
-            "label": "Alternate Germany",
-        },
-
-        {
-            "query": f"site:caseking.de {query}",
-            "region": "de-de",
-            "label": "Caseking",
-        },
-
-        {
-            "query": f"site:computeruniverse.net {query}",
-            "region": "de-de",
-            "label": "Computeruniverse",
-        },
-
-
-        # =================================================
-        # POLAND 🇵🇱
-        # =================================================
-
-        {
-            "query": f"{query} cena",
-            "region": "pl-pl",
-            "label": "Poland / Polish",
-        },
-
-        {
-            "query": f"{query} kupić",
-            "region": "pl-pl",
-            "label": "Poland / Buy",
-        },
-
-        {
-            "query": f"site:x-kom.pl {query}",
-            "region": "pl-pl",
-            "label": "x-kom",
-        },
-
-        {
-            "query": f"site:morele.net {query}",
-            "region": "pl-pl",
-            "label": "Morele",
-        },
-
-        {
-            "query": f"site:komputronik.pl {query}",
-            "region": "pl-pl",
-            "label": "Komputronik",
-        },
-
-
-        # =================================================
-        # RUSSIA / RUSSIAN 🇷🇺
-        # =================================================
-
-        {
-            "query": f"{query} цена",
-            "region": "ru-ru",
-            "label": "Russian / Price",
-        },
-
-        {
-            "query": f"{query} купить",
-            "region": "ru-ru",
-            "label": "Russian / Buy",
-        },
-    ]
-
-    results = []
-    seen_urls = set()
-
-    print()
-    print(
-        f"Запускаем "
-        f"{len(search_profiles)} "
-        f"поисковых запросов..."
-    )
-
-    for profile in search_profiles:
-
-        search_query = profile["query"]
-        region = profile["region"]
-        label = profile["label"]
-
-        print()
-        print(
-            f"[{label}] "
-            f"{search_query}"
-        )
-
+    return domain[4:] if domain.startswith("www.") else domain
+
+
+def domain_matches(domain, candidates):
+    return any(domain == d or domain.endswith("." + d) for d in candidates)
+
+
+def normalize(text):
+    """Нижний регистр, без пробелов и дефисов: «RTX 5070-Ti» → «rtx5070ti»."""
+    return re.sub(r"[\s\-_/]+", "", (text or "").lower())
+
+
+def query_tokens(query):
+    return [t for t in re.split(r"[\s\-_/]+", query.lower()) if len(t) >= 2]
+
+
+def is_relevant(query, *texts):
+    """Все значимые слова запроса должны встречаться в заголовке/сниппете/URL."""
+    haystack = " ".join(texts).lower()
+    compact = normalize(haystack)
+    if normalize(query) in compact:
+        return True
+    return all(token in haystack or token in compact for token in query_tokens(query))
+
+
+def is_relevant_strict(query, title, url):
+    """Каждое слово запроса — отдельным словом в заголовке страницы или URL.
+    «990 PRO 2TB» не совпадёт с «990 EVO 2TB» или «990 PRO 1TB»."""
+    text = f"{title} {url}".lower()
+    if normalize(query) in normalize(text):
+        return True
+    for token in query_tokens(query):
+        # «2tb» должно находиться и как «2 tb»
+        spaced = re.sub(r"(?<=\d)(?=[a-z])|(?<=[a-z])(?=\d)", r"[\\s\\-]?", re.escape(token))
+        if not re.search(rf"(?<![a-z0-9]){spaced}(?![a-z0-9])", text):
+            return False
+    return True
+
+
+def parse_number(raw):
+    """«1 299,90» / «1.299,90» / «1,299.90» / «469» → float."""
+    s = re.sub(r"[^\d.,]", "", str(raw))
+    if not s:
+        return None
+    if "," in s and "." in s:
+        if s.rfind(",") > s.rfind("."):
+            s = s.replace(".", "").replace(",", ".")
+        else:
+            s = s.replace(",", "")
+    elif "," in s:
+        head, _, tail = s.rpartition(",")
+        s = f"{head.replace(',', '')}.{tail}" if len(tail) in (1, 2) else s.replace(",", "")
+    elif s.count(".") > 1 or (s.count(".") == 1 and len(s.rpartition(".")[2]) == 3):
+        s = s.replace(".", "")
+    try:
+        value = float(s)
+    except ValueError:
+        return None
+    return value if 0 < value < 1_000_000 else None
+
+
+TLD_CURRENCY = {
+    "ee": "EUR", "lv": "EUR", "lt": "EUR", "fi": "EUR", "de": "EUR", "eu": "EUR", "nl": "EUR",
+    "fr": "EUR", "it": "EUR", "es": "EUR", "at": "EUR", "be": "EUR", "ie": "EUR",
+    "se": "SEK", "no": "NOK", "dk": "DKK", "pl": "PLN", "uk": "GBP", "ru": "RUB",
+}
+
+
+def normalize_currency(raw):
+    raw = (raw or "").strip()
+    if raw.upper() in CURRENCY_CODES:
+        return raw.upper()
+    return CURRENCY_SYMBOLS.get(raw) or CURRENCY_SYMBOLS.get(raw.lower())
+
+
+ECB_URL = "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml"
+FALLBACK_RATES = {"EUR": 1.0, "USD": 1.09, "GBP": 0.84, "SEK": 11.2, "NOK": 11.6, "DKK": 7.46, "PLN": 4.25, "CHF": 0.94, "CZK": 24.5}
+_rates = None
+
+
+def eur_rates():
+    """Курсы ЕЦБ (сколько единиц валюты за 1 евро); при ошибке — примерные."""
+    global _rates
+    if _rates is None:
+        _rates = dict(FALLBACK_RATES)
         try:
+            xml = requests.get(ECB_URL, timeout=8).text
+            for code, rate in re.findall(r"currency='([A-Z]{3})' rate='([0-9.]+)'", xml):
+                _rates[code] = float(rate)
+        except requests.RequestException:
+            log("Курсы ЕЦБ недоступны — используем примерные")
+    return _rates
 
-            with DDGS() as ddgs:
 
-                search_results = ddgs.text(
-                    search_query,
-                    region=region,
-                    safesearch="off",
-                    max_results=max_results,
-                )
+def to_eur(price, currency):
+    rate = eur_rates().get((currency or "").upper())
+    return round(price / rate, 2) if price and rate else None
 
-                for result in search_results:
 
-                    url = result.get(
-                        "href",
-                        "",
-                    ).strip()
+def currency_for_domain(domain):
+    return TLD_CURRENCY.get(domain.rsplit(".", 1)[-1])
 
-                    if not url:
-                        continue
 
-                    # Удаляем query-параметры
-                    # для определения дублей
-                    clean_url = (
-                        url
-                        .split("?")[0]
-                        .rstrip("/")
-                    )
+def availability(raw):
+    value = str(raw or "").lower().replace(" ", "")
+    if any(m in value for m in OUT_OF_STOCK_MARKERS):
+        return False
+    if any(m in value for m in IN_STOCK_MARKERS):
+        return True
+    return None
 
-                    if clean_url in seen_urls:
-                        continue
 
-                    seen_urls.add(clean_url)
+# ---------------------------------------------------------
+# Поиск
+# ---------------------------------------------------------
 
-                    results.append({
-                        "title": result.get(
-                            "title",
-                            "",
-                        ),
-                        "url": url,
-                        "snippet": result.get(
-                            "body",
-                            "",
-                        ),
-                        "search_query": search_query,
-                        "region": region,
-                        "search_label": label,
-                    })
+def run_search_query(template, region, query):
+    search_query = template.format(q=query)
+    try:
+        with DDGS() as ddgs:
+            return list(ddgs.text(search_query, region=region, safesearch="off", max_results=RESULTS_PER_QUERY))
+    except Exception as exc:
+        log(f"Ошибка поиска [{search_query}]: {exc}")
+        return []
 
-        except Exception as e:
 
-            print(
-                f"Ошибка: {e}"
-            )
+def search(query):
+    results = []
+    seen = set()
+    total = len(SEARCH_PROFILES)
+    progress("search", 0, total)
 
-    print()
-    print(
-        f"Уникальных результатов: "
-        f"{len(results)}"
-    )
+    with ThreadPoolExecutor(max_workers=SEARCH_WORKERS) as pool:
+        futures = [pool.submit(run_search_query, t, r, query) for t, r in SEARCH_PROFILES]
+        for done, future in enumerate(as_completed(futures), start=1):
+            for item in future.result():
+                url = (item.get("href") or "").strip()
+                if not url:
+                    continue
+                key = url.split("?")[0].split("#")[0].rstrip("/")
+                if key in seen:
+                    continue
+                seen.add(key)
+                results.append({
+                    "title": item.get("title", ""),
+                    "url": url,
+                    "snippet": item.get("body", ""),
+                })
+            progress("search", done, total, found=len(results))
 
+    log(f"Уникальных результатов: {len(results)}")
     return results
 
+
+def filter_results(query, results):
+    filtered = []
+    for r in results:
+        domain = get_domain(r["url"])
+        if domain_matches(domain, NON_STORE_DOMAINS):
+            continue
+        if any(m in r["url"].lower() for m in SEARCH_PAGE_MARKERS):
+            continue
+        if not is_relevant(query, r["title"], r["snippet"], r["url"]):
+            continue
+        filtered.append(r)
+    log(f"После фильтрации: {len(filtered)}")
+    return filtered
+
+
 # ---------------------------------------------------------
-# ИЗВЛЕЧЕНИЕ ЦЕН
+# Извлечение цены
 # ---------------------------------------------------------
 
-def extract_prices(text):
-    """
-    Общий поиск цен на странице.
-    Используется как fallback, если нет
-    специального парсера магазина.
-    """
+def _iter_jsonld(soup):
+    for tag in soup.find_all("script", type="application/ld+json"):
+        try:
+            data = json.loads(tag.string or tag.get_text() or "")
+        except (json.JSONDecodeError, TypeError):
+            continue
+        stack = [data]
+        while stack:
+            node = stack.pop()
+            if isinstance(node, list):
+                stack.extend(node)
+            elif isinstance(node, dict):
+                yield node
+                for key in ("@graph", "offers", "mainEntity", "itemListElement"):
+                    if key in node:
+                        stack.append(node[key])
 
-    text = text[:5000]
 
-    patterns = [
-        # $469.00
-        r"(?P<currency>[$€£])\s*"
-        r"(?P<price>\d{1,5}(?:[.,]\d{1,2})?)",
-
-        # 469.00 USD
-        r"(?P<price>\d{1,5}(?:[.,]\d{1,2})?)\s*"
-        r"(?P<currency>EUR|USD|GBP)",
-    ]
-
-    prices = []
-
-    for pattern in patterns:
-
-        for match in re.finditer(
-            pattern,
-            text,
-            re.IGNORECASE,
-        ):
-
-            if match.groupdict().get("currency"):
-                currency = match.group("currency").upper()
-
-            else:
-                currency = ""
-
-            price = match.group("price")
-
-            price = price.replace(",", ".")
-
-            try:
-                price = float(price)
-            except ValueError:
-                continue
-
-            # Отбрасываем явно подозрительные значения
-            if price < 50:
-                continue
-
-            if price > 2000:
-                continue
-
-            prices.append({
+def price_from_jsonld(soup):
+    """schema.org Product → Offer / AggregateOffer."""
+    for node in _iter_jsonld(soup):
+        types = node.get("@type")
+        types = types if isinstance(types, list) else [types]
+        if not any(t in ("Offer", "AggregateOffer") for t in types):
+            continue
+        raw = node.get("price") or node.get("lowPrice")
+        spec = node.get("priceSpecification")
+        if raw is None and isinstance(spec, dict):
+            raw = spec.get("price")
+        price = parse_number(raw) if raw is not None else None
+        if price:
+            currency = node.get("priceCurrency")
+            if not currency and isinstance(spec, dict):
+                currency = spec.get("priceCurrency")
+            return {
                 "price": price,
-                "currency": currency,
-            })
+                "currency": normalize_currency(currency),
+                "in_stock": availability(node.get("availability")),
+                "source": "json-ld",
+            }
+    return None
 
-    # Удаляем дубликаты
-    unique = []
-    seen = set()
 
-    for item in prices:
+def price_from_meta(soup):
+    """Open Graph / microdata: product:price:amount, itemprop=price."""
+    amount = (
+        soup.find("meta", property="product:price:amount")
+        or soup.find("meta", property="og:price:amount")
+        or soup.find(attrs={"itemprop": "price"})
+    )
+    if not amount:
+        return None
+    raw = amount.get("content") or amount.get_text(" ", strip=True)
+    price = parse_number(raw)
+    if not price:
+        return None
+    currency_tag = (
+        soup.find("meta", property="product:price:currency")
+        or soup.find("meta", property="og:price:currency")
+        or soup.find(attrs={"itemprop": "priceCurrency"})
+    )
+    currency = currency_tag.get("content") if currency_tag else None
+    stock_tag = soup.find(attrs={"itemprop": "availability"}) or soup.find("meta", property="product:availability")
+    stock = (stock_tag.get("href") or stock_tag.get("content")) if stock_tag else None
+    return {"price": price, "currency": normalize_currency(currency), "in_stock": availability(stock), "source": "meta"}
 
-        key = (
-            item["price"],
-            item["currency"],
-        )
 
-        if key not in seen:
-            seen.add(key)
-            unique.append(item)
+PRICE_PATTERNS = [
+    re.compile(r"(?P<cur>[€$£₽])\s?(?P<num>\d{1,3}(?:[ ., ]\d{3})*(?:[.,]\d{1,2})?)"),
+    re.compile(r"(?P<num>\d{1,3}(?:[ ., ]\d{3})*(?:[.,]\d{1,2})?)\s?(?P<cur>€|EUR|USD|GBP|zł|PLN|SEK|NOK|DKK|kr|₽)", re.I),
+]
 
+
+def price_from_text(text):
+    """Запасной вариант: первая цена с валютой в начале страницы."""
+    for pattern in PRICE_PATTERNS:
+        for match in pattern.finditer(text[:8000]):
+            price = parse_number(match.group("num"))
+            if price and price >= 1:
+                return {"price": price, "currency": normalize_currency(match.group("cur")), "in_stock": None, "source": "text"}
+    return None
+
+
+def inspect_page(result, query):
+    url = result["url"]
+    domain = get_domain(url)
+    offer = {"url": url, "domain": domain, "title": result.get("title", ""), "status": "error", "price": None, "query": query}
+    try:
+        response = requests.get(url, headers=HEADERS, timeout=PAGE_TIMEOUT, allow_redirects=True)
+    except requests.RequestException as exc:
+        log(f"[{domain}] ошибка запроса: {type(exc).__name__}")
+        return offer
+
+    if response.status_code in (401, 403, 429, 503):
+        offer["status"] = "blocked"
+        log(f"[{domain}] сайт закрыт для ботов (HTTP {response.status_code})")
+        return offer
+    if response.status_code >= 400:
+        log(f"[{domain}] HTTP {response.status_code}")
+        return offer
+
+    soup = BeautifulSoup(response.text, "html.parser")
+    if soup.title and soup.title.get_text(strip=True):
+        offer["title"] = soup.title.get_text(" ", strip=True)[:300]
+
+    if not is_relevant_strict(offer["query"], offer["title"], url):
+        offer["status"] = "irrelevant"
+        log(f"[{domain}] не тот товар: {offer['title'][:80]}")
+        return offer
+
+    price = price_from_jsonld(soup) or price_from_meta(soup) or price_from_text(soup.get_text(" ", strip=True))
+    offer["status"] = "ok"
+    offer["price"] = price
+    log(f"[{domain}] {price['price']:.2f} {price['currency'] or ''} ({price['source']})" if price else f"[{domain}] цена не найдена")
+    return offer
+
+
+def inspect_pages(results, query):
+    offers = []
+    total = len(results)
+    progress("pages", 0, total)
+    with ThreadPoolExecutor(max_workers=PAGE_WORKERS) as pool:
+        futures = [pool.submit(inspect_page, r, query) for r in results]
+        for done, future in enumerate(as_completed(futures), start=1):
+            offers.append(future.result())
+            progress("pages", done, total, priced=sum(1 for o in offers if o["price"]))
+    return offers
+
+
+def clean_offers(offers):
+    """Убирает мусор текстового парсера и дубли."""
+    for o in offers:
+        price = o.get("price")
+        if not price:
+            continue
+        local = currency_for_domain(o["domain"])
+        # Валюта по доменной зоне, если магазин её не указал
+        # или текстовый парсер нашёл «чужой» символ (например $ на .ee).
+        if not price.get("currency") or (price["source"] == "text" and local and price["currency"] != local):
+            price["currency"] = local or price.get("currency")
+
+    # Выбросы: текстовая цена в 3+ раза дальше от медианы надёжных цен.
+    trusted = sorted(o["price"]["price"] for o in offers if o.get("price") and o["price"]["source"] != "text")
+    if len(trusted) >= 3:
+        median = trusted[len(trusted) // 2]
+        for o in offers:
+            price = o.get("price")
+            if price and price["source"] == "text" and not (median / 3 <= price["price"] <= median * 3):
+                log(f"[{o['domain']}] цена {price['price']} отброшена как выброс (медиана {median})")
+                o["price"] = None
+
+    # Дубли: один магазин, одно название, одна цена.
+    unique, seen = [], set()
+    for o in offers:
+        key = (o["domain"], (o.get("title") or "").strip().lower(), (o.get("price") or {}).get("price"))
+        if key in seen:
+            continue
+        seen.add(key)
+        unique.append(o)
     return unique
 
 
 # ---------------------------------------------------------
-# NEWEGG
+# Сохранение
 # ---------------------------------------------------------
 
-def extract_newegg_price(text):
-    """
-    Newegg обычно отдаёт основную цену рядом с Item#.
-    Например:
-
-    Item#: N82E16819113877 $ 469 .00 $507.99
-    """
-
-    patterns = [
-
-        # Item#: XXXXX $ 469 .00
-        r"Item#:\s*[A-Z0-9]+\s+"
-        r"\$\s*(\d{1,5})\s*"
-        r"(?:[.]\s*(\d{1,2}))?",
-
-        # Item#: XXXXX $469.00
-        r"Item#:\s*[A-Z0-9]+\s+"
-        r"\$\s*(\d{1,5}(?:[.,]\d{1,2})?)",
-    ]
-
-    for pattern in patterns:
-
-        match = re.search(
-            pattern,
-            text,
-            re.IGNORECASE,
-        )
-
-        if not match:
-            continue
-
-        whole = match.group(1)
-
-        decimal = match.group(2)
-
-        if decimal is not None:
-            price = float(
-                f"{whole}.{decimal}"
-            )
-        else:
-            price = float(
-                whole.replace(",", ".")
-            )
-
-        return {
-            "price": price,
-            "currency": "$",
-        }
-
-    return None
-
-
-# ---------------------------------------------------------
-# ОБЩИЙ ПАРСЕР ЦЕНЫ
-# ---------------------------------------------------------
-
-def extract_product_price(text, domain):
-
-    # Специальный парсер Newegg
-    if "newegg.com" in domain:
-
-        price = extract_newegg_price(text)
-
-        if price:
-            return price
-
-    # Общий fallback
-    prices = extract_prices(text)
-
-    if prices:
-        return prices[0]
-
-    return None
-
-
-# ---------------------------------------------------------
-# ПРОВЕРКА СТРАНИЦЫ
-# ---------------------------------------------------------
-
-def inspect_page(url, query):
-
-    print()
-    print("=" * 80)
-    print(f"URL: {url}")
-
-    domain = get_domain(url)
-
+def save_results(query, offers):
+    """Сохраняет свежие результаты; старые предложения по этому запросу удаляются."""
+    progress("save")
+    usable = [o for o in offers if o["status"] == "ok"]
+    conn = psycopg2.connect(**DB_CONFIG)
     try:
+        with conn, conn.cursor() as cur:
+            cur.execute("SELECT id FROM products WHERE search_query = %s", (query,))
+            row = cur.fetchone()
+            if row:
+                product_id = row[0]
+                cur.execute("DELETE FROM offers WHERE product_id = %s", (product_id,))
+            else:
+                cur.execute(
+                    "INSERT INTO products (name, search_query) VALUES (%s, %s) RETURNING id",
+                    (query, query),
+                )
+                product_id = cur.fetchone()[0]
 
-        response = requests.get(
-            url,
-            headers=HEADERS,
-            timeout=15,
-            allow_redirects=True,
-        )
+            for o in usable:
+                price = o["price"] or {}
+                cur.execute(
+                    """
+                    INSERT INTO offers (product_id, store, title, price, currency, in_stock, url,
+                                        price_source, price_eur, last_seen)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
+                    ON CONFLICT (product_id, store, url) DO UPDATE SET
+                        title = EXCLUDED.title, price = EXCLUDED.price, currency = EXCLUDED.currency,
+                        in_stock = EXCLUDED.in_stock, price_source = EXCLUDED.price_source,
+                        price_eur = EXCLUDED.price_eur, last_seen = NOW()
+                    """,
+                    (
+                        product_id, o["domain"], o["title"][:500],
+                        price.get("price"), (price.get("currency") or "")[:3] or None,
+                        price.get("in_stock"), o["url"],
+                        price.get("source"), to_eur(price.get("price"), price.get("currency")),
+                    ),
+                )
+    finally:
+        conn.close()
+    log(f"Сохранено предложений: {len(usable)}")
+    return len(usable)
 
-        print(f"HTTP: {response.status_code}")
-
-        # Защита магазина
-        if response.status_code in (
-            401,
-            403,
-            429,
-        ):
-
-            print("STATUS: BLOCKED")
-            print(
-                "Причина: сайт не разрешил автоматический доступ"
-            )
-
-            return {
-                "url": url,
-                "domain": domain,
-                "status": "blocked",
-                "price": None,
-            }
-
-        # Остальные ошибки
-        if response.status_code >= 400:
-
-            print("STATUS: ERROR")
-
-            return {
-                "url": url,
-                "domain": domain,
-                "status": "error",
-                "price": None,
-            }
-
-        # HTML
-        soup = BeautifulSoup(
-            response.text,
-            "html.parser",
-        )
-
-        # Заголовок
-        if soup.title:
-
-            title = soup.title.get_text(
-                " ",
-                strip=True,
-            )
-
-        else:
-
-            title = ""
-
-        print(f"TITLE: {title}")
-
-        # Весь текст страницы
-        text = soup.get_text(
-            " ",
-            strip=True,
-        )
-
-        # Цена
-        price = extract_product_price(
-            text,
-            domain,
-        )
-
-        if price:
-
-            print(
-                f"PRICE: "
-                f"{price['price']:.2f} "
-                f"{price['currency']}"
-            )
-
-        else:
-
-            print("PRICE: unavailable")
-
-        # Небольшой фрагмент страницы
-        print()
-        print(
-            f"TEXT: {text[:500]}"
-        )
-
-        return {
-            "url": url,
-            "domain": domain,
-            "status": "ok",
-            "title": title,
-            "price": price,
-        }
-
-    except requests.RequestException as e:
-
-        print(
-            f"REQUEST ERROR: {e}"
-        )
-
-        return {
-            "url": url,
-            "domain": domain,
-            "status": "error",
-            "price": None,
-        }
-
-
-# ---------------------------------------------------------
-# ОСНОВНАЯ ПРОГРАММА
-# ---------------------------------------------------------
 
 def main():
-
     if len(sys.argv) < 2:
-
-        print(
-            'Использование: '
-            'python bot.py "Ryzen 7 9800X3D"'
-        )
-
+        print('Использование: python bot.py "Ryzen 7 9800X3D"')
         sys.exit(1)
 
-    query = " ".join(
-        sys.argv[1:]
-    )
+    query = " ".join(sys.argv[1:]).strip()
+    log(f"Поиск: {query}")
 
-    print(
-        f"Поиск: {query}"
-    )
+    results = filter_results(query, search(query))
+    offers = clean_offers(inspect_pages(results, query))
+    saved = save_results(query, offers)
 
-    # -----------------------------------------------------
-    # ПОИСК
-    # -----------------------------------------------------
-
-    results = search(
-        query,
-        max_results=10,
-    )
-
-    print()
-    print(
-        f"Найдено результатов: "
-        f"{len(results)}"
-    )
-
-    # -----------------------------------------------------
-    # ФИЛЬТРАЦИЯ
-    # -----------------------------------------------------
-
-    filtered = []
-
-    non_store_domains = {
-        "youtube.com",
-        "youtu.be",
-        "tomshardware.com",
-        "videocardz.com",
-        "wccftech.com",
-        "pcpartpicker.com",
-        "gputracker.eu",
-    }
-
-    for result in results:
-
-        title = result["title"]
-        url = result["url"]
-        snippet = result["snippet"]
-
-        combined = (
-            title
-            + " "
-            + snippet
-            + " "
-            + url
-        ).lower()
-
-        domain = get_domain(url)
-
-        # -------------------------------------------------
-        # Товар обязательно должен присутствовать
-        # -------------------------------------------------
-
-        query_lower = query.lower()
-
-        if query_lower not in combined:
-
-            # Для Ryzen 7 9800X3D разрешаем искать
-            # по точному идентификатору модели.
-            if "9800x3d" not in combined:
-                continue
-
-        # -------------------------------------------------
-        # Известные НЕ-магазины
-        # -------------------------------------------------
-
-        if is_excluded(url):
-
-            print(
-                f"SKIP: {domain}"
-            )
-
-            continue
-
-        # -------------------------------------------------
-        # Дополнительные информационные сайты
-        # -------------------------------------------------
-
-        if any(
-            domain == d
-            or domain.endswith("." + d)
-            for d in non_store_domains
-        ):
-
-            print(
-                f"SKIP INFO: {domain}"
-            )
-
-            continue
-
-        # -------------------------------------------------
-        # Исключаем страницы поиска магазина
-        # -------------------------------------------------
-
-        lower_url = url.lower()
-
-        search_page_markers = [
-            "/search",
-            "searchpage",
-            "?q=",
-            "?query=",
-            "?keyword=",
-            "/pl?",
-        ]
-
-        if any(
-            marker in lower_url
-            for marker in search_page_markers
-        ):
-
-            print(
-                f"SKIP SEARCH PAGE: {url}"
-            )
-
-            continue
-
-        # -------------------------------------------------
-        # Добавляем нормальный результат
-        # -------------------------------------------------
-
-        filtered.append(result)
-
-    # -----------------------------------------------------
-    # РЕЗУЛЬТАТ ФИЛЬТРАЦИИ
-    # -----------------------------------------------------
-
-    print()
-    print(
-        f"После фильтрации: "
-        f"{len(filtered)}"
-    )
-
-    # -----------------------------------------------------
-    # ПОКАЗЫВАЕМ НАЙДЕННЫЕ МАГАЗИНЫ
-    # -----------------------------------------------------
-
-    for index, result in enumerate(
-        filtered,
-        1,
-    ):
-
-        print()
-        print(
-            f"{index}. "
-            f"{result['title']}"
-        )
-
-        print(
-            f"   {result['url']}"
-        )
-
-    # -----------------------------------------------------
-    # ЗАХОДИМ НА СТРАНИЦЫ
-    # -----------------------------------------------------
-
-    offers = []
-
-    for result in filtered:
-
-        offer = inspect_page(
-            result["url"],
-            query,
-        )
-
-        offers.append(offer)
-
-    # -----------------------------------------------------
-    # СОХРАНЕНИЕ В БД
-    # -----------------------------------------------------
-
-    save_results(
-        query,
-        offers,
-    )
-    
-    # -----------------------------------------------------
-    # ИТОГ
-    # -----------------------------------------------------
-
-    print()
-    print()
-    print("=" * 80)
-    print("ИТОГ")
-    print("=" * 80)
-
-    for offer in offers:
-
-        domain = offer["domain"]
-
-        status = offer["status"]
-
-        price = offer.get(
-            "price"
-        )
-
-        if price:
-
-            price_text = (
-                f"{price['price']:.2f} "
-                f"{price['currency']}"
-            )
-
-        else:
-
-            price_text = "N/A"
-
-        print(
-            f"{domain:25} "
-            f"{price_text:12} "
-            f"{status}"
-        )
+    blocked = sum(1 for o in offers if o["status"] == "blocked")
+    priced = sum(1 for o in offers if o["price"])
+    progress("done", saved, len(offers), priced=priced, blocked=blocked)
+    log(f"Итог: страниц {len(offers)}, с ценой {priced}, закрыты для ботов {blocked}, сохранено {saved}")
 
 
 if __name__ == "__main__":
     main()
-

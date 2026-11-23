@@ -1094,3 +1094,12 @@ button {
     line-height: 1.5;
   }
 }
+
+/* Недавние запросы */
+#history { margin-bottom: 10px; }
+.query-chip--history { border-style: dashed; }
+#history[hidden] { display: none; }
+
+.offer__eur { font-size: 0.85rem; opacity: 0.7; margin-top: 2px; }
+.offer__note { font-size: 0.78rem; color: #eab308; margin-top: 4px; }
+.offer--unconfirmed { opacity: 0.75; }
