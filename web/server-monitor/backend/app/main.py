@@ -9,12 +9,13 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
+from app import history, insights
 from app.metrics import collect_all, get_docker_containers
 
 FRONTEND_DIR = Path(os.getenv("FRONTEND_DIR", Path(__file__).resolve().parent.parent.parent / "frontend"))
 DEPLOY_AGENT_URL = os.getenv("DEPLOY_AGENT_URL", "http://deploy-agent:9000")
 
-app = FastAPI(title="Server Monitor", version="1.1.0")
+app = FastAPI(title="Server Monitor", version="1.2.0")
 
 # Панель и API живут на одном адресе, поэтому CORS не нужен.
 # Управляющие POST-запросы должны нести собственный заголовок: браузер
@@ -40,9 +41,29 @@ def health():
     return {"status": "ok"}
 
 
+@app.on_event("startup")
+def _start_history():
+    history.start()
+
+
+@app.on_event("shutdown")
+def _stop_history():
+    history.stop()
+
+
 @app.get("/api/metrics")
 def metrics():
-    return collect_all()
+    data = collect_all()
+    data["network"] = {k: history.latest().get(k) for k in ("rx", "tx")}
+    data["insights"] = insights.collect(data["docker"], data["plex"], data["amnezia"])
+    return data
+
+
+@app.get("/api/history")
+def metrics_history(range: str = "1h"):
+    if range not in history.RANGES:
+        raise HTTPException(status_code=400, detail="range: 1h, 6h или 24h")
+    return history.series(range)
 
 
 _docker_ops = set()

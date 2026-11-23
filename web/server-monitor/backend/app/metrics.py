@@ -1,4 +1,5 @@
 import os
+import re
 import shutil
 import socket
 import subprocess
@@ -128,10 +129,20 @@ def _container_uptime(container) -> int:
 
 
 def get_cpu() -> dict:
+    # Загрузку считает фоновый сэмплер истории: общий счётчик psutil
+    # нельзя дёргать из двух мест, иначе интервалы перемешаются.
+    from app import history
+    latest = history.latest()
+    if latest.get("ts") and time.time() - latest["ts"] < 30:
+        percent = latest["cpu"]
+    else:
+        percent = psutil.cpu_percent(interval=0.2)
     return {
-        "percent": round(psutil.cpu_percent(interval=None), 1),
+        "percent": round(percent, 1),
         "cores": psutil.cpu_count(logical=True) or 0,
+        "physical_cores": psutil.cpu_count(logical=False) or 0,
         "model": _get_cpu_model(),
+        "load_avg": [round(x, 2) for x in os.getloadavg()],
     }
 
 
@@ -185,8 +196,46 @@ def _get_disk(mount: Path, device: str) -> dict | None:
     }
 
 
+SMARTCTL_URL = os.getenv("SMARTCTL_EXPORTER_URL", "http://host.docker.internal:9633/metrics")
+
+
+@ttl_cache(60)
+def get_smart() -> dict:
+    """SMART из smartctl-exporter: {device: {healthy, temperature, power_on_hours}}."""
+    result: dict = {}
+    try:
+        with urllib.request.urlopen(SMARTCTL_URL, timeout=3) as response:
+            text = response.read().decode(errors="ignore")
+    except (urllib.error.URLError, OSError):
+        return result
+    pattern = re.compile(r'^(smartctl_device_(?:smart_status|temperature|power_on_seconds))\{device="([^"]+)"([^}]*)\}\s+(\S+)$')
+    for line in text.splitlines():
+        m = pattern.match(line)
+        if not m:
+            continue
+        metric, device, labels, value = m.groups()
+        info = result.setdefault(device, {})
+        try:
+            number = float(value)
+        except ValueError:
+            continue
+        if metric.endswith("smart_status"):
+            info["healthy"] = number == 1
+        elif metric.endswith("temperature") and 'temperature_type="current"' in labels:
+            info["temperature"] = number
+        elif metric.endswith("power_on_seconds"):
+            info["power_on_hours"] = int(number // 3600)
+    return result
+
+
+def _with_smart(disk: dict) -> dict:
+    if disk:
+        disk["smart"] = get_smart().get(disk.get("device"), {})
+    return disk
+
+
 def get_disk() -> dict:
-    return _get_disk(Path("/"), ROOT_BLOCK_DEVICE) or {}
+    return _with_smart(_get_disk(Path("/"), ROOT_BLOCK_DEVICE) or {})
 
 
 def get_storage_disks() -> list[dict]:
@@ -194,7 +243,7 @@ def get_storage_disks() -> list[dict]:
     for device, mount in STORAGE_DISKS:
         disk = _get_disk(Path(mount), device)
         if disk:
-            disks.append(disk)
+            disks.append(_with_smart(disk))
     return disks
 
 
@@ -202,34 +251,73 @@ def get_uptime() -> dict:
     return _uptime(int(time.time() - psutil.boot_time()))
 
 
-def get_temperature() -> dict | None:
-    thermal_dir = SYSFS_PATH / "class" / "thermal"
-    if not thermal_dir.exists():
-        return None
-
-    readings = []
-    for zone in sorted(thermal_dir.glob("thermal_zone*")):
+def get_cpu_temperature() -> dict | None:
+    """Температура процессора из hwmon (coretemp — Intel, k10temp — AMD)."""
+    hwmon = SYSFS_PATH / "class" / "hwmon"
+    for sensor in sorted(hwmon.glob("hwmon*")):
         try:
-            celsius = int((zone / "temp").read_text().strip()) / 1000.0
+            name = (sensor / "name").read_text().strip()
+        except OSError:
+            continue
+        if name not in ("coretemp", "k10temp", "zenpower"):
+            continue
+        package = None
+        cores = []
+        crit = None
+        for temp_input in sorted(sensor.glob("temp*_input"), key=lambda f: int(re.sub(r"\D", "", f.name) or 0)):
+            base = temp_input.name[: -len("_input")]
+            try:
+                value = int(temp_input.read_text()) / 1000
+            except (OSError, ValueError):
+                continue
+            try:
+                label = (sensor / f"{base}_label").read_text().strip()
+            except OSError:
+                label = base
+            if crit is None:
+                try:
+                    crit = int((sensor / f"{base}_crit").read_text()) / 1000
+                except (OSError, ValueError):
+                    pass
+            if label.startswith(("Package", "Tctl", "Tdie")) and package is None:
+                package = value
+            elif label.startswith("Core"):
+                cores.append(round(value, 1))
+        if package is None and cores:
+            package = max(cores)
+        if package is not None:
+            return {"package": round(package, 1), "cores": cores, "crit": crit, "sensor": name}
+    return None
+
+
+def get_temperature() -> dict | None:
+    cpu = get_cpu_temperature()
+    zones = []
+    for zone in sorted((SYSFS_PATH / "class" / "thermal").glob("thermal_zone*")):
+        try:
+            zones.append({
+                "label": (zone / "type").read_text().strip(),
+                "celsius": round(int((zone / "temp").read_text().strip()) / 1000, 1),
+            })
         except (OSError, ValueError):
             continue
-        try:
-            label = (zone / "type").read_text().strip()
-        except OSError:
-            label = zone.name
-        readings.append({"label": label, "celsius": round(celsius, 1)})
+    board = [z["celsius"] for z in zones if z["label"] == "acpitz"]
 
-    if not readings:
-        return None
-
-    cpu = [r for r in readings if r["label"] in CPU_THERMAL_ZONES]
-    primary = max(cpu or readings, key=lambda r: r["celsius"])
-    return {
-        "celsius": primary["celsius"],
-        "label": primary["label"],
-        "is_cpu": bool(cpu),
-        "zones": readings,
-    }
+    if cpu:
+        return {
+            "celsius": cpu["package"],
+            "cores": cpu["cores"],
+            "crit": cpu["crit"],
+            "board": max(board) if board else None,
+            "is_cpu": True,
+            "label": _get_cpu_model(),
+            "zones": zones,
+        }
+    if zones:
+        hottest = max(zones, key=lambda z: z["celsius"])
+        return {"celsius": hottest["celsius"], "cores": [], "crit": None, "board": None,
+                "is_cpu": False, "label": hottest["label"], "zones": zones}
+    return None
 
 
 def _container_ports(container, network_mode: str) -> tuple[list[dict], list[str]]:
@@ -315,6 +403,9 @@ def get_docker_containers() -> dict:
                 "image": image,
                 "created": attrs.get("Created", ""),
                 "uptime_seconds": _container_uptime(container),
+                "restart_count": int(attrs.get("RestartCount") or 0),
+                "exit_code": (attrs.get("State") or {}).get("ExitCode"),
+                "finished_at": (attrs.get("State") or {}).get("FinishedAt", ""),
                 "compose_project": project,
                 "compose_service": service,
                 "kind": "compose" if project else "standalone",
@@ -423,86 +514,32 @@ def _check_plex_web() -> dict:
             return {**result, "available": False, "error": str(exc)}
 
 
-def _get_plex_from_systemd() -> dict | None:
-    if not shutil.which("systemctl"):
-        return None
-    try:
-        result = subprocess.run(
-            [
-                "systemctl", "show", PLEX_SERVICE_NAME,
-                "--property=ActiveState,SubState,MainPID,ActiveEnterTimestamp,UnitFileState",
-            ],
-            capture_output=True, text=True, timeout=5,
-        )
-    except (OSError, subprocess.TimeoutExpired):
-        return None
-    if result.returncode != 0 or not result.stdout.strip():
-        return None
-
-    props = dict(line.split("=", 1) for line in result.stdout.splitlines() if "=" in line)
-    active_state = props.get("ActiveState", "unknown")
-    sub_state = props.get("SubState", "")
-    if active_state == "not-found" and props.get("UnitFileState", "") in ("", "disabled", "masked"):
-        return None
-
-    is_running = active_state == "active" and sub_state == "running"
-    uptime = 0
-    if is_running:
-        try:
-            # Формат systemd: "Mon 2026-11-23 10:00:00 UTC"
-            started = datetime.strptime(
-                " ".join(props.get("ActiveEnterTimestamp", "").split()[1:3]), "%Y-%m-%d %H:%M:%S"
-            ).timestamp()
-            uptime = int(max(time.time() - started, 0))
-        except ValueError:
-            pass
-
-    return {
-        "found": True,
-        "source": "systemd",
-        "service": f"{PLEX_SERVICE_NAME}.service",
-        "status": "running" if is_running else "stopped",
-        "pid": int(props.get("MainPID", "0") or "0"),
-        "uptime": _uptime(uptime),
-    }
-
-
 @ttl_cache(15)
 def get_plex_status() -> dict:
-    # Сначала ищем контейнер Plex.
-    try:
-        client = docker.from_env()
-        try:
-            for container in client.containers.list(all=True):
-                tags = container.image.tags if container.image else []
-                if "plex" not in container.name.lower() and not (tags and "plex" in tags[0].lower()):
-                    continue
-                running = container.status == "running"
-                return {
-                    "found": True,
-                    "source": "docker",
-                    "service": container.name,
-                    "status": "running" if running else "stopped",
-                    "pid": None,
-                    "uptime": _uptime(_container_uptime(container)),
-                    "web": _check_plex_web() if running else {"available": False, "port": PLEX_WEB_PORT},
-                }
-        finally:
-            client.close()
-    except Exception as exc:
-        print(f"Error checking Plex container: {exc}")
-
-    # Контейнера нет — проверяем системную службу.
-    service_info = _get_plex_from_systemd()
-    if not service_info:
-        return {
-            "found": False,
-            "service": f"{PLEX_SERVICE_NAME}.service",
-            "status": "not_found",
-            "uptime": _uptime(0),
-            "web": {"available": False, "port": PLEX_WEB_PORT},
-        }
-    return {**service_info, "web": _check_plex_web()}
+    """Plex работает нативно (systemd). Контейнер видит процессы хоста,
+    поэтому находим процесс «Plex Media Server» и проверяем веб-порт."""
+    for proc in psutil.process_iter(["pid", "name", "create_time"]):
+        if (proc.info["name"] or "").startswith("Plex Media Serv"):
+            uptime = int(max(time.time() - (proc.info["create_time"] or time.time()), 0))
+            return {
+                "found": True,
+                "source": "systemd",
+                "service": f"{PLEX_SERVICE_NAME}.service",
+                "status": "running",
+                "pid": proc.info["pid"],
+                "uptime": _uptime(uptime),
+                "web": _check_plex_web(),
+            }
+    web = _check_plex_web()
+    return {
+        "found": web.get("available", False),
+        "source": "systemd",
+        "service": f"{PLEX_SERVICE_NAME}.service",
+        "status": "running" if web.get("available") else "stopped",
+        "pid": None,
+        "uptime": _uptime(0),
+        "web": web,
+    }
 
 
 def _ip_sort_key(peer: dict) -> tuple:
@@ -595,7 +632,34 @@ def _host_name() -> str:
     return os.uname().nodename
 
 
+def _host_service_stacks(plex: dict) -> list[dict]:
+    """Службы хоста (не Docker), которые показываем в общем списке."""
+    if not plex.get("found"):
+        return []
+    return [{
+        "name": "plex",
+        "project": "",
+        "kind": "host",
+        "status": "running" if plex.get("status") == "running" else "stopped",
+        "container_count": 1,
+        "running_count": 1 if plex.get("status") == "running" else 0,
+        "services": ["plexmediaserver.service"],
+        "container_names": [],
+        "container_ids": [],
+        "ports": "32400/tcp",
+        "link_url": LINK_OVERRIDES["plex"][0].format(ip=SERVER_IP),
+        "link_label": LINK_OVERRIDES["plex"][0].format(ip=SERVER_IP),
+        "description": "Медиасервер Plex · служба systemd",
+    }]
+
+
 def collect_all() -> dict:
+    plex = get_plex_status()
+    docker_info = dict(get_docker_containers())
+    if docker_info.get("available"):
+        stacks = docker_info["stacks"] + _host_service_stacks(plex)
+        docker_info["stacks"] = sorted(stacks, key=lambda s: s["name"].casefold())
+        docker_info["total"] = len(docker_info["stacks"])
     return {
         "cpu": get_cpu(),
         "memory": get_memory(),
@@ -603,8 +667,8 @@ def collect_all() -> dict:
         "storage_disks": get_storage_disks(),
         "uptime": get_uptime(),
         "temperature": get_temperature(),
-        "docker": get_docker_containers(),
-        "plex": get_plex_status(),
+        "docker": docker_info,
+        "plex": plex,
         "amnezia": get_amnezia_status(),
         "hostname": _host_name(),
         "server_ip": SERVER_IP,

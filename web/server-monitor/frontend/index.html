@@ -6,7 +6,7 @@
   <meta name="color-scheme" content="dark">
   <title>Server Monitor</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23131720'/%3E%3Cpath d='M6 20l5-6 5 4 5-8 5 6' fill='none' stroke='%233b82f6' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="/static/css/style.css?v=21">
+  <link rel="stylesheet" href="/static/css/style.css?v=31">
 </head>
 <body class="is-loading">
   <div class="dashboard" id="dashboard">
@@ -28,10 +28,17 @@
     </header>
 
     <section class="section" aria-labelledby="sys-title">
-      <h2 class="section__title" id="sys-title">Система</h2>
+      <div class="section__head">
+        <h2 class="section__title" id="sys-title">Система</h2>
+        <div class="range" role="group" aria-label="Период для графиков и средних">
+          <button type="button" class="range__btn is-active" data-range="1h">1 ч</button>
+          <button type="button" class="range__btn" data-range="6h">6 ч</button>
+          <button type="button" class="range__btn" data-range="24h">24 ч</button>
+        </div>
+      </div>
       <div class="cards cards--system">
         <article class="card" id="card-cpu">
-          <div class="card__head"><span class="card__label">Процессор</span><span class="card__hint">10 мин</span></div>
+          <div class="card__head"><span class="card__label">Процессор</span><span class="card__hint" data-range-label>1 ч</span></div>
           <div class="card__value" id="cpu-value">—</div>
           <svg class="spark" id="cpu-spark" viewBox="0 0 100 28" preserveAspectRatio="none" aria-hidden="true"></svg>
           <div class="bar"><div class="bar__fill" id="cpu-bar"></div></div>
@@ -39,7 +46,7 @@
         </article>
 
         <article class="card" id="card-ram">
-          <div class="card__head"><span class="card__label">Память</span><span class="card__hint">10 мин</span></div>
+          <div class="card__head"><span class="card__label">Память</span><span class="card__hint" data-range-label>1 ч</span></div>
           <div class="card__value" id="ram-value">—</div>
           <svg class="spark" id="ram-spark" viewBox="0 0 100 28" preserveAspectRatio="none" aria-hidden="true"></svg>
           <div class="bar"><div class="bar__fill" id="ram-bar"></div></div>
@@ -47,11 +54,18 @@
         </article>
 
         <article class="card" id="card-temp">
-          <div class="card__head"><span class="card__label">Температура</span><span class="card__hint">10 мин</span></div>
+          <div class="card__head"><span class="card__label">Температура</span><span class="card__hint" data-range-label>1 ч</span></div>
           <div class="card__value" id="temp-value">—</div>
           <svg class="spark" id="temp-spark" viewBox="0 0 100 28" preserveAspectRatio="none" aria-hidden="true"></svg>
           <div class="bar"><div class="bar__fill" id="temp-bar"></div></div>
           <p class="card__meta" id="temp-meta">&nbsp;</p>
+        </article>
+
+        <article class="card" id="card-net">
+          <div class="card__head"><span class="card__label">Сеть</span><span class="card__hint" data-range-label>1 ч</span></div>
+          <div class="card__value card__value--net" id="net-value">—</div>
+          <svg class="spark spark--net" id="net-spark" viewBox="0 0 100 28" preserveAspectRatio="none" aria-hidden="true"></svg>
+          <p class="card__meta" id="net-meta">&nbsp;</p>
         </article>
 
         <article class="card" id="card-uptime">
@@ -88,6 +102,6 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="/static/js/app.js?v=21"></script>
+  <script src="/static/js/app.js?v=31"></script>
 </body>
 </html>

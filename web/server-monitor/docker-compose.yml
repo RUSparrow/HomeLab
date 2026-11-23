@@ -15,9 +15,16 @@ services:
       - /mnt/disk2:/mnt/disk2:ro
       - /run/dbus/system_bus_socket:/run/dbus/system_bus_socket:ro
       - /etc/hostname:/host/etc/hostname:ro
+      # История метрик (переживает перезапуск)
+      - ./data:/state
+      # Источники для карточек сервисов
+      - ../../security/clamav/reports:/data/clamav-reports:ro
+      - ../../vpn/duckdns/config:/data/duckdns:ro
+      - ../../tools/syncthing/data/config:/data/syncthing:ro
     pid: host
     restart: unless-stopped
     environment:
+      TZ: Europe/Tallinn
       SYSFS_PATH: /sys
       DBUS_SYSTEM_BUS_ADDRESS: unix:path=/run/dbus/system_bus_socket
       PLEX_WEB_HOST: host.docker.internal

@@ -5,13 +5,17 @@
    ========================================================= */
 
 const REFRESH_INTERVAL = 5000;
-const HISTORY_POINTS = 120; // 120 × 5 с = 10 минут
+const HISTORY_REFRESH = 30000;
+const RANGE_LABELS = { "1h": "1 ч", "6h": "6 ч", "24h": "24 ч" };
 const API_HEADERS = { "X-Requested-With": "server-monitor" };
 
 const $ = (id) => document.getElementById(id);
+let lastData = null;
 
 const state = {
-  history: { cpu: [], ram: [], temp: [] },
+  history: null,             // ответ /api/history
+  range: "1h",
+  historyTimer: null,
   serverIp: "",
   expanded: new Set(),      // раскрытые стеки
   busy: new Set(),          // стеки, для которых идёт запрос
@@ -118,66 +122,149 @@ function setText(el, text) {
   if (el.textContent !== text) el.textContent = text;
 }
 
-/* ---------- Мини-графики ---------- */
+/* ---------- История и мини-графики ---------- */
 
-function pushHistory(key, value) {
-  const list = state.history[key];
-  list.push(Number(value) || 0);
-  if (list.length > HISTORY_POINTS) list.shift();
+function loadRange() {
+  try {
+    const saved = localStorage.getItem("sm-range");
+    if (saved && RANGE_LABELS[saved]) state.range = saved;
+  } catch {
+    // localStorage может быть недоступен — работаем с периодом по умолчанию
+  }
 }
 
-function renderSpark(svg, values, min = 0, max = 100) {
+async function fetchHistory() {
+  try {
+    const res = await fetch(`/api/history?range=${state.range}`, { cache: "no-store" });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    state.history = await res.json();
+    if (lastData) renderSystem(lastData);
+  } catch (err) {
+    console.error("History fetch error:", err);
+  }
+}
+
+function setRange(range) {
+  state.range = range;
+  try { localStorage.setItem("sm-range", range); } catch { /* не критично */ }
+  document.querySelectorAll(".range__btn").forEach((b) => b.classList.toggle("is-active", b.dataset.range === range));
+  document.querySelectorAll("[data-range-label]").forEach((el) => { el.textContent = RANGE_LABELS[range]; });
+  fetchHistory();
+}
+
+/** Серия из истории + текущее значение в конце. null — пропуски (сервер был выключен). */
+function seriesWithNow(field, now) {
+  const line = state.history?.series?.[field] ? [...state.history.series[field]] : [];
+  if (now != null && line.length) line[line.length - 1] = now;
+  return line;
+}
+
+function sparkPath(values, min, max) {
+  const n = Math.max(values.length - 1, 1);
+  const y = (v) => 28 - ((Math.min(Math.max(v, min), max) - min) / (max - min || 1)) * 26 - 1;
+  const segments = [];
+  let current = [];
+  values.forEach((v, i) => {
+    if (v == null) {
+      if (current.length) segments.push(current);
+      current = [];
+    } else {
+      current.push([((i / n) * 100).toFixed(2), y(v).toFixed(2)]);
+    }
+  });
+  if (current.length) segments.push(current);
+  return segments;
+}
+
+function renderSpark(svg, values, min = 0, max = 100, cls = "") {
   if (!svg) return;
-  if (values.length < 2) {
+  const segments = sparkPath(values, min, max).filter((seg) => seg.length > 1);
+  if (!segments.length) {
     svg.innerHTML = "";
     return;
   }
-  const n = HISTORY_POINTS - 1;
-  const offset = n - (values.length - 1);
-  const y = (v) => 28 - ((Math.min(Math.max(v, min), max) - min) / (max - min)) * 26 - 1;
-  const points = values.map((v, i) => `${(((offset + i) / n) * 100).toFixed(2)},${y(v).toFixed(2)}`);
-  const firstX = ((offset / n) * 100).toFixed(2);
-  svg.innerHTML =
-    `<path class="area" d="M${firstX},28 L${points.join(" L")} L100,28 Z"></path>` +
-    `<path class="line" d="M${points.join(" L")}"></path>`;
+  let html = "";
+  for (const seg of segments) {
+    const pts = seg.map(([x, y]) => `${x},${y}`).join(" L");
+    if (!cls) html += `<path class="area" d="M${seg[0][0]},28 L${pts} L${seg[seg.length - 1][0]},28 Z"></path>`;
+    html += `<path class="line ${cls}" d="M${pts}"></path>`;
+  }
+  return html;
+}
+
+function setSpark(svg, html) {
+  if (svg && html !== undefined) patch(svg, html || "");
+}
+
+/** «Ср. 12,3 % · пик 61 %» за выбранный период. */
+function statsLine(field, unit, digits = 1, format = null) {
+  const st = state.history?.stats?.[field];
+  if (!st) return "Собираю историю…";
+  const f = format || ((v) => `${fmtNumber(v, digits)}${unit}`);
+  const covered = state.history.covered_seconds;
+  const partial = covered && covered < state.history.seconds * 0.9 ? ` (за ${fmtDuration(covered)})` : "";
+  return `Ср. <b>${f(st.avg)}</b> · пик <b>${f(st.max)}</b>${partial}`;
+}
+
+function fmtRate(bytesPerSec) {
+  if (bytesPerSec == null) return "—";
+  const bits = bytesPerSec * 8;
+  if (bits >= 1e6) return `${fmtNumber(bits / 1e6, bits >= 1e8 ? 0 : 1)} Мбит/с`;
+  if (bits >= 1e3) return `${fmtNumber(bits / 1e3, 0)} Кбит/с`;
+  return `${Math.round(bits)} бит/с`;
+}
+
+function cpuName(model) {
+  return (model || "CPU").replace(/\(R\)|\(TM\)/g, "").replace(/\s+CPU\s+@.*/, "").replace(/\s+/g, " ").trim();
 }
 
 /* ---------- Системные карточки ---------- */
 
 function renderSystem(data) {
   const cpu = data.cpu || {};
-  pushHistory("cpu", cpu.percent);
   setText($("cpu-value"), `${fmtNumber(cpu.percent)} %`);
   $("cpu-bar").style.width = `${cpu.percent}%`;
   setLevel($("card-cpu"), level(cpu.percent, 70, 90));
-  renderSpark($("cpu-spark"), state.history.cpu);
-  const avg = state.history.cpu.reduce((a, b) => a + b, 0) / state.history.cpu.length;
-  setText($("cpu-meta"), `${(cpu.model || "CPU").replace(/\s+CPU\s+@.*/, "").replace(/\(R\)|\(TM\)/g, "")} · ${cpu.cores} потоков\nСреднее за период: ${fmtNumber(avg)} %`);
+  setSpark($("cpu-spark"), renderSpark($("cpu-spark"), seriesWithNow("cpu", cpu.percent)));
+  const load = (cpu.load_avg || []).map((v) => fmtNumber(v, 2)).join(" / ");
+  patch($("cpu-meta"), `${esc(cpuName(cpu.model))} · ${cpu.physical_cores || "?"} ядра / ${cpu.cores} потоков<br>${statsLine("cpu", " %")}${load ? `<br>Load avg: ${load}` : ""}`);
 
   const mem = data.memory || {};
-  pushHistory("ram", mem.percent);
   setText($("ram-value"), `${fmtNumber(mem.percent)} %`);
   $("ram-bar").style.width = `${mem.percent}%`;
   setLevel($("card-ram"), level(mem.percent, 75, 90));
-  renderSpark($("ram-spark"), state.history.ram);
-  setText($("ram-meta"), `${fmtBytes(mem.used)} из ${fmtBytes(mem.total)}\nДоступно: ${fmtBytes(mem.available)}`);
+  setSpark($("ram-spark"), renderSpark($("ram-spark"), seriesWithNow("ram", mem.percent)));
+  patch($("ram-meta"), `${fmtBytes(mem.used)} из ${fmtBytes(mem.total)} · доступно ${fmtBytes(mem.available)}<br>${statsLine("ram", " %")}`);
 
   const temp = data.temperature;
   if (temp) {
-    pushHistory("temp", temp.celsius);
     setText($("temp-value"), `${fmtNumber(temp.celsius)} °C`);
     $("temp-bar").style.width = `${Math.min(temp.celsius, 100)}%`;
     setLevel($("card-temp"), level(temp.celsius, 70, 85));
-    renderSpark($("temp-spark"), state.history.temp, 20, 100);
-    const others = (temp.zones || [])
-      .filter((z) => z.label !== temp.label)
-      .map((z) => z.celsius);
-    const board = others.length ? `\nМатеринская плата: ${fmtNumber(Math.max(...others))} °C` : "";
-    setText($("temp-meta"), `${temp.is_cpu ? "Процессор" : "Самый горячий датчик"} (${temp.label})${board}`);
+    setSpark($("temp-spark"), renderSpark($("temp-spark"), seriesWithNow("temp", temp.celsius), 20, 100));
+    const cores = (temp.cores || []).map((c, i) => `<span title="Ядро ${i}">${Math.round(c)}°</span>`).join("");
+    const extra = [
+      temp.board != null ? `плата ${fmtNumber(temp.board)} °C` : "",
+      temp.crit ? `предел ${Math.round(temp.crit)} °C` : "",
+    ].filter(Boolean).join(" · ");
+    patch($("temp-meta"),
+      `${temp.is_cpu ? esc(cpuName(temp.label)) : `Датчик ${esc(temp.label)}`}${extra ? ` · ${extra}` : ""}` +
+      `<br>${statsLine("temp", " °C")}` +
+      (cores ? `<div class="cores" title="Температура по ядрам">${cores}</div>` : ""));
   } else {
     setText($("temp-value"), "н/д");
     setText($("temp-meta"), "Датчики температуры не найдены");
   }
+
+  const net = data.network || {};
+  patch($("net-value"), `<span class="rx">↓ ${fmtRate(net.rx)}</span><span class="tx">↑ ${fmtRate(net.tx)}</span>`);
+  const rx = seriesWithNow("rx", net.rx);
+  const tx = seriesWithNow("tx", net.tx);
+  const maxNet = Math.max(1, ...rx.filter((v) => v != null), ...tx.filter((v) => v != null));
+  const netSvg = $("net-spark");
+  setSpark(netSvg, (renderSpark(netSvg, rx, 0, maxNet) || "") + (renderSpark(netSvg, tx, 0, maxNet, "tx") || ""));
+  patch($("net-meta"), `Ср. ↓ <b>${fmtRate(state.history?.stats?.rx?.avg)}</b> · ↑ <b>${fmtRate(state.history?.stats?.tx?.avg)}</b><br>` +
+    `Пик ↓ ${fmtRate(state.history?.stats?.rx?.max)} · ↑ ${fmtRate(state.history?.stats?.tx?.max)}`);
 
   const uptime = data.uptime || {};
   setText($("uptime-value"), fmtDuration(uptime.seconds));
@@ -193,8 +280,16 @@ function renderDisks(data) {
   }
 
   const html = disks.map((disk) => {
-    const lvl = level(disk.percent, 80, 90);
+    const smart = disk.smart || {};
+    const smartBad = smart.healthy === false;
+    const lvl = smartBad ? "lvl-crit" : level(disk.percent, 80, 90);
     const nominal = disk.nominal_total ? ` · ${fmtBytes(disk.nominal_total)}` : "";
+    const health = smart.healthy == null ? "" :
+      `<span class="badge badge--${smartBad ? "bad" : "ok"}" title="Самодиагностика диска">${smartBad ? "SMART: ошибка" : "SMART в норме"}</span>`;
+    const facts = [
+      smart.temperature != null ? `${Math.round(smart.temperature)} °C` : "",
+      smart.power_on_hours ? `наработка ${fmtDuration(smart.power_on_hours * 3600).replace(/ \d+ ч$/, "")}` : "",
+    ].filter(Boolean).join(" · ");
     return `
       <article class="card ${lvl}">
         <div class="card__head">
@@ -203,8 +298,8 @@ function renderDisks(data) {
         </div>
         <div class="card__value">${fmtNumber(disk.percent)} %</div>
         <div class="bar"><div class="bar__fill" style="width:${Number(disk.percent) || 0}%"></div></div>
-        <p class="card__meta">Свободно <b>${fmtBytes(disk.free)}</b> из ${fmtBytes(disk.total)}
-${esc(disk.model)}${nominal}</p>
+        <p class="card__meta">Свободно <b>${fmtBytes(disk.free)}</b> из ${fmtBytes(disk.total)}<br>${esc(disk.model)}${nominal}</p>
+        <div class="card__stats">${health}${facts ? `<span>${facts}</span>` : ""}</div>
       </article>`;
   }).join("");
 
@@ -244,7 +339,48 @@ const ICONS = {
   chevron: '<svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>',
 };
 
-const stackKey = (s) => (s.kind === "compose" ? `compose:${s.project}` : `standalone:${s.name}`);
+const stackKey = (s) => (s.kind === "compose" ? `compose:${s.project}` : `${s.kind}:${s.name}`);
+
+/** Сведения о сервисе: по имени стека, затем по любому его контейнеру. */
+function stackInsight(s, data) {
+  const all = data?.insights || {};
+  if (all[s.name]) return all[s.name];
+  for (const name of s.container_names || []) {
+    if (all[name]) return all[name];
+  }
+  return null;
+}
+
+/** Состояние стека с учётом «выключен — и это нормально». */
+function stackState(s, insight, busy) {
+  if (busy) return { label: "Выполняется операция", cls: "busy" };
+  if (s.status === "stopped" && insight?.expected_stopped) {
+    return { label: s.name === "clamav" ? "Запускается по расписанию" : "Выключен", cls: "idle", idle: true };
+  }
+  return STACK_STATES[s.status] || { label: "Неизвестно", cls: "stopped" };
+}
+
+function renderInsightLine(insight) {
+  if (!insight?.summary) return "";
+  return `<div class="insight insight--${esc(insight.level)}" title="${esc(insight.summary)}"><span>${esc(insight.summary)}</span></div>`;
+}
+
+function renderInsightCard(insight) {
+  if (!insight || (!insight.facts?.length && !insight.items?.length)) return "";
+  const levelText = { ok: "Всё в порядке", warn: "Есть замечания", bad: "Проблема", idle: "Выключен" }[insight.level] || "";
+  const badge = { ok: "ok", warn: "warn", bad: "bad", idle: "off" }[insight.level] || "off";
+  const facts = (insight.facts || []).map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("");
+  const items = insight.items?.length ? `<div class="dcard__items">${insight.items.map((i) => `<span>${esc(i)}</span>`).join("")}</div>` : "";
+  return `
+    <article class="dcard dcard--wide dcard--insight is-${esc(insight.level)}">
+      <div class="dcard__head">
+        <div class="dcard__title"><span>${esc(insight.summary)}</span></div>
+        <span class="badge badge--${badge}">${levelText}</span>
+      </div>
+      ${facts ? `<dl class="kv">${facts}</dl>` : ""}
+      ${items}
+    </article>`;
+}
 
 function renderLink(s) {
   if (s.link_url) {
@@ -267,10 +403,11 @@ function renderPorts(ports) {
   }).join("")}</div>`;
 }
 
-function renderStackRow(s) {
+function renderStackRow(s, insight) {
   const key = stackKey(s);
   const busy = state.busy.has(key) || state.pending.has(key);
-  const st = busy ? { label: "Выполняется операция", cls: "busy" } : (STACK_STATES[s.status] || { label: "Неизвестно", cls: "stopped" });
+  const st = stackState(s, insight, busy);
+  const isHost = s.kind === "host";
   const allRunning = Number(s.running_count) === Number(s.container_count);
   const locked = busy || s.status === "partial";
   const open = state.expanded.has(key);
@@ -290,25 +427,26 @@ function renderStackRow(s) {
           <b data-copy="${esc(name)}" title="${esc(name)}">${esc(name)}</b>
         </div>
         ${s.description ? `<div class="stack__desc">${esc(s.description)}</div>` : ""}
+        ${renderInsightLine(insight)}
       </div>
       <div class="stack__cell stack__cell--count">
         <span class="stack__label">Контейнеры</span>
         <div>
-          <div class="stack__count"><span class="${bad ? "is-bad" : ""}">${s.running_count}/${s.container_count}</span> <span class="stack__state ${bad ? "is-bad" : ""}">· ${esc(st.label.toLowerCase())}</span></div>
+          <div class="stack__count">${isHost ? '<span class="kind-tag">служба</span>' : `<span class="${bad ? "is-bad" : ""}">${s.running_count}/${s.container_count}</span>`} <span class="stack__state ${bad ? "is-bad" : ""}">· ${esc(st.label.toLowerCase())}</span></div>
           ${services}
         </div>
       </div>
       <div class="stack__cell stack__cell--link"><span class="stack__label">Адрес</span>${renderLink(s)}</div>
       <div class="stack__cell stack__cell--ports"><span class="stack__label">Порты</span>${renderPorts(s.ports)}</div>
       <div class="stack__actions">
-        <button type="button" class="icon-btn ${allRunning ? "icon-btn--stop" : "icon-btn--start"} ${busy ? "is-busy" : ""}"
+        ${isHost ? "" : `<button type="button" class="icon-btn ${allRunning ? "icon-btn--stop" : "icon-btn--start"} ${busy ? "is-busy" : ""}"
           data-action="toggle" ${data} title="${esc(toggleTitle)}" aria-label="${esc(toggleTitle)}" ${locked ? "disabled" : ""}>
           ${allRunning ? ICONS.power : ICONS.play}
         </button>
         <button type="button" class="icon-btn" data-action="restart" ${data}
           title="Перезапустить ${esc(name)}" aria-label="Перезапустить ${esc(name)}" ${locked ? "disabled" : ""}>
           ${ICONS.restart}
-        </button>
+        </button>`}
         <button type="button" class="icon-btn icon-btn--details" data-action="details" data-key="${esc(key)}"
           title="${open ? "Скрыть подробности" : "Подробнее"}" aria-expanded="${open}">
           ${ICONS.chevron}
@@ -332,6 +470,8 @@ function renderContainerCard(c) {
         <dt>Healthcheck</dt><dd>${health ? `<span class="badge badge--${health[1]}">${health[0]}</span>` : '<span class="muted">не настроен</span>'}</dd>
         <dt>ID</dt><dd><code data-copy="${esc(c.id)}">${esc(c.id)}</code></dd>
         <dt>Порты</dt><dd>${esc(c.ports || "—")}</dd>
+        ${c.restart_count ? `<dt>Перезапусков</dt><dd><span class="badge badge--warn">${esc(c.restart_count)}</span> (автоматических)</dd>` : ""}
+        ${c.status !== "running" && c.exit_code != null && c.exit_code !== 0 ? `<dt>Код выхода</dt><dd>${esc(c.exit_code)}</dd>` : ""}
       </dl>
     </article>`;
 }
@@ -390,12 +530,13 @@ function renderAmneziaCard(vpn) {
     </article>`;
 }
 
-function renderStackDetails(s, containers, data) {
+function renderStackDetails(s, containers, data, insight) {
   const names = new Set(s.container_names || []);
   const members = containers.filter((c) => names.has(c.name));
-  const cards = members.map(renderContainerCard);
+  const cards = [renderInsightCard(insight)];
+  if (s.kind === "host" && s.name === "plex") cards.push(renderPlexCard(data.plex));
   if (members.some((c) => c.name === "amnezia-awg2")) cards.push(renderAmneziaCard(data.amnezia));
-  if (members.some((c) => c.name.toLowerCase().includes("plex"))) cards.push(renderPlexCard(data.plex));
+  cards.push(...members.map(renderContainerCard));
   return `<div class="details-grid">${cards.join("") || '<p class="muted">Подробности недоступны</p>'}</div>`;
 }
 
@@ -440,14 +581,21 @@ function renderDocker(data) {
   const containers = Array.isArray(docker.containers) ? docker.containers : [];
   resolvePending(stacks);
 
-  // Сводка
-  const running = stacks.filter((s) => s.status === "running").length;
-  const stopped = stacks.filter((s) => s.status === "stopped").length;
-  const problems = stacks.length - running - stopped;
+  // Сводка: «требуют внимания» — сбой контейнера или проблема по сведениям сервиса.
+  const insightsBy = new Map(stacks.map((s) => [stackKey(s), stackInsight(s, data)]));
+  let running = 0, idle = 0, stopped = 0, attention = 0;
+  for (const s of stacks) {
+    const ins = insightsBy.get(stackKey(s));
+    if (s.status === "running") running += 1;
+    else if (s.status === "stopped" && ins?.expected_stopped) idle += 1;
+    else if (s.status === "stopped") stopped += 1;
+    if (["mixed", "unhealthy"].includes(s.status) || ["bad", "warn"].includes(ins?.level)) attention += 1;
+  }
   patch($("docker-summary"), [
     `<span class="chip chip--ok">${running} ${plural(running, ["работает", "работают", "работают"])}</span>`,
+    idle ? `<span class="chip chip--off" title="Выключены намеренно или запускаются по расписанию">${idle} в ожидании</span>` : "",
     stopped ? `<span class="chip chip--off">${stopped} ${plural(stopped, ["остановлен", "остановлены", "остановлены"])}</span>` : "",
-    problems ? `<span class="chip chip--bad">${problems} ${plural(problems, ["требует", "требуют", "требуют"])} внимания</span>` : "",
+    attention ? `<span class="chip chip--bad">${attention} ${plural(attention, ["требует", "требуют", "требуют"])} внимания</span>` : "",
   ].join(""));
 
   if (!stacks.length) {
@@ -474,16 +622,15 @@ function renderDocker(data) {
     const key = stackKey(s);
     const open = state.expanded.has(key);
     el.classList.toggle("is-open", open);
-    patch(el.querySelector(".stack__main"), renderStackRow(s));
+    const insight = insightsBy.get(key);
+    patch(el.querySelector(".stack__main"), renderStackRow(s, insight));
     const details = el.querySelector(".stack__details");
     details.hidden = !open;
-    if (open) patch(details, renderStackDetails(s, containers, data));
+    if (open) patch(details, renderStackDetails(s, containers, data, insight));
   });
 }
 
 /* ---------- Загрузка данных ---------- */
-
-let lastData = null;
 
 function setConnection(ok) {
   const conn = $("conn");
@@ -520,13 +667,19 @@ async function fetchMetrics() {
 
 function startPolling() {
   clearInterval(state.timer);
+  clearInterval(state.historyTimer);
   fetchMetrics();
+  fetchHistory();
   state.timer = setInterval(fetchMetrics, REFRESH_INTERVAL);
+  state.historyTimer = setInterval(fetchHistory, HISTORY_REFRESH);
 }
 
 // В фоновой вкладке не опрашиваем сервер, при возвращении — сразу обновляем.
 document.addEventListener("visibilitychange", () => {
-  if (document.hidden) clearInterval(state.timer);
+  if (document.hidden) {
+    clearInterval(state.timer);
+    clearInterval(state.historyTimer);
+  }
   else startPolling();
 });
 
@@ -640,4 +793,9 @@ $("update-project").addEventListener("click", async () => {
 
 $("pricefinder-link").href = `${location.protocol}//${location.hostname}:8082`;
 
+document.querySelectorAll(".range__btn").forEach((btn) => {
+  btn.addEventListener("click", () => setRange(btn.dataset.range));
+});
+loadRange();
+setRange(state.range);
 startPolling();
