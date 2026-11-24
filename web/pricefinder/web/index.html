@@ -4,34 +4,35 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Поиск товаров и цен в интернет-магазинах">
-  <meta name="theme-color" content="#0b1020">
+  <meta name="theme-color" content="#0e0e11">
   <title>PriceFinder — поиск товаров</title>
-  <link rel="stylesheet" href="/css/style.css?v=9">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%2317181c'/%3E%3Ccircle cx='10.5' cy='10.5' r='5' fill='none' stroke='%23fbb26a' stroke-width='2.2'/%3E%3Cpath d='m14.5 14.5 4 4' stroke='%23fbb26a' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="/css/style.css?v=10">
 </head>
 <body>
   <header class="header">
     <nav class="nav container">
       <a class="nav__logo" href="/" aria-label="PriceFinder — главная">
-        <span class="logo-icon" aria-hidden="true">⌕</span>
-        <span>Price<span class="accent">Finder</span></span>
+        <span class="logo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg></span>
+        <span>PriceFinder</span>
       </a>
 
       <a class="nav__back" id="monitor-link" href="/">
-        Server Monitor <span aria-hidden="true">↗</span>
+        Server Monitor
       </a>
     </nav>
   </header>
 
   <main>
     <section class="hero container">
-      <h1 class="hero__title">
-        Найди товар<br>
-        <span class="accent">Сравни варианты</span>
-      </h1>
+      <h1 class="hero__title">Где купить дешевле</h1>
 
       <p class="hero__description">
-        Ищи товары в магазинах разных стран и открывай найденные предложения
-        в один клик.
+        Ищет товар в магазинах Эстонии, Латвии, Литвы, Финляндии,
+        Скандинавии, Германии и Польши и пересчитывает цены в евро.
       </p>
 
       <form class="search" id="search-form">
@@ -85,8 +86,8 @@
             <path d="m16 16 5 5"></path>
           </svg>
         </div>
-        <h3>Что будем искать?</h3>
-        <p>Введи название товара — бот проверит магазины Эстонии, Латвии, Литвы, Финляндии, Скандинавии, Германии и Польши. Поиск занимает 1–3 минуты.</p>
+        <h3>Здесь появятся предложения</h3>
+        <p>Введите модель товара или выберите пример выше. Проверка магазинов занимает 1–3 минуты.</p>
       </div>
 
       <div class="offers" id="offers"></div>
@@ -96,10 +97,10 @@
   <footer class="footer">
     <div class="container footer__inner">
       <a class="footer__logo" href="/">PriceFinder</a>
-      <span>Твой поиск товаров в интернете по магазинам Эстонии, Финляндии, Швеции, Германии и других стран</span>
+      <span>Цены собираются со страниц магазинов и могут отличаться от актуальных</span>
     </div>
   </footer>
 
-  <script src="/js/main.js?v=8"></script>
+  <script src="/js/main.js?v=9"></script>
 </body>
 </html>

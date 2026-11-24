@@ -104,10 +104,6 @@ function createLoadingView(query) {
     gears.appendChild(gear);
   });
 
-  const eyebrow = document.createElement("div");
-  eyebrow.className = "pf-loading__eyebrow";
-  eyebrow.textContent = "PRICEFINDER ENGINE";
-
   const title = document.createElement("h3");
   title.className = "pf-loading__title";
   title.id = "pf-stage-title";
@@ -185,7 +181,7 @@ function createLoadingView(query) {
     "Выполняется запрос к поисковому серверу. Некоторые сайты могут блокировать автоматический поиск.";
 
   emptyState.append(
-    gears, eyebrow, title, description, queryLabel,
+    gears, title, description, queryLabel,
     progressHeader, progressTrack, stageList, notice
   );
   emptyState.hidden = false;
@@ -315,7 +311,7 @@ function renderOffers(items) {
           link.href = url.href;
           link.target = "_blank";
           link.rel = "noopener noreferrer";
-          link.textContent = "Открыть магазин ↗";
+          link.textContent = "Открыть магазин";
           right.appendChild(link);
         }
       } catch {

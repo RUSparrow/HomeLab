@@ -1,8 +1,8 @@
 :root {
   color-scheme: dark;
   font-family: "Segoe UI", system-ui, sans-serif;
-  background: #0b0e14;
-  color: #e6edf7;
+  background: #0e0e11;
+  color: #eaeaec;
 }
 
 * { box-sizing: border-box; }
@@ -20,8 +20,8 @@ body { margin: 0; }
   width: min(100%, 420px);
   padding: 3rem 2rem;
   text-align: center;
-  background: #131720;
-  border: 1px solid #252d3d;
+  background: #17181c;
+  border: 1px solid #2c2d30;
   border-radius: 16px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
 }
@@ -30,25 +30,27 @@ body { margin: 0; }
   width: 48px;
   height: 48px;
   margin: 0 auto 1.5rem;
-  border: 4px solid #293448;
-  border-top-color: #3b82f6;
+  border: 4px solid #2c2d30;
+  border-top-color: #fbb26a;
   border-radius: 50%;
   animation: spin 0.9s linear infinite;
 }
 
 h1 { margin: 0 0 0.75rem; font-size: 1.5rem; }
 
-#update-message { margin: 0; color: #8b9cb3; }
+#update-message { margin: 0; color: #878b91; }
 
-.update-state { margin: 1rem 0 0; color: #93c5fd; font-size: 0.9rem; }
+.update-state { margin: 1rem 0 0; color: #fbb26a; font-size: 0.9rem; }
 
 .back-button {
   display: inline-block;
   margin-top: 1.5rem;
   padding: 0.6rem 1rem;
-  color: white;
+  color: #17181c;
+  font-weight: 600;
   text-decoration: none;
-  background: #3b82f6;
+  background: #fbb26a;
+  box-shadow: 0 2px 30px rgba(251, 178, 106, 0.25);
   border-radius: 8px;
 }
 
