@@ -10,160 +10,148 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Golos+Text:wght@400;500;600&display=swap">
-  <link rel="stylesheet" href="css/style.css?v=1">
+  <link rel="stylesheet" href="/shared/planner.css?v=1">
+  <link rel="stylesheet" href="css/style.css?v=2">
 </head>
 <body>
+  <div class="tape" aria-hidden="true"></div>
   <header class="top">
     <div class="wrap top__in">
       <a class="logo" href="#">
         <svg class="logo__van" viewBox="0 0 40 28" aria-hidden="true"><path d="M2 21V5a3 3 0 0 1 3-3h19l9 8 5 2v9z"/><circle cx="11" cy="22" r="4"/><circle cx="30" cy="22" r="4"/></svg>
-        <span>Фургон<br>за час</span>
+        <span data-i18n="brand">Фургон<br>за час</span>
       </a>
-      <nav class="nav" aria-label="Разделы">
-        <a href="#fit">Что влезет</a>
-        <a href="#van">Машина</a>
-        <a href="#prices">Цены</a>
-        <a href="#faq">Вопросы</a>
+      <nav class="nav" aria-label="Menu">
+        <a href="#fit" data-i18n="nav.fit">Что влезет</a>
+        <a href="#van" data-i18n="nav.van">Машина</a>
+        <a href="#prices" data-i18n="nav.prices">Цены</a>
+        <a href="#faq" data-i18n="nav.faq">Вопросы</a>
       </nav>
       <a class="btn btn--small" href="tel:+37250000202">+372 5000 0202</a>
+      <div data-lang-switch></div>
     </div>
   </header>
 
   <main>
     <section class="hero wrap">
       <div class="hero__text">
-        <h1>Перевезём вещи по Таллинну сегодня</h1>
-        <p class="lead">Белый Peugeot Boxer с водителем и, если нужно, грузчиками. Платите только за время, которое работаем.</p>
+        <h1 data-i18n="hero.title">Перевезём вещи по Таллинну сегодня</h1>
+        <p class="lead" data-i18n="hero.lead">Белый Peugeot Boxer с водителем и, если нужно, грузчиками. Платите только за время, которое работаем.</p>
 
         <form class="calc" id="calc">
           <div class="calc__field">
-            <div class="calc__label"><span>Сколько часов</span><b id="hours-val">3 ч</b></div>
-            <input type="range" id="hours" min="2" max="10" value="3" aria-label="Часы работы">
+            <div class="calc__label"><span data-i18n="calc.hours">Сколько часов</span><b id="hours-val">3</b></div>
+            <input type="range" id="hours" min="2" max="10" value="3" aria-label="Hours" data-i18n-attr="aria-label:calc.hours">
             <div class="calc__ticks" aria-hidden="true"><span>2</span><span>4</span><span>6</span><span>8</span><span>10</span></div>
           </div>
           <div class="calc__field">
-            <div class="calc__label"><span>Грузчики</span></div>
-            <div class="pills" role="radiogroup" aria-label="Грузчики">
-              <label><input type="radio" name="movers" value="0"><span>Сам</span></label>
-              <label><input type="radio" name="movers" value="1" checked><span>1 грузчик</span></label>
-              <label><input type="radio" name="movers" value="2"><span>2 грузчика</span></label>
+            <div class="calc__label"><span data-i18n="calc.movers">Грузчики</span></div>
+            <div class="pills" role="radiogroup">
+              <label><input type="radio" name="movers" value="0"><span data-i18n="calc.m0">Сам</span></label>
+              <label><input type="radio" name="movers" value="1" checked><span data-i18n="calc.m1">1 грузчик</span></label>
+              <label><input type="radio" name="movers" value="2"><span data-i18n="calc.m2">2 грузчика</span></label>
             </div>
           </div>
           <div class="calc__inline">
             <div class="stepper">
-              <span>Этажей без лифта</span>
-              <button type="button" data-step="-1" aria-label="Меньше">−</button>
+              <span data-i18n="calc.floors">Этажей без лифта</span>
+              <button type="button" data-step="-1" aria-label="−">−</button>
               <output id="floors">0</output>
-              <button type="button" data-step="1" aria-label="Больше">+</button>
+              <button type="button" data-step="1" aria-label="+">+</button>
             </div>
-            <label class="check"><input type="checkbox" id="assembly"><span>Разобрать и собрать мебель</span></label>
+            <label class="check"><input type="checkbox" id="assembly"><span data-i18n="calc.assembly">Разобрать и собрать мебель</span></label>
           </div>
           <div class="calc__total">
-            <div><small>Примерно</small><b id="total">101 €</b></div>
-            <button class="btn" type="submit">Забронировать</button>
+            <div><small data-i18n="calc.approx">Примерно</small><b id="total">101 €</b></div>
+            <button class="btn" type="submit" data-i18n="calc.book">Забронировать</button>
           </div>
         </form>
       </div>
 
       <figure class="hero__pic">
-        <img src="img/boxer.jpg" srcset="img/boxer-900.jpg 900w, img/boxer.jpg 1800w" sizes="(max-width: 900px) 100vw, 50vw" alt="Белый фургон Peugeot Boxer, вид сбоку">
-        <figcaption class="tag tag--a">13 м³</figcaption>
-        <figcaption class="tag tag--b">до 1,4 т</figcaption>
+        <img src="img/boxer.jpg" srcset="img/boxer-900.jpg 900w, img/boxer.jpg 1800w" sizes="(max-width: 900px) 100vw, 50vw" alt="Peugeot Boxer" data-i18n-attr="alt:hero.alt">
+        <figcaption class="tag tag--a">13 m³</figcaption>
+        <figcaption class="tag tag--b" data-i18n="hero.tagB">до 1,4 т</figcaption>
       </figure>
     </section>
 
     <section class="fit" id="fit">
       <div class="wrap">
         <div class="fit__head">
-          <h2>Влезет ли всё за один рейс?</h2>
-          <p>Нажимайте на вещи, которые везёте. Посчитаем, сколько места они займут в кузове.</p>
+          <h2 data-i18n="fit.title">Влезет ли всё за один рейс?</h2>
+          <p data-i18n="fit.lead">Нажимайте на вещи, которые везёте, или введите свои размеры. Покажем, как они встанут в кузов и сколько места останется.</p>
         </div>
-        <div class="fit__grid">
-          <div class="items" id="items"></div>
-          <div class="load">
-            <svg class="load__van" viewBox="0 0 400 190" aria-hidden="true">
-              <defs><clipPath id="body"><rect x="14" y="14" width="262" height="128" rx="10"/></clipPath></defs>
-              <rect x="14" y="14" width="262" height="128" rx="10" class="load__box"/>
-              <rect id="fill" x="14" y="14" width="0" height="128" clip-path="url(#body)" class="load__fill"/>
-              <path d="M276 30h48c10 0 18 6 24 14l26 38c6 8 10 18 10 28v32H276z" class="load__cab"/>
-              <path d="M290 44h34c6 0 10 3 13 8l18 26h-65z" class="load__glass"/>
-              <circle cx="84" cy="150" r="24" class="load__wheel"/><circle cx="330" cy="150" r="24" class="load__wheel"/>
-              <circle cx="84" cy="150" r="9" class="load__hub"/><circle cx="330" cy="150" r="9" class="load__hub"/>
-            </svg>
-            <p class="load__num"><b id="vol">0</b> из 13 м³</p>
-            <p class="load__verdict" id="verdict">Выберите вещи слева</p>
-            <button type="button" class="link" id="clear">Очистить список</button>
-          </div>
-        </div>
+        <div id="planner"></div>
+        <p class="fit__note" data-i18n="fit.note">Между колёсными арками 1,42 м — широкие вещи ставим ближе к дверям. Шкафы и диваны можно везти на боку.</p>
       </div>
     </section>
 
     <section class="van wrap" id="van">
-      <h2>Машина</h2>
+      <h2 data-i18n="van.title">Машина</h2>
       <div class="van__grid">
-        <div class="spec"><b>3,7 м</b><span>длина кузова</span></div>
-        <div class="spec"><b>1,87 м</b><span>ширина, между арками 1,42 м</span></div>
-        <div class="spec"><b>1,93 м</b><span>высота — шкаф стоя</span></div>
-        <div class="spec"><b>13 м³</b><span>как однокомнатная квартира</span></div>
-        <div class="spec"><b>1,4 т</b><span>грузоподъёмность</span></div>
-        <div class="spec"><b>2 двери</b><span>боковая 1,25 м и задние на 270°</span></div>
+        <div class="spec"><b>3,7 m</b><span data-i18n="van.len">длина кузова</span></div>
+        <div class="spec"><b>1,87 m</b><span data-i18n="van.wid">ширина, между арками 1,42 м</span></div>
+        <div class="spec"><b>1,93 m</b><span data-i18n="van.hei">высота — шкаф стоя</span></div>
+        <div class="spec"><b>13 m³</b><span data-i18n="van.vol">как однокомнатная квартира</span></div>
+        <div class="spec"><b data-i18n="van.payV">1,4 т</b><span data-i18n="van.pay">грузоподъёмность</span></div>
+        <div class="spec"><b data-i18n="van.doorsV">2 двери</b><span data-i18n="van.doors">боковая 1,25 м и задние на 270°</span></div>
       </div>
     </section>
 
     <section class="services wrap">
-      <h2>Чем помогаем чаще всего</h2>
+      <h2 data-i18n="srv.title">Чем помогаем чаще всего</h2>
       <div class="cards">
-        <article class="card"><h3>Переезд квартиры</h3><p>Однушка обычно укладывается в 3–4 часа с двумя грузчиками.</p></article>
-        <article class="card"><h3>Покупки из магазина</h3><p>Заберём диван или кухню со склада и поднимем на этаж.</p></article>
-        <article class="card"><h3>Вывоз старой мебели</h3><p>Вынесем и отвезём в пункт приёма отходов. Плата пункта — по чеку.</p></article>
-        <article class="card"><h3>Небольшой офис</h3><p>Столы, техника, архив. Можно вечером или в выходной.</p></article>
+        <article class="card"><h3 data-i18n="srv.c1">Переезд квартиры</h3><p data-i18n="srv.c1t">Однушка обычно укладывается в 3–4 часа с двумя грузчиками.</p></article>
+        <article class="card"><h3 data-i18n="srv.c2">Покупки из магазина</h3><p data-i18n="srv.c2t">Заберём диван или кухню со склада и поднимем на этаж.</p></article>
+        <article class="card"><h3 data-i18n="srv.c3">Вывоз старой мебели</h3><p data-i18n="srv.c3t">Вынесем и отвезём в пункт приёма отходов. Плата пункта — по чеку.</p></article>
+        <article class="card"><h3 data-i18n="srv.c4">Небольшой офис</h3><p data-i18n="srv.c4t">Столы, техника, архив. Можно вечером или в выходной.</p></article>
       </div>
     </section>
 
     <section class="prices wrap" id="prices">
-      <h2>Цены</h2>
+      <h2 data-i18n="prices.title">Цены</h2>
       <ul class="price-list">
-        <li><span>Фургон с водителем</span><b>35 € / час</b></li>
-        <li><span>Грузчик</span><b>22 € / час</b></li>
-        <li><span>Минимальный заказ</span><b>2 часа</b></li>
-        <li><span>Подъём без лифта</span><b>10 € за этаж</b></li>
-        <li><span>Разборка и сборка мебели</span><b>от 25 €</b></li>
-        <li><span>Поездка за город</span><b>0,8 € / км</b></li>
+        <li><span data-i18n="prices.p1">Фургон с водителем</span><b data-i18n="prices.v1">35 € / час</b></li>
+        <li><span data-i18n="prices.p2">Грузчик</span><b data-i18n="prices.v2">22 € / час</b></li>
+        <li><span data-i18n="prices.p3">Минимальный заказ</span><b data-i18n="prices.v3">2 часа</b></li>
+        <li><span data-i18n="prices.p4">Подъём без лифта</span><b data-i18n="prices.v4">10 € за этаж</b></li>
+        <li><span data-i18n="prices.p5">Разборка и сборка мебели</span><b data-i18n="prices.v5">от 25 €</b></li>
+        <li><span data-i18n="prices.p6">Поездка за город</span><b data-i18n="prices.v6">0,8 € / км</b></li>
       </ul>
-      <p class="note">Время считаем от подачи машины до окончания выгрузки. Цены с НДС.</p>
+      <p class="note" data-i18n="prices.note">Время считаем от подачи машины до окончания выгрузки. Цены с НДС.</p>
     </section>
 
     <section class="steps wrap">
-      <h2>Как заказать</h2>
+      <h2 data-i18n="steps.title">Как заказать</h2>
       <ol>
-        <li><b>Напишите или позвоните</b><span>Адреса, дата и примерный список вещей.</span></li>
-        <li><b>Подтвердим время</b><span>Часто — в тот же день. Водитель позвонит за 30 минут.</span></li>
-        <li><b>Оплата по факту</b><span>Наличными, картой или переводом после выгрузки.</span></li>
+        <li><b data-i18n="steps.s1">Напишите или позвоните</b><span data-i18n="steps.s1t">Адреса, дата и примерный список вещей.</span></li>
+        <li><b data-i18n="steps.s2">Подтвердим время</b><span data-i18n="steps.s2t">Часто — в тот же день. Водитель позвонит за 30 минут.</span></li>
+        <li><b data-i18n="steps.s3">Оплата по факту</b><span data-i18n="steps.s3t">Наличными, картой или переводом после выгрузки.</span></li>
       </ol>
     </section>
 
     <section class="faq wrap" id="faq">
-      <h2>Вопросы</h2>
-      <details><summary>Можно поехать в кабине?</summary><p>Да, в кабине есть два пассажирских места.</p></details>
-      <details><summary>Вы упакуете вещи?</summary><p>Привезём коробки, плёнку и стрейч. Упаковку делаем, если попросите заранее — это входит в почасовую оплату.</p></details>
-      <details><summary>Что если не уложимся в выбранное время?</summary><p>Ничего страшного: дальше считаем по факту, каждые 30 минут. Калькулятор — только ориентир.</p></details>
-      <details><summary>Возите в другие города?</summary><p>Да, по всей Эстонии. Поездка за город — 0,8 € за километр в одну сторону.</p></details>
+      <h2 data-i18n="faq.title">Вопросы</h2>
+      <details><summary data-i18n="faq.q1">Можно поехать в кабине?</summary><p data-i18n="faq.a1">Да, в кабине есть два пассажирских места.</p></details>
+      <details><summary data-i18n="faq.q2">Вы упакуете вещи?</summary><p data-i18n="faq.a2">Привезём коробки, плёнку и стрейч. Упаковку делаем, если попросите заранее — это входит в почасовую оплату.</p></details>
+      <details><summary data-i18n="faq.q3">Что если не уложимся в выбранное время?</summary><p data-i18n="faq.a3">Ничего страшного: дальше считаем по факту, каждые 30 минут. Калькулятор — только ориентир.</p></details>
+      <details><summary data-i18n="faq.q4">Возите в другие города?</summary><p data-i18n="faq.a4">Да, по всей Эстонии. Поездка за город — 0,8 € за километр в одну сторону.</p></details>
     </section>
   </main>
 
   <footer class="foot">
     <div class="wrap foot__in">
-      <div><b>Фургон за час</b><p>Таллинн и Харьюмаа · ежедневно 8:00–22:00</p></div>
+      <div><b data-i18n="brandFlat">Фургон за час</b><p data-i18n="foot.hours">Таллинн и Харьюмаа · ежедневно 8:00–22:00</p></div>
       <div class="foot__links"><a href="tel:+37250000202">+372 5000 0202</a><a data-wa href="#">WhatsApp</a></div>
-      <p class="foot__credit">Фото: Retired electrician, <a href="https://commons.wikimedia.org/wiki/File:Moscow,_Peugeot_Boxer_white_van,_May_2026_01.jpg">Wikimedia Commons</a>, CC0</p>
+      <p class="foot__credit"><span data-i18n="foot.photo">Фото</span>: Retired electrician, <a href="https://commons.wikimedia.org/wiki/File:Moscow,_Peugeot_Boxer_white_van,_May_2026_01.jpg">Wikimedia Commons</a>, CC0</p>
     </div>
   </footer>
 
   <div class="dock">
-    <a class="btn" href="tel:+37250000202">Позвонить</a>
+    <a class="btn" href="tel:+37250000202" data-i18n="dock.call">Позвонить</a>
     <a class="btn btn--light" data-wa href="#">WhatsApp</a>
   </div>
 
-  <script src="js/app.js?v=1"></script>
+  <script type="module" src="js/app.js?v=2"></script>
 </body>
 </html>

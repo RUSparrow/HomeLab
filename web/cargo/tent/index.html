@@ -3,42 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#1f4d3a">
-  <meta name="description" content="Volkswagen Crafter с тентованным кузовом 4,2 м: 8 европаллет, погрузка сбоку, сзади и сверху. Возим туда, куда фура не заедет.">
+  <meta name="theme-color" content="#2a3036">
+  <meta name="description" content="Белый Volkswagen Crafter с серым тентом 4,2 м: 8 европаллет, погрузка сбоку, сзади и сверху. Возим туда, куда фура не заедет.">
   <title>Тент Б — тентованный Crafter, 8 паллет</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231f4d3a'/%3E%3Cpath d='M6 10h20v12H6z' fill='none' stroke='%23eef0e8' stroke-width='2.5'/%3E%3Cpath d='M4 16h24' stroke='%23f08a24' stroke-width='3'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%232a3036'/%3E%3Cpath d='M6 10h20v12H6z' fill='%23d9dde1'/%3E%3Cpath d='M4 16h24' stroke='%23f08a24' stroke-width='3'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&display=swap">
-  <link rel="stylesheet" href="css/style.css?v=1">
+  <link rel="stylesheet" href="/shared/planner.css?v=1">
+  <link rel="stylesheet" href="css/style.css?v=2">
 </head>
 <body>
   <header class="top">
     <div class="wrap top__in">
-      <a class="logo" href="#"><span class="logo__mark" aria-hidden="true">Б</span>Тент Б</a>
-      <nav class="nav" aria-label="Разделы">
-        <a href="#body">Кузов</a>
-        <a href="#compare">Сравнить</a>
-        <a href="#prices">Цены</a>
-        <a href="#faq">Вопросы</a>
+      <a class="logo" href="#"><span class="logo__mark" aria-hidden="true">Б</span><span data-i18n="brand">Тент Б</span></a>
+      <nav class="nav" aria-label="Menu">
+        <a href="#body" data-i18n="nav.body">Кузов</a>
+        <a href="#compare" data-i18n="nav.compare">Сравнить</a>
+        <a href="#prices" data-i18n="nav.prices">Цены</a>
+        <a href="#faq" data-i18n="nav.faq">Вопросы</a>
       </nav>
       <a class="top__phone" href="tel:+37250000303">+372 5000 0303</a>
+      <div data-lang-switch></div>
     </div>
+    <div class="strap-progress" aria-hidden="true"><span></span></div>
   </header>
 
   <main>
     <section class="hero">
       <div class="wrap hero__in">
         <div class="hero__text">
-          <h1>8 паллет там, куда фура не заедет</h1>
-          <p>Volkswagen Crafter с тентом 4,2 метра. Грузим погрузчиком сбоку, краном сверху или руками сзади. Пропуск в центр и во двор не нужен.</p>
+          <h1 data-i18n="hero.title">8 паллет там, куда фура не заедет</h1>
+          <p data-i18n="hero.lead">Белый Volkswagen Crafter с тентом 4,2 метра. Грузим погрузчиком сбоку, краном сверху или руками сзади. Пропуск в центр и во двор не нужен.</p>
           <div class="hero__cta">
-            <a class="btn btn--strap" href="tel:+37250000303">Позвонить</a>
-            <a class="btn btn--line" href="#calc">Рассчитать цену</a>
+            <a class="btn btn--strap" href="tel:+37250000303" data-i18n="cta.call">Позвонить</a>
+            <a class="btn btn--line" href="#body" data-i18n="cta.plan">Проверить свой груз</a>
           </div>
         </div>
         <figure class="hero__pic">
-          <img src="img/crafter.jpg" srcset="img/crafter-900.jpg 900w, img/crafter.jpg 1800w" sizes="(max-width: 900px) 100vw, 55vw" alt="Volkswagen Crafter с зелёным тентованным кузовом">
+          <img src="img/crafter.jpg" srcset="img/crafter-900.jpg 900w, img/crafter.jpg 1800w" sizes="(max-width: 900px) 100vw, 55vw" alt="Volkswagen Crafter" data-i18n-attr="alt:hero.alt">
+          <span class="curtain curtain--l" aria-hidden="true"></span>
+          <span class="curtain curtain--r" aria-hidden="true"></span>
         </figure>
       </div>
       <div class="strap" aria-hidden="true"><span></span></div>
@@ -46,115 +51,91 @@
 
     <section class="body wrap" id="body">
       <div class="body__head">
-        <h2>Что поместится в кузов</h2>
-        <p>Выберите груз — покажем, как он ляжет и с какой стороны грузить.</p>
+        <h2 data-i18n="body.title">Что поместится в кузов</h2>
+        <p data-i18n="body.lead">Добавьте паллеты, биг-бэги или впишите размеры своих мест. Покажем, как груз ляжет в кузов 4,2 × 2,1 × 2,2 м и не будет ли перегруза.</p>
       </div>
-      <div class="cargo-tabs" role="tablist" id="tabs">
-        <button type="button" role="tab" data-cargo="euro" aria-selected="true">Европаллеты</button>
-        <button type="button" role="tab" data-cargo="fin">Финпаллеты</button>
-        <button type="button" role="tab" data-cargo="long">Доски и трубы</button>
-        <button type="button" role="tab" data-cargo="bags">Биг-бэги</button>
-        <button type="button" role="tab" data-cargo="move">Переезд</button>
-      </div>
-      <div class="plan">
-        <div class="plan__draw">
-          <svg viewBox="-70 -60 560 340" id="plan" role="img" aria-labelledby="plan-caption">
-            <!-- Кабина -->
-            <path d="M-56 30h40v150h-40c-8 0-14-8-14-18V48c0-10 6-18 14-18z" class="cab"/>
-            <!-- Платформа 4,2 × 2,1 м, 100 px = 1 м -->
-            <rect x="0" y="0" width="420" height="210" class="deck"/>
-            <g id="load"></g>
-            <!-- Стороны погрузки -->
-            <g class="side" data-side="left"><path d="M60 -44h300" /><text x="210" y="-50">сбоку</text></g>
-            <g class="side" data-side="right"><path d="M60 254h300" /><text x="210" y="278">сбоку</text></g>
-            <g class="side" data-side="rear"><path d="M448 40v130" /><text x="470" y="110" transform="rotate(90 470 110)">сзади</text></g>
-            <!-- Размеры -->
-            <g class="dim"><path d="M0 232h420"/><text x="210" y="226">4,2 м</text></g>
-            <g class="dim"><path d="M-30 0v210"/><text x="-36" y="105" transform="rotate(-90 -36 105)">2,1 м</text></g>
-          </svg>
-        </div>
-        <div class="plan__info">
-          <p class="plan__big" id="plan-big">8 европаллет</p>
-          <p id="plan-caption">5 поперёк и 3 вдоль. Погрузчик подъезжает сбоку — тент сдвигается за пару минут.</p>
-          <ul class="plan__sides" id="plan-sides"></ul>
-        </div>
-      </div>
+      <div id="planner"></div>
+      <ul class="sides">
+        <li><b data-i18n="side.s">Сбоку</b><span data-i18n="side.st">тент сдвигается — погрузчик с любой стороны</span></li>
+        <li><b data-i18n="side.r">Сзади</b><span data-i18n="side.rt">ворота открываются на всю ширину</span></li>
+        <li><b data-i18n="side.t">Сверху</b><span data-i18n="side.tt">снимаем дуги — кран ставит биг-бэги и пачки</span></li>
+      </ul>
     </section>
 
     <section class="specs">
       <div class="wrap specs__in">
-        <div><b>4,2 × 2,1 × 2,2 м</b><span>кузов внутри</span></div>
-        <div><b>19 м³</b><span>объём</span></div>
-        <div><b>1 200 кг</b><span>груза за рейс</span></div>
-        <div><b>3 стороны</b><span>погрузки и сверху</span></div>
-        <div><b>12 ремней</b><span>и поперечные штанги</span></div>
+        <div><b data-i18n="spec.dimsV">4,2 × 2,1 × 2,2 м</b><span data-i18n="spec.dims">кузов внутри</span></div>
+        <div><b>19 m³</b><span data-i18n="spec.vol">объём</span></div>
+        <div><b data-i18n="spec.payV">1 200 кг</b><span data-i18n="spec.pay">груза за рейс</span></div>
+        <div><b data-i18n="spec.sidesV">3 стороны</b><span data-i18n="spec.sides">погрузки и сверху</span></div>
+        <div><b data-i18n="spec.strapsV">12 ремней</b><span data-i18n="spec.straps">и поперечные штанги</span></div>
       </div>
     </section>
 
     <section class="compare wrap" id="compare">
-      <h2>Почему не фура и не фургон</h2>
-      <div class="cmp" role="table" aria-label="Сравнение машин">
-        <div class="cmp__row cmp__row--head" role="row"><span role="columnheader"></span><span role="columnheader">Фургон</span><span role="columnheader" class="is-us">Тент Б</span><span role="columnheader">Фура</span></div>
-        <div class="cmp__row" role="row"><span role="rowheader">Европаллеты</span><span>2–3</span><span class="is-us">8</span><span>33</span></div>
-        <div class="cmp__row" role="row"><span role="rowheader">Погрузка погрузчиком сбоку</span><span class="no">нет</span><span class="is-us yes">да</span><span class="yes">да</span></div>
-        <div class="cmp__row" role="row"><span role="rowheader">Въезд в старый город и дворы</span><span class="yes">да</span><span class="is-us yes">да</span><span class="no">нет</span></div>
-        <div class="cmp__row" role="row"><span role="rowheader">Груз длиной 4 метра</span><span class="no">нет</span><span class="is-us yes">да</span><span class="yes">да</span></div>
-        <div class="cmp__row" role="row"><span role="rowheader">Час работы</span><span>от 35 €</span><span class="is-us">от 42 €</span><span>от 90 €</span></div>
+      <h2 data-i18n="cmp.title">Почему не фура и не фургон</h2>
+      <div class="cmp" role="table">
+        <div class="cmp__row cmp__row--head" role="row"><span role="columnheader"></span><span role="columnheader" data-i18n="cmp.van">Фургон</span><span role="columnheader" class="is-us" data-i18n="brand">Тент Б</span><span role="columnheader" data-i18n="cmp.truck">Фура</span></div>
+        <div class="cmp__row" role="row"><span role="rowheader" data-i18n="cmp.r1">Европаллеты</span><span>2–3</span><span class="is-us">8</span><span>33</span></div>
+        <div class="cmp__row" role="row"><span role="rowheader" data-i18n="cmp.r2">Погрузка погрузчиком сбоку</span><span class="no" data-i18n="cmp.no">нет</span><span class="is-us yes" data-i18n="cmp.yes">да</span><span class="yes" data-i18n="cmp.yes">да</span></div>
+        <div class="cmp__row" role="row"><span role="rowheader" data-i18n="cmp.r3">Въезд в старый город и дворы</span><span class="yes" data-i18n="cmp.yes">да</span><span class="is-us yes" data-i18n="cmp.yes">да</span><span class="no" data-i18n="cmp.no">нет</span></div>
+        <div class="cmp__row" role="row"><span role="rowheader" data-i18n="cmp.r4">Груз длиной 4 метра</span><span class="no" data-i18n="cmp.no">нет</span><span class="is-us yes" data-i18n="cmp.yes">да</span><span class="yes" data-i18n="cmp.yes">да</span></div>
+        <div class="cmp__row" role="row"><span role="rowheader" data-i18n="cmp.r5">Час работы</span><span data-i18n="cmp.p1">от 35 €</span><span class="is-us" data-i18n="cmp.p2">от 42 €</span><span data-i18n="cmp.p3">от 90 €</span></div>
       </div>
     </section>
 
     <section class="calc-sec" id="prices">
       <div class="wrap calc-sec__in">
         <div>
-          <h2>Цены</h2>
+          <h2 data-i18n="prices.title">Цены</h2>
           <ul class="prices">
-            <li><span>По Таллинну, час</span><b>42 €</b></li>
-            <li><span>Минимальный заказ</span><b>2 часа</b></li>
-            <li><span>Междугородний рейс</span><b>0,85 € / км</b></li>
-            <li><span>Грузчик, час</span><b>22 €</b></li>
-            <li><span>Ожидание погрузки, первые 30 мин</span><b>бесплатно</b></li>
+            <li><span data-i18n="prices.p1">По Таллинну, час</span><b>42 €</b></li>
+            <li><span data-i18n="prices.p2">Минимальный заказ</span><b data-i18n="prices.v2">2 часа</b></li>
+            <li><span data-i18n="prices.p3">Междугородний рейс</span><b data-i18n="prices.v3">0,85 € / км</b></li>
+            <li><span data-i18n="prices.p4">Грузчик, час</span><b>22 €</b></li>
+            <li><span data-i18n="prices.p5">Ожидание погрузки, первые 30 мин</span><b data-i18n="prices.v5">бесплатно</b></li>
           </ul>
         </div>
         <form class="calc" id="calc">
-          <h3>Посчитать</h3>
-          <div class="toggle" role="radiogroup" aria-label="Тип поездки">
-            <label><input type="radio" name="mode" value="city" checked><span>По городу</span></label>
-            <label><input type="radio" name="mode" value="trip"><span>Между городами</span></label>
+          <h3 data-i18n="calc.title">Посчитать</h3>
+          <div class="toggle" role="radiogroup">
+            <label><input type="radio" name="mode" value="city" checked><span data-i18n="calc.city">По городу</span></label>
+            <label><input type="radio" name="mode" value="trip"><span data-i18n="calc.trip">Между городами</span></label>
           </div>
-          <label class="field" id="f-hours"><span>Часов: <b id="hours-val">3</b></span>
+          <label class="field" id="f-hours"><span><span data-i18n="calc.hours">Часов</span>: <b id="hours-val">3</b></span>
             <input type="range" id="hours" min="2" max="10" value="3">
           </label>
-          <label class="field" id="f-km" hidden>Километров в одну сторону
+          <label class="field" id="f-km" hidden><span data-i18n="calc.km">Километров в одну сторону</span>
             <input type="number" id="km" min="10" max="1500" value="180" inputmode="numeric">
           </label>
-          <label class="check"><input type="checkbox" id="mover"><span>Нужен грузчик</span></label>
-          <div class="calc__sum"><span>Ориентир</span><b id="sum">126 €</b></div>
-          <button class="btn btn--strap btn--wide" type="submit">Отправить в WhatsApp</button>
+          <label class="check"><input type="checkbox" id="mover"><span data-i18n="calc.mover">Нужен грузчик</span></label>
+          <div class="calc__sum"><span data-i18n="calc.est">Ориентир</span><b id="sum">126 €</b></div>
+          <button class="btn btn--strap btn--wide" type="submit" data-i18n="calc.send">Отправить в WhatsApp</button>
         </form>
       </div>
     </section>
 
     <section class="faq wrap" id="faq">
-      <h2>Вопросы</h2>
-      <details><summary>Нужны ли водителю особые права?</summary><p>Нет, машина до 3,5 т — категория B. Для вас это значит: нет ограничений для грузовиков в центре и на мостах.</p></details>
-      <details><summary>Сможете взять груз длиннее 4,2 м?</summary><p>До 4,8 м с открытым задним бортом и флажком на свесе. Длиннее — уже нужна фура.</p></details>
-      <details><summary>Кто грузит паллеты?</summary><p>Погрузчик на складе отправителя и получателя. Если его нет, есть гидравлическая тележка — подкатим паллету к краю, но поднять её с земли без техники не получится.</p></details>
-      <details><summary>Возите в выходные?</summary><p>Да, с доплатой 20 % в воскресенье и праздники.</p></details>
+      <h2 data-i18n="faq.title">Вопросы</h2>
+      <details><summary data-i18n="faq.q1">Нужны ли водителю особые права?</summary><p data-i18n="faq.a1">Нет, машина до 3,5 т — категория B. Для вас это значит: нет ограничений для грузовиков в центре и на мостах.</p></details>
+      <details><summary data-i18n="faq.q2">Сможете взять груз длиннее 4,2 м?</summary><p data-i18n="faq.a2">До 4,8 м с открытым задним бортом и флажком на свесе. Длиннее — уже нужна фура.</p></details>
+      <details><summary data-i18n="faq.q3">Кто грузит паллеты?</summary><p data-i18n="faq.a3">Погрузчик на складе отправителя и получателя. Если его нет, есть гидравлическая тележка — подкатим паллету к краю, но поднять её с земли без техники не получится.</p></details>
+      <details><summary data-i18n="faq.q4">Возите в выходные?</summary><p data-i18n="faq.a4">Да, с доплатой 20 % в воскресенье и праздники.</p></details>
     </section>
   </main>
 
   <footer class="foot">
     <div class="wrap foot__in">
-      <div><b>Тент Б</b><p>Таллинн и вся Эстония · <a href="tel:+37250000303">+372 5000 0303</a></p></div>
-      <p class="foot__credit">Фото: Homoatrox, <a href="https://commons.wikimedia.org/wiki/File:Volkswagen_truck_in_Belarus_3.jpg">Wikimedia Commons</a>, CC BY-SA 3.0. Изменено: размыты надписи и номер.</p>
+      <div><b data-i18n="brand">Тент Б</b><p><span data-i18n="foot.area">Таллинн и вся Эстония</span> · <a href="tel:+37250000303">+372 5000 0303</a></p></div>
+      <p class="foot__credit"><span data-i18n="foot.photo">Фото</span>: Homoatrox, <a href="https://commons.wikimedia.org/wiki/File:Volkswagen_truck_in_Belarus_3.jpg">Wikimedia Commons</a>, CC BY-SA 3.0. <span data-i18n="foot.changed">Изменено: перекрашено, размыты надписи и номер.</span></p>
     </div>
   </footer>
 
   <div class="dock">
-    <a class="btn btn--strap" href="tel:+37250000303">Позвонить</a>
+    <a class="btn btn--strap" href="tel:+37250000303" data-i18n="cta.call">Позвонить</a>
     <a class="btn btn--line-dark" data-wa href="#">WhatsApp</a>
   </div>
 
-  <script src="js/app.js?v=1"></script>
+  <script type="module" src="js/app.js?v=2"></script>
 </body>
 </html>

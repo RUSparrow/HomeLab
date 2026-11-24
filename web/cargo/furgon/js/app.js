@@ -1,33 +1,16 @@
-"use strict";
+import { createI18n } from "/shared/i18n.js";
+import { mountPlanner } from "/shared/planner.js";
+import { DICT } from "./lang.js";
 
 const WHATSAPP = "37250000202";
 const PRICE = { van: 35, mover: 22, floor: 10, assembly: 25 };
-const CAPACITY = 13; // м³
-
-// Объём в кузове с учётом пустот при укладке, м³
-const ITEMS = [
-  { id: "box",     name: "Коробка",            v: 0.08 },
-  { id: "sofa",    name: "Диван",              v: 2.0 },
-  { id: "chair",   name: "Кресло",             v: 0.8 },
-  { id: "bed",     name: "Кровать двуспальная", v: 1.4 },
-  { id: "mattr",   name: "Матрас",             v: 0.6 },
-  { id: "ward",    name: "Шкаф",               v: 1.6 },
-  { id: "dresser", name: "Комод",              v: 0.6 },
-  { id: "fridge",  name: "Холодильник",        v: 0.9 },
-  { id: "washer",  name: "Стиральная машина",  v: 0.45 },
-  { id: "table",   name: "Стол",               v: 0.6 },
-  { id: "seat",    name: "Стул",               v: 0.15 },
-  { id: "tv",      name: "Телевизор",          v: 0.25 },
-  { id: "bike",    name: "Велосипед",          v: 0.5 },
-  { id: "bag",     name: "Сумка или мешок",    v: 0.12 },
-];
 
 const $ = (id) => document.getElementById(id);
-const counts = {};
+const i18n = createI18n(DICT);
+const t = i18n.t;
 let floors = 0;
 
 const euro = (n) => `${Math.round(n)} €`;
-const m3 = (n) => n.toLocaleString("ru-RU", { maximumFractionDigits: 1 });
 const waLink = (text) => `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(text)}`;
 
 // ---------- Калькулятор ----------
@@ -41,7 +24,7 @@ function quote() {
 
 function renderCalc() {
   const q = quote();
-  $("hours-val").textContent = `${q.hours} ч`;
+  $("hours-val").textContent = t("calc.h", { n: q.hours });
   $("floors").textContent = floors;
   $("total").textContent = euro(q.total);
   return q;
@@ -53,68 +36,48 @@ document.querySelectorAll("[data-step]").forEach((b) => b.addEventListener("clic
 }));
 $("calc").addEventListener("input", renderCalc);
 
-// ---------- Что влезет ----------
-function itemsHtml() {
-  return ITEMS.map((it) => {
-    const n = counts[it.id] || 0;
-    return `<button type="button" class="item${n ? " has" : ""}" data-id="${it.id}" aria-label="${it.name}: ${n}">
-      ${it.name}<small>${m3(it.v)} м³</small>
-      ${n ? `<span class="item__count">${n}</span><span class="item__minus" data-minus="${it.id}" role="button" aria-label="Убрать">−</span>` : ""}
-    </button>`;
-  }).join("");
-}
-
-function volume() {
-  return ITEMS.reduce((sum, it) => sum + (counts[it.id] || 0) * it.v, 0);
-}
-
-function renderFit() {
-  $("items").innerHTML = itemsHtml();
-  const v = volume();
-  const share = v / CAPACITY;
-  const fill = $("fill");
-  fill.setAttribute("width", String(Math.min(1, share) * 262));
-  fill.classList.toggle("is-over", share > 1);
-  $("vol").textContent = m3(v);
-  const verdict = $("verdict");
-  verdict.className = "load__verdict";
-  if (!v) verdict.textContent = "Выберите вещи слева";
-  else if (share <= 0.85) { verdict.textContent = "Помещается за один рейс"; verdict.classList.add("ok"); }
-  else if (share <= 1) { verdict.textContent = "Впритык — лучше разобрать мебель"; verdict.classList.add("ok"); }
-  else { verdict.textContent = `Нужно ${Math.ceil(share)} рейса или две машины`; verdict.classList.add("over"); }
-}
-
-$("items").addEventListener("click", (e) => {
-  const minus = e.target.closest("[data-minus]");
-  const btn = e.target.closest(".item");
-  if (!btn) return;
-  const id = btn.dataset.id;
-  counts[id] = Math.max(0, (counts[id] || 0) + (minus ? -1 : 1));
-  renderFit();
-  document.querySelector(`.item[data-id="${id}"]`)?.focus();
+// ---------- 3D: что влезет в Boxer ----------
+const P = (id, w, d, h, kg, stack, tilt) => ({ id, w, d, h, kg, stack, tilt, name: () => t(`pr.${id}`) });
+const planner = mountPlanner($("planner"), {
+  lang: i18n.lang,
+  vehicle: {
+    L: 370, W: 187, H: 193, payload: 1400, deck: 55, wheel: 34,
+    axles: [-120, 290],
+    cab: { l: 1.7, w: 2.0, h: 1.95, y: 0.5 },
+  },
+  colors: {
+    body: 0xffffff, edge: 0x1b1e2b, floor: 0xb8bcc8, cab: 0xffffff,
+    cargo: [0xc99a62, 0x2a52f4, 0x8fb3ff, 0xe08a5a, 0x5b6072, 0xb9c96a, 0xd16ba5],
+  },
+  presets: [
+    P("box", 60, 40, 40, 15, true, true), P("sofa", 210, 95, 85, 60, false, true),
+    P("ward", 100, 60, 200, 80, false, true), P("fridge", 60, 65, 185, 70, false, false),
+    P("washer", 60, 60, 85, 65, false, false), P("mattr", 200, 160, 25, 20, true, true),
+    P("table", 120, 80, 75, 30, true, true), P("chair", 90, 85, 90, 30, false, false),
+    P("bike", 175, 60, 100, 15, false, true), P("bag", 60, 40, 30, 8, true, true),
+  ],
+  start: [["sofa", 1], ["ward", 1], ["fridge", 1], ["washer", 1], ["box", 14]],
 });
-$("clear").addEventListener("click", () => { for (const k in counts) delete counts[k]; renderFit(); });
 
 // ---------- Заявка ----------
-function listText() {
-  const parts = ITEMS.filter((it) => counts[it.id]).map((it) => `${it.name.toLowerCase()} ×${counts[it.id]}`);
-  return parts.length ? ` Вещи: ${parts.join(", ")} (≈${m3(volume())} м³).` : "";
-}
-
 $("calc").addEventListener("submit", (e) => {
   e.preventDefault();
   const q = renderCalc();
-  const movers = q.movers ? `${q.movers} ${q.movers > 1 ? "грузчика" : "грузчик"}` : "без грузчиков";
-  const extra = [floors ? `${floors} эт. без лифта` : "", q.assembly ? "сборка мебели" : ""].filter(Boolean).join(", ");
-  window.open(waLink(`Здравствуйте! Нужен фургон на ${q.hours} ч, ${movers}${extra ? ", " + extra : ""}. По калькулятору ≈${euro(q.total)}.${listText()} Когда свободны?`), "_blank", "noopener");
+  const movers = q.movers ? t("wa.movers", { n: q.movers }) : t("wa.noMovers");
+  const extra = [floors ? t("wa.floors", { n: floors }) : "", q.assembly ? t("wa.assembly") : ""].filter(Boolean).join(", ");
+  const items = planner.summary();
+  window.open(waLink(t("wa.book", { h: q.hours, movers: movers + (extra ? ", " + extra : ""), total: euro(q.total) }) + (items ? " " + t("wa.items", { list: items }) : "")), "_blank", "noopener");
 });
 
-document.querySelectorAll("[data-wa]").forEach((a) => {
-  a.addEventListener("click", (e) => {
-    e.preventDefault();
-    window.open(waLink(`Здравствуйте! Хочу заказать фургон.${listText()}`), "_blank", "noopener");
+function setupWa() {
+  document.querySelectorAll("[data-wa]").forEach((a) => {
+    a.onclick = (e) => {
+      e.preventDefault();
+      const items = planner.summary();
+      window.open(waLink(t("wa.hello") + (items ? " " + t("wa.items", { list: items }) : "")), "_blank", "noopener");
+    };
   });
-});
+}
 
-renderCalc();
-renderFit();
+i18n.onChange((lang) => { renderCalc(); planner.setLang(lang); setupWa(); });
+i18n.start();
