@@ -1,126 +1,131 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const header = document.getElementById("header");
-  const navToggle = document.getElementById("nav-toggle");
-  const navMenu = document.getElementById("nav-menu");
-  const navLinks = document.querySelectorAll(".nav__link");
-  const contactForm = document.getElementById("contact-form");
-  const toast = document.getElementById("toast");
-  const yearEl = document.getElementById("year");
+"use strict";
 
-  yearEl.textContent = new Date().getFullYear();
+// Личные данные лежат в profile.json (в .gitignore — репозиторий публичный).
+// Если его нет, страница показывает шаблон из profile.example.json.
+const LANGS = ["et", "ru", "en"];
+let P = null;
 
-  /* Scroll: header shadow */
-  window.addEventListener("scroll", () => {
-    header.classList.toggle("header--scrolled", window.scrollY > 20);
+const $ = (id) => document.getElementById(id);
+const el = (tag, cls, text) => {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text != null) n.textContent = text;
+  return n;
+};
+
+function pickLang() {
+  const saved = localStorage.getItem("lang");
+  if (LANGS.includes(saved)) return saved;
+  const nav = (navigator.language || "et").slice(0, 2);
+  return LANGS.includes(nav) ? nav : "et";
+}
+
+function renderLab(t) {
+  const lanes = $("lab-lanes");
+  lanes.replaceChildren();
+  const rows = [
+    ["lane_access", P.lab.access],
+    ["lane_services", P.lab.services],
+    ["lane_watch", P.lab.watch],
+  ];
+  rows.forEach(([key, items]) => {
+    const lane = el("div", "lane");
+    lane.append(el("p", "lane__title", t[key]));
+    const ul = el("ul", "lane__items");
+    items.forEach((i) => ul.append(el("li", null, i)));
+    lane.append(ul);
+    lanes.append(lane);
+  });
+}
+
+function render(lang) {
+  const t = P.i18n[lang];
+  document.documentElement.lang = lang;
+  document.title = P.name;
+
+  document.querySelectorAll("[data-t]").forEach((n) => {
+    n.textContent = t[n.dataset.t] ?? "";
+  });
+  document.querySelectorAll("[data-lang]").forEach((b) => {
+    b.setAttribute("aria-pressed", String(b.dataset.lang === lang));
   });
 
-  /* Mobile menu */
-  navToggle.addEventListener("click", () => {
-    navToggle.classList.toggle("nav__toggle--open");
-    navMenu.classList.toggle("nav__menu--open");
+  $("top-name").textContent = P.name;
+  $("name").textContent = P.name;
+  $("role").textContent = t.role;
+  $("intro").textContent = t.intro;
+  $("cta-mail").href = `mailto:${P.email}`;
+  $("cta-github").href = P.github;
+  $("foot").textContent = t.foot;
+
+  renderLab(t);
+
+  const tl = $("timeline");
+  tl.replaceChildren();
+  t.timeline.forEach((e) => {
+    const li = el("li", "timeline__item");
+    li.append(el("span", "timeline__when", e.when));
+    const body = el("div", "timeline__body");
+    body.append(el("p", "timeline__what", e.what), el("p", "timeline__where", e.where));
+    li.append(body);
+    tl.append(li);
   });
 
-  navLinks.forEach((link) => {
-    link.addEventListener("click", () => {
-      navToggle.classList.remove("nav__toggle--open");
-      navMenu.classList.remove("nav__menu--open");
-    });
+  const sg = $("skill-groups");
+  sg.replaceChildren();
+  t.skill_groups.forEach((g) => {
+    const box = el("div", "skills__group");
+    box.append(el("h3", null, g.title));
+    const ul = el("ul");
+    g.items.forEach((i) => ul.append(el("li", null, i)));
+    box.append(ul);
+    sg.append(box);
   });
 
-  /* Active nav link on scroll */
-  const sections = document.querySelectorAll("section[id]");
-
-  const setActiveLink = () => {
-    const scrollPos = window.scrollY + 100;
-
-    sections.forEach((section) => {
-      const top = section.offsetTop;
-      const height = section.offsetHeight;
-      const id = section.getAttribute("id");
-
-      if (scrollPos >= top && scrollPos < top + height) {
-        navLinks.forEach((link) => {
-          link.classList.toggle("nav__link--active", link.getAttribute("href") === `#${id}`);
-        });
-      }
-    });
-  };
-
-  window.addEventListener("scroll", setActiveLink);
-  setActiveLink();
-
-  /* Fade-in on scroll */
-  const fadeElements = document.querySelectorAll(
-    ".section__title, .about__text, .about__facts, .skill-card, .contact__form, .contact__links"
-  );
-
-  fadeElements.forEach((el) => el.classList.add("fade-in"));
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("fade-in--visible");
-        }
-      });
-    },
-    { threshold: 0.15 }
-  );
-
-  fadeElements.forEach((el) => observer.observe(el));
-
-  /* Form validation */
-  const validators = {
-    name: (value) => (value.trim().length < 2 ? "Введите имя (минимум 2 символа)" : ""),
-    email: (value) => {
-      const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return pattern.test(value.trim()) ? "" : "Введите корректный email";
-    },
-    message: (value) => (value.trim().length < 10 ? "Сообщение должно быть не короче 10 символов" : ""),
-  };
-
-  const showError = (field, message) => {
-    const input = document.getElementById(field);
-    const errorEl = document.getElementById(`${field}-error`);
-    input.classList.toggle("form__input--error", Boolean(message));
-    errorEl.textContent = message;
-  };
-
-  const validateField = (field) => {
-    const input = document.getElementById(field);
-    const error = validators[field](input.value);
-    showError(field, error);
-    return !error;
-  };
-
-  ["name", "email", "message"].forEach((field) => {
-    document.getElementById(field).addEventListener("blur", () => validateField(field));
+  const cl = $("contact-list");
+  cl.replaceChildren();
+  const mail = el("a", null, P.email);
+  mail.href = `mailto:${P.email}`;
+  const gh = el("a", null, P.github.replace(/^https?:\/\//, ""));
+  gh.href = P.github;
+  gh.target = "_blank";
+  gh.rel = "noopener noreferrer";
+  [
+    [t.contact_email, mail],
+    ["GitHub", gh],
+    [t.contact_city, document.createTextNode(P.city)],
+    [t.contact_langs, document.createTextNode(t.langs)],
+  ].forEach(([k, v]) => {
+    const row = el("div", "contact__row");
+    const dd = el("dd");
+    dd.append(v);
+    row.append(el("dt", null, k), dd);
+    cl.append(row);
   });
+}
 
-  contactForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    const isValid = ["name", "email", "message"].every(validateField);
-    if (!isValid) return;
-
-    showToast("Сообщение отправлено! Спасибо за обращение.", "success");
-    contactForm.reset();
-    ["name", "email", "message"].forEach((field) => showError(field, ""));
-  });
-
-  /* Toast notification */
-  let toastTimeout;
-
-  function showToast(message, type = "") {
-    toast.textContent = message;
-    toast.className = "toast";
-    if (type) toast.classList.add(`toast--${type}`);
-
-    requestAnimationFrame(() => toast.classList.add("toast--visible"));
-
-    clearTimeout(toastTimeout);
-    toastTimeout = setTimeout(() => {
-      toast.classList.remove("toast--visible");
-    }, 3500);
+async function load() {
+  for (const file of ["profile.json", "profile.example.json"]) {
+    try {
+      const r = await fetch(file, { cache: "no-store" });
+      if (r.ok) return r.json();
+    } catch { /* try next */ }
   }
-});
+  throw new Error("profile.json not found");
+}
+
+load()
+  .then((data) => {
+    P = data;
+    const lang = pickLang();
+    render(lang);
+    document.querySelectorAll("[data-lang]").forEach((b) =>
+      b.addEventListener("click", () => {
+        localStorage.setItem("lang", b.dataset.lang);
+        render(b.dataset.lang);
+      })
+    );
+  })
+  .catch(() => {
+    $("name").textContent = "profile.json puudub / не найден";
+  });

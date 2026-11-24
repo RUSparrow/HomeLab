@@ -1,0 +1,224 @@
+{
+  "name": "Eesnimi Perenimi",
+  "email": "name@example.com",
+  "github": "https://github.com/username",
+  "city": "Tallinn",
+  "i18n": {
+    "et": {
+      "nav_experience": "Kogemus",
+      "nav_skills": "Oskused",
+      "nav_contact": "Kontakt",
+      "role": "IT-tugi ja süsteemide haldus. Juhiload B, C ja D.",
+      "intro": "Olen lõpetanud IT-spetsialisti õpingud. Haldan oma koduserverit: VPN, veebilehed, monitooring ja varukoopiad. Otsin tööd IT-toes, süsteemide halduses või logistikas.",
+      "cta_mail": "Kirjuta e-kiri",
+      "lab_title": "Minu koduserver",
+      "lab_note": "Kõik see töötab ühes masinas Tallinnas. Seadistan ja hooldan seda ise.",
+      "lane_access": "Ligipääs",
+      "lane_services": "Teenused",
+      "lane_watch": "Jälgimine",
+      "contact_lead": "Kõige kiirem on kirjutada e-kiri. Vastan tavaliselt samal päeval.",
+      "contact_email": "E-post",
+      "contact_city": "Asukoht",
+      "contact_langs": "Keeled",
+      "langs": "eesti B2, vene C1, inglise B1",
+      "foot": "Viimati uuendatud: november 2026",
+      "skill_groups": [
+        {
+          "title": "IT",
+          "items": [
+            "Linux (Ubuntu Server)",
+            "Docker ja Docker Compose",
+            "nginx",
+            "VPN: WireGuard, AmneziaWG",
+            "Prometheus, Grafana, Loki",
+            "fail2ban, ClamAV",
+            "Git",
+            "Python",
+            "SQL, Power BI (algtase)"
+          ]
+        },
+        {
+          "title": "Transport ja logistika",
+          "items": [
+            "Juhiload B, C, D",
+            "Raskete kaupade vedu",
+            "Marsruutide planeerimine Harjumaal",
+            "Tahhograaf",
+            "Laotöö"
+          ]
+        },
+        {
+          "title": "Keeled",
+          "items": [
+            "Eesti keel B2",
+            "Vene keel C1",
+            "Inglise keel B1"
+          ]
+        }
+      ],
+      "timeline": [
+        {
+          "when": "2024",
+          "what": "Ametikoht",
+          "where": "Ettevõte"
+        },
+        {
+          "when": "2022-2024",
+          "what": "Ametikoht",
+          "where": "Ettevõte"
+        }
+      ]
+    },
+    "ru": {
+      "nav_experience": "Опыт",
+      "nav_skills": "Навыки",
+      "nav_contact": "Контакты",
+      "role": "IT-поддержка и администрирование систем. Права B, C и D.",
+      "intro": "Окончил обучение на IT-специалиста. Сам веду свой домашний сервер: VPN, сайты, мониторинг и резервные копии. Ищу работу в IT-поддержке, администрировании или логистике.",
+      "cta_mail": "Написать письмо",
+      "lab_title": "Мой домашний сервер",
+      "lab_note": "Всё это работает на одной машине в Таллинне. Настраиваю и обслуживаю сам.",
+      "lane_access": "Доступ",
+      "lane_services": "Сервисы",
+      "lane_watch": "Наблюдение",
+      "contact_lead": "Быстрее всего написать на почту. Обычно отвечаю в тот же день.",
+      "contact_email": "Почта",
+      "contact_city": "Город",
+      "contact_langs": "Языки",
+      "langs": "эстонский B2, русский C1, английский B1",
+      "foot": "Обновлено: ноябрь 2026",
+      "skill_groups": [
+        {
+          "title": "IT",
+          "items": [
+            "Linux (Ubuntu Server)",
+            "Docker и Docker Compose",
+            "nginx",
+            "VPN: WireGuard, AmneziaWG",
+            "Prometheus, Grafana, Loki",
+            "fail2ban, ClamAV",
+            "Git",
+            "Python",
+            "SQL, Power BI (базовый уровень)"
+          ]
+        },
+        {
+          "title": "Транспорт и логистика",
+          "items": [
+            "Права B, C, D",
+            "Перевозка тяжёлых грузов",
+            "Планирование маршрутов по Харьюмаа",
+            "Тахограф",
+            "Работа на складе"
+          ]
+        },
+        {
+          "title": "Языки",
+          "items": [
+            "Эстонский B2",
+            "Русский C1",
+            "Английский B1"
+          ]
+        }
+      ],
+      "timeline": [
+        {
+          "when": "2024",
+          "what": "Ametikoht",
+          "where": "Ettevõte"
+        },
+        {
+          "when": "2022-2024",
+          "what": "Ametikoht",
+          "where": "Ettevõte"
+        }
+      ]
+    },
+    "en": {
+      "nav_experience": "Experience",
+      "nav_skills": "Skills",
+      "nav_contact": "Contact",
+      "role": "IT support and system administration. Driving licences B, C and D.",
+      "intro": "I finished my IT specialist studies. I run my own home server: VPN, websites, monitoring and backups. I am looking for work in IT support, system administration or logistics.",
+      "cta_mail": "Send an email",
+      "lab_title": "My home server",
+      "lab_note": "All of this runs on one machine in Tallinn. I set it up and maintain it myself.",
+      "lane_access": "Access",
+      "lane_services": "Services",
+      "lane_watch": "Monitoring",
+      "contact_lead": "Email is the fastest way. I usually reply the same day.",
+      "contact_email": "Email",
+      "contact_city": "Location",
+      "contact_langs": "Languages",
+      "langs": "Estonian B2, Russian C1, English B1",
+      "foot": "Last updated: November 2026",
+      "skill_groups": [
+        {
+          "title": "IT",
+          "items": [
+            "Linux (Ubuntu Server)",
+            "Docker and Docker Compose",
+            "nginx",
+            "VPN: WireGuard, AmneziaWG",
+            "Prometheus, Grafana, Loki",
+            "fail2ban, ClamAV",
+            "Git",
+            "Python",
+            "SQL, Power BI (basic)"
+          ]
+        },
+        {
+          "title": "Transport and logistics",
+          "items": [
+            "Driving licences B, C, D",
+            "Heavy goods transport",
+            "Route planning in Harju County",
+            "Tachograph",
+            "Warehouse work"
+          ]
+        },
+        {
+          "title": "Languages",
+          "items": [
+            "Estonian B2",
+            "Russian C1",
+            "English B1"
+          ]
+        }
+      ],
+      "timeline": [
+        {
+          "when": "2024",
+          "what": "Ametikoht",
+          "where": "Ettevõte"
+        },
+        {
+          "when": "2022-2024",
+          "what": "Ametikoht",
+          "where": "Ettevõte"
+        }
+      ]
+    }
+  },
+  "lab": {
+    "access": [
+      "AmneziaWG VPN",
+      "SSH + fail2ban",
+      "DuckDNS"
+    ],
+    "services": [
+      "nginx gateway",
+      "Server Monitor",
+      "PriceFinder",
+      "Plex",
+      "Minecraft",
+      "Syncthing"
+    ],
+    "watch": [
+      "Prometheus",
+      "Loki + Alloy",
+      "Grafana",
+      "ClamAV"
+    ]
+  }
+}
