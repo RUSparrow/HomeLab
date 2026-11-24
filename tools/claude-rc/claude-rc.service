@@ -1,0 +1,12 @@
+[Unit]
+Description=Claude Code Remote Control in tmux session "claude"
+After=default.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/tmux new-session -d -s claude -c %h/HomeLab %h/HomeLab/tools/claude-rc/claude-rc.sh
+ExecStop=/usr/bin/tmux kill-session -t claude
+
+[Install]
+WantedBy=default.target
