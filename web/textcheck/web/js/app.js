@@ -1,18 +1,24 @@
 "use strict";
 
+/* Проверка на лету: под прозрачным textarea лежит слой с тем же текстом,
+   в котором подсвечены находки. Печатаем в textarea как обычно, а слой
+   повторяет его символ в символ. */
+
 const $ = (id) => document.getElementById(id);
 const input = $("input");
-const doc = $("doc");
+const backdrop = $("backdrop");
 const pop = $("pop");
 
 const CAT_ORDER = ["hidden", "spell", "grammar", "ai", "style"];
-const HIDDEN_SYMBOL = { " ": "⍽", " ": "⍽", " ": "⍽" };
+const CHECK_DELAY = 800;  // мс тишины после ввода, прежде чем звать LanguageTool
 
 let text = "";
-let issues = [];          // сейчас показанные находки
-let ltIssues = [];        // находки LanguageTool (сдвигаются при правках)
+let issues = [];          // показанные находки (без пересечений)
+let ltIssues = [];        // находки LanguageTool, сдвигаются при правках
 let nextId = 1;
 let current = null;       // открытая в попапе находка или слово
+let checkTimer = null;
+let inflight = null;      // AbortController текущего запроса
 
 // ---------- Мелочи ----------
 const store = {
@@ -42,13 +48,23 @@ function plural(n, one, few, many) {
   return many;
 }
 
-function updateStats() {
-  const src = doc.hidden ? input.value : text;
-  const words = (src.match(/[\p{L}\p{N}][\p{L}\p{N}'’-]*/gu) || []).length;
-  $("stats").textContent = `${words} ${plural(words, "слово", "слова", "слов")} · ${src.length} ${plural(src.length, "знак", "знака", "знаков")}`;
+function setStatus(state, msg) {
+  const el = $("status");
+  el.dataset.state = state;
+  el.textContent = msg;
 }
 
-// ---------- Проверка ----------
+function updateStats() {
+  const words = (text.match(/[\p{L}\p{N}][\p{L}\p{N}'’-]*/gu) || []).length;
+  $("stats").textContent = `${words} ${plural(words, "слово", "слова", "слов")} · ${text.length} ${plural(text.length, "знак", "знака", "знаков")}`;
+}
+
+function autosize() {
+  input.style.height = "auto";
+  input.style.height = `${input.scrollHeight}px`;
+}
+
+// ---------- LanguageTool ----------
 function ltCategory(match) {
   const type = match.rule?.issueType;
   if (type === "misspelling") return "spell";
@@ -56,48 +72,52 @@ function ltCategory(match) {
   return "grammar";
 }
 
-async function fetchLanguageTool(src) {
+async function runCheck() {
+  clearTimeout(checkTimer);
+  inflight?.abort();
+  const src = text;
+  if (!src.trim()) { ltIssues = []; refresh(); setStatus("idle", ""); return; }
+
+  const ctrl = new AbortController();
+  inflight = ctrl;
+  setStatus("busy", "Проверяю…");
   const lang = $("lang").value;
   const body = new URLSearchParams({ text: src, language: lang });
   if (lang === "auto") body.set("preferredVariants", "en-US,de-DE");
-  const res = await fetch("/api/lt/check", { method: "POST", body });
-  if (!res.ok) throw new Error(`сервер ответил ${res.status}`);
-  const data = await res.json();
-  return data.matches.map((m) => {
-    const word = src.substr(m.offset, m.length);
-    return {
+
+  try {
+    const res = await fetch("/api/lt/check", { method: "POST", body, signal: ctrl.signal });
+    if (!res.ok) throw new Error(`сервер ответил ${res.status}`);
+    const data = await res.json();
+    if (src !== text) return;  // пока шёл запрос, текст поменялся — дождёмся следующей проверки
+    ltIssues = data.matches.map((m) => ({
       offset: m.offset,
       length: m.length,
       cat: ltCategory(m),
       title: m.shortMessage || m.rule?.category?.name || "Замечание",
       message: m.message,
       replacements: (m.replacements || []).slice(0, 8).map((r) => r.value),
-      word,
-    };
-  }).filter((i) => !(i.cat === "spell" && ignored.has(i.word.toLowerCase())));
-}
-
-async function check() {
-  text = input.value;
-  if (!text.trim()) { toast("Вставьте текст для проверки"); input.focus(); return; }
-  closePop();
-  $("busy").hidden = false;
-  $("check-btn").disabled = true;
-  try {
-    ltIssues = await fetchLanguageTool(text);
+      word: src.substr(m.offset, m.length),
+    })).filter((i) => !(i.cat === "spell" && ignored.has(i.word.toLowerCase())));
+    refresh();
+    setStatus("ok", "Проверено");
   } catch (err) {
-    ltIssues = [];
-    toast(`Орфография не проверена: ${err.message}. Признаки ИИ проверены.`, true);
+    if (err.name === "AbortError") return;
+    setStatus("error", "Орфография недоступна");
+    toast(`Орфография не проверена: ${err.message}. Признаки ИИ проверяются.`, true);
   } finally {
-    $("busy").hidden = true;
-    $("check-btn").disabled = false;
+    if (inflight === ctrl) inflight = null;
   }
-  rescan();
-  showReview();
 }
 
-/** Пересчитать признаки ИИ и собрать список без пересечений. */
-function rescan() {
+function scheduleCheck() {
+  clearTimeout(checkTimer);
+  setStatus("wait", text.trim() ? "Ждёт паузы в наборе…" : "");
+  checkTimer = setTimeout(runCheck, CHECK_DELAY);
+}
+
+// ---------- Сборка находок и отрисовка ----------
+function refresh() {
   const ai = AIMarks.scan(text);
   const all = [...ltIssues, ...ai.found];
   all.sort((a, b) => a.offset - b.offset || CAT_ORDER.indexOf(a.cat) - CAT_ORDER.indexOf(b.cat));
@@ -108,27 +128,21 @@ function rescan() {
     if (CAT_ORDER.indexOf(issue.cat) < CAT_ORDER.indexOf(kept[clash].cat)) kept[clash] = issue;
   }
   issues = kept.sort((a, b) => a.offset - b.offset).map((i) => ({ ...i, id: nextId++ }));
-  renderVerdict(ai);
+  renderBackdrop();
+  renderVerdict(text.trim() ? ai : null);
   renderCounts();
+  updateStats();
 }
 
-// ---------- Отрисовка ----------
-function wordSpans(chunk) {
-  return esc(chunk).replace(/[\p{Script=Cyrillic}][\p{Script=Cyrillic}-]*/gu, (w) => `<span class="w">${w}</span>`);
-}
-
-function renderDoc() {
+function renderBackdrop() {
   let html = "", pos = 0;
   for (const i of issues) {
-    html += wordSpans(text.slice(pos, i.offset));
-    const raw = text.substr(i.offset, i.length);
-    let inner = esc(raw);
-    if (i.hiddenChar) inner = `<span class="sym">${HIDDEN_SYMBOL[raw] || "◆"}</span>${raw === " " || raw === " " ? " " : ""}`;
-    html += `<mark class="m m--${i.cat}" data-id="${i.id}" tabindex="0">${inner}</mark>`;
+    html += esc(text.slice(pos, i.offset));
+    html += `<mark class="m m--${i.cat}${i.hiddenChar ? " m--char" : ""}" data-id="${i.id}">${esc(text.substr(i.offset, i.length))}</mark>`;
     pos = i.offset + i.length;
   }
-  html += wordSpans(text.slice(pos));
-  doc.innerHTML = html + "\n";
+  // Лишний перевод строки: чтобы последняя пустая строка тоже имела высоту, как в textarea
+  backdrop.innerHTML = html + esc(text.slice(pos)) + "\n ";
 }
 
 function renderCounts() {
@@ -140,9 +154,16 @@ function renderCounts() {
 }
 
 function renderVerdict(ai) {
+  const v = $("verdict");
+  if (!ai) {
+    $("ai-meter").style.width = "0";
+    delete v.dataset.level;
+    $("ai-verdict").textContent = "Начните писать, и оценка появится здесь.";
+    $("ai-reasons").innerHTML = "";
+    return;
+  }
   const s = ai.score;
   $("ai-meter").style.width = `${Math.max(s, 3)}%`;
-  const v = $("verdict");
   v.dataset.level = s >= 55 ? "high" : s >= 25 ? "mid" : "low";
   $("ai-verdict").textContent =
     s >= 55 ? `Много признаков ИИ (${s} из 100)`
@@ -151,56 +172,77 @@ function renderVerdict(ai) {
   $("ai-reasons").innerHTML = ai.reasons.map((r) => `<li>${esc(r)}</li>`).join("");
 }
 
-function showReview() {
-  renderDoc();
-  input.hidden = true;
-  doc.hidden = false;
-  $("edit-btn").hidden = false;
-  $("hint").hidden = false;
-  updateStats();
-}
-
-function showEditor() {
-  closePop();
-  input.value = text;
-  doc.hidden = true;
-  input.hidden = false;
-  $("edit-btn").hidden = true;
-  input.focus();
-}
-
-// ---------- Правки ----------
-function replaceRange(offset, length, value, skipId) {
-  const delta = value.length - length;
-  text = text.slice(0, offset) + value + text.slice(offset + length);
+// ---------- Ввод ----------
+/** Сдвигает находки LanguageTool под правку: меняется только кусок между общим началом и концом. */
+function shiftIssues(oldText, newText) {
+  let start = 0;
+  const max = Math.min(oldText.length, newText.length);
+  while (start < max && oldText[start] === newText[start]) start++;
+  let endOld = oldText.length, endNew = newText.length;
+  while (endOld > start && endNew > start && oldText[endOld - 1] === newText[endNew - 1]) { endOld--; endNew--; }
+  const delta = endNew - endOld;
   ltIssues = ltIssues
-    .filter((i) => !(i.offset < offset + length && offset < i.offset + i.length) && !(length === 0 && i.offset === offset))
-    .map((i) => (i.offset >= offset + length ? { ...i, offset: i.offset + delta } : i));
-  input.value = text;
+    .filter((i) => i.offset + i.length <= start || i.offset >= endOld)
+    // Правка вплотную к концу слова (дописали букву) — старая находка для него уже неверна
+    .filter((i) => !(i.offset + i.length === start && /[\p{L}\p{N}]/u.test(newText[start] || "")))
+    .map((i) => (i.offset >= endOld ? { ...i, offset: i.offset + delta } : i));
+}
+
+input.addEventListener("input", () => {
+  const next = input.value;
+  shiftIssues(text, next);
+  text = next;
   store.set("tc-draft", text);
-}
-
-function commit() {
-  rescan();
-  renderDoc();
-  updateStats();
-}
-
-function applyFix(issue, value) {
-  replaceRange(issue.offset, issue.length, value);
   closePop();
-  commit();
+  autosize();
+  refresh();
+  scheduleCheck();
+});
+
+$("lang").addEventListener("change", runCheck);
+
+/** Заменить кусок текста так, чтобы работала отмена (Ctrl+Z). */
+function replaceRange(offset, length, value) {
+  input.focus({ preventScroll: true });
+  input.setSelectionRange(offset, offset + length);
+  const ok = value === "" ? document.execCommand("delete") : document.execCommand("insertText", false, value);
+  if (!ok) {
+    input.setRangeText(value, offset, offset + length, "end");
+    input.dispatchEvent(new Event("input"));
+  }
+}
+
+function applyFix(target, value) {
+  closePop();
+  replaceRange(target.offset, target.length, value);
 }
 
 function fixAll(predicate) {
   const list = issues.filter(predicate).sort((a, b) => b.offset - a.offset);
-  for (const i of list) replaceRange(i.offset, i.length, i.replacements[0]);
-  commit();
+  // Одной правкой, чтобы Ctrl+Z откатил всё разом
+  let out = text;
+  for (const i of list) out = out.slice(0, i.offset) + i.replacements[0] + out.slice(i.offset + i.length);
+  if (list.length) replaceRange(0, text.length, out);
   return list.length;
 }
 
 // ---------- Попап ----------
-function openPop(anchor, data) {
+/** Прямоугольник куска текста — по слою подсветки, где текст совпадает символ в символ. */
+function rectFor(offset, length) {
+  const walker = document.createTreeWalker(backdrop, NodeFilter.SHOW_TEXT);
+  const range = document.createRange();
+  let pos = 0, startSet = false, node;
+  while ((node = walker.nextNode())) {
+    const len = node.nodeValue.length;
+    if (!startSet && offset <= pos + len) { range.setStart(node, offset - pos); startSet = true; }
+    if (startSet && offset + length <= pos + len) { range.setEnd(node, offset + length - pos); break; }
+    pos += len;
+  }
+  const rects = range.getClientRects();
+  return rects[0] || range.getBoundingClientRect();
+}
+
+function openPop(data) {
   current = data;
   $("pop-title").textContent = data.title;
   $("pop-msg").textContent = data.message || "";
@@ -220,14 +262,15 @@ function openPop(anchor, data) {
 
   $("pop-ignore").hidden = !data.id;
   $("pop-learn").hidden = data.cat !== "spell";
-
-  const formsWord = pickFormsWord(data);
   $("pop-forms").hidden = true;
+  const formsWord = pickFormsWord(data);
   if (formsWord) loadForms(formsWord, data);
 
+  backdrop.querySelectorAll(".is-current").forEach((e) => e.classList.remove("is-current"));
+  if (data.id) backdrop.querySelector(`[data-id="${data.id}"]`)?.classList.add("is-current");
+
   pop.hidden = false;
-  placePop(anchor);
-  (opts.querySelector("button") || $("pop-ignore")).focus({ preventScroll: true });
+  placePop();
 }
 
 function pickFormsWord(data) {
@@ -257,15 +300,16 @@ async function loadForms(word, data) {
       box.appendChild(b);
     }
     $("pop-forms").hidden = false;
-    placePop(current.anchor);
-  } catch { /* формы — дополнительная подсказка, без них можно */ }
+    placePop();
+  } catch { /* формы — дополнительная подсказка */ }
 }
 
-function placePop(anchor) {
-  if (!anchor || window.matchMedia("(max-width: 640px)").matches) { pop.style.left = pop.style.top = ""; return; }
-  const r = anchor.getBoundingClientRect();
+function placePop() {
+  if (!current || pop.hidden) return;
+  if (window.matchMedia("(max-width: 640px)").matches) { pop.style.left = pop.style.top = ""; return; }
+  const r = rectFor(current.offset, current.length);
   const w = pop.offsetWidth, h = pop.offsetHeight;
-  let left = Math.min(r.left + window.scrollX, window.scrollX + document.documentElement.clientWidth - w - 16);
+  const left = Math.min(r.left + window.scrollX, window.scrollX + document.documentElement.clientWidth - w - 16);
   let top = r.bottom + window.scrollY + 8;
   if (r.bottom + h + 16 > window.innerHeight && r.top > h + 16) top = r.top + window.scrollY - h - 8;
   pop.style.left = `${Math.max(16, left)}px`;
@@ -273,60 +317,37 @@ function placePop(anchor) {
 }
 
 function closePop() {
+  if (pop.hidden) return;
   pop.hidden = true;
   current = null;
-  doc.querySelectorAll(".is-current").forEach((e) => e.classList.remove("is-current"));
+  backdrop.querySelectorAll(".is-current").forEach((e) => e.classList.remove("is-current"));
 }
 
-doc.addEventListener("click", (e) => {
-  const mark = e.target.closest(".m");
-  const word = e.target.closest(".w");
-  doc.querySelectorAll(".is-current").forEach((el) => el.classList.remove("is-current"));
-  if (mark) {
-    const issue = issues.find((i) => i.id === Number(mark.dataset.id));
-    if (!issue) return;
-    mark.classList.add("is-current");
-    openPop(mark, Object.assign(issue, { anchor: mark }));
-  } else if (word) {
-    // Смещение слова: считаем по тексту до него в DOM
-    const range = document.createRange();
-    range.setStart(doc, 0);
-    range.setEndBefore(word);
-    const offset = domTextLength(range.cloneContents());
-    word.classList.add("is-current");
-    openPop(word, { title: word.textContent, message: "", replacements: [], offset, length: word.textContent.length, anchor: word });
-  } else {
-    closePop();
-  }
+// Клик по подчёркнутому — исправления
+input.addEventListener("click", () => {
+  if (input.selectionStart !== input.selectionEnd) return;
+  const pos = input.selectionStart;
+  const issue = issues.find((i) => i.length && pos >= i.offset && pos <= i.offset + i.length && !document.body.classList.contains(`hide-${i.cat}`));
+  if (issue) openPop(issue);
+  else closePop();
 });
 
-doc.addEventListener("keydown", (e) => {
-  if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("m")) { e.preventDefault(); e.target.click(); }
+// Двойной клик по слову — его формы
+input.addEventListener("dblclick", () => {
+  const start = input.selectionStart, end = input.selectionEnd;
+  const word = text.slice(start, end).trim();
+  if (!/^[\p{Script=Cyrillic}-]{2,}$/u.test(word)) return;
+  const offset = start + text.slice(start, end).indexOf(word);
+  const issue = issues.find((i) => i.offset === offset && i.length === word.length);
+  openPop(issue || { title: word, message: "", replacements: [], offset, length: word.length });
 });
-
-/** Длина исходного текста во фрагменте: значки скрытых символов считаются по их реальной длине. */
-function domTextLength(fragment) {
-  let n = 0;
-  const walk = (node) => {
-    if (node.nodeType === 3) { n += node.nodeValue.length; return; }
-    if (node.classList?.contains("m")) {
-      const issue = issues.find((i) => i.id === Number(node.dataset.id));
-      n += issue ? issue.length : node.textContent.length;
-      return;
-    }
-    node.childNodes.forEach(walk);
-  };
-  walk(fragment);
-  return n;
-}
 
 $("pop-ignore").addEventListener("click", () => {
   if (!current?.id) return;
-  ltIssues = ltIssues.filter((i) => !(i.offset === current.offset && i.length === current.length));
-  issues = issues.filter((i) => i.id !== current.id);
+  const { offset, length } = current;
+  ltIssues = ltIssues.filter((i) => !(i.offset === offset && i.length === length));
   closePop();
-  renderDoc();
-  renderCounts();
+  refresh();
 });
 
 $("pop-learn").addEventListener("click", () => {
@@ -336,25 +357,19 @@ $("pop-learn").addEventListener("click", () => {
   store.set("tc-ignored", [...ignored]);
   ltIssues = ltIssues.filter((i) => !(i.cat === "spell" && i.word.toLowerCase() === w));
   closePop();
-  commit();
+  refresh();
   toast(`«${w}» больше не считается ошибкой`);
 });
 
-document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !pop.hidden) closePop(); });
-document.addEventListener("click", (e) => {
-  if (!pop.hidden && !pop.contains(e.target) && !doc.contains(e.target)) closePop();
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && !pop.hidden) { closePop(); input.focus(); }
 });
-window.addEventListener("resize", () => { if (current) placePop(current.anchor); });
+document.addEventListener("mousedown", (e) => {
+  if (!pop.hidden && !pop.contains(e.target) && e.target !== input) closePop();
+});
+window.addEventListener("resize", () => { autosize(); placePop(); });
 
 // ---------- Кнопки ----------
-$("check-btn").addEventListener("click", check);
-$("edit-btn").addEventListener("click", showEditor);
-
-input.addEventListener("keydown", (e) => {
-  if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); check(); }
-});
-input.addEventListener("input", () => { store.set("tc-draft", input.value); updateStats(); });
-
 $("fix-all-btn").addEventListener("click", () => {
   const n = fixAll((i) => i.cat === "spell" && i.replacements.length);
   toast(`Исправлено опечаток: ${n}`);
@@ -366,14 +381,13 @@ $("clean-btn").addEventListener("click", () => {
 });
 
 $("copy-btn").addEventListener("click", async () => {
-  const src = doc.hidden ? input.value : text;
-  if (!src) return;
+  if (!text) return;
   try {
-    await navigator.clipboard.writeText(src);
+    await navigator.clipboard.writeText(text);
   } catch {
-    // На http без HTTPS буфер обмена недоступен через API — копируем через выделение.
+    // На http без HTTPS буфер обмена через API недоступен — копируем через выделение.
     const t = document.createElement("textarea");
-    t.value = src;
+    t.value = text;
     t.style.position = "fixed"; t.style.opacity = "0";
     document.body.appendChild(t);
     t.select();
@@ -392,5 +406,9 @@ $("filters").addEventListener("change", (e) => {
 const host = `${location.protocol}//${location.hostname}`;
 $("monitor-link").href = `${host}:8080`;
 $("pf-link").href = `${host}:8082`;
-input.value = store.get("tc-draft", "");
-updateStats();
+
+text = input.value = store.get("tc-draft", "");
+autosize();
+refresh();
+if (text.trim()) runCheck();
+input.focus();

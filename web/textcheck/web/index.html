@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap">
-  <link rel="stylesheet" href="/css/style.css?v=2">
+  <link rel="stylesheet" href="/css/style.css?v=3">
 </head>
 <body>
   <header class="header">
@@ -41,21 +41,17 @@
           </select>
         </label>
         <span class="toolbar__stats" id="stats">0 слов</span>
-        <div class="toolbar__actions">
-          <button type="button" class="btn" id="edit-btn" hidden>Редактировать</button>
-          <button type="button" class="btn btn--primary" id="check-btn">
-            Проверить <kbd>Ctrl+Enter</kbd>
-          </button>
-        </div>
+        <span class="status" id="status" role="status" aria-live="polite"></span>
       </div>
 
       <div class="sheet">
-        <textarea id="input" spellcheck="false" placeholder="Вставьте текст: письмо, пост, сообщение. Проверю орфографию, грамматику и признаки того, что текст написал ИИ."></textarea>
-        <div class="doc" id="doc" hidden></div>
-        <div class="sheet__busy" id="busy" hidden><span class="spinner" aria-hidden="true"></span>Проверяю…</div>
+        <div class="field">
+          <div class="backdrop" id="backdrop" aria-hidden="true"></div>
+          <textarea id="input" spellcheck="false" placeholder="Начните писать или вставьте текст. Ошибки и признаки ИИ подсветятся сами, пока вы пишете."></textarea>
+        </div>
       </div>
 
-      <p class="hint" id="hint">Подчёркнутое можно нажать — появятся исправления. Нажатие на любое русское слово покажет все его формы.</p>
+      <p class="hint">Нажмите на подчёркнутое, чтобы увидеть исправления. Двойной клик по русскому слову покажет все его формы.</p>
     </section>
 
     <aside class="side" aria-label="Итоги проверки">
@@ -102,6 +98,6 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="/js/aimarks.js?v=1"></script>
-  <script src="/js/app.js?v=1"></script>
+  <script src="/js/app.js?v=2"></script>
 </body>
 </html>
