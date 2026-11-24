@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TextClean — чистка текста от следов ИИ</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2317181c'/%3E%3Cpath d='M9 16l5 5 9-10' fill='none' stroke='%23fbb26a' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --bg: #0e0e11; --surface: #17181c; --surface-2: #1c1d21; --surface-3: #272930;
+    --border: #2c2d30; --border-strong: #494b50; --text: #eaeaec; --text-muted: #878b91;
+    --accent: #fbb26a; --accent-deep: #ed700a; --accent-soft: rgba(251,178,106,.12);
+    --green: #4ed16a; --green-soft: rgba(78,209,106,.13); --red-text: #ff9a9d; --red-soft: rgba(255,90,95,.14);
+    --radius: 14px; --radius-sm: 10px;
+    --font: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.5 var(--font); }
+  main { max-width: 1180px; margin: 0 auto; padding: 28px 20px 48px; }
+  header { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 20px; }
+  h1 { font-size: 22px; font-weight: 600; margin: 0; }
+  h1 span { color: var(--accent); }
+  header p { margin: 0; color: var(--text-muted); }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .card h2 { margin: 0; font-size: 13px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center; }
+  textarea { width: 100%; min-height: 340px; resize: vertical; background: var(--surface-2); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; font: 14px/1.55 var(--font); }
+  textarea:focus { outline: none; border-color: var(--accent); }
+  .bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  select, button { font: 500 14px var(--font); border-radius: var(--radius-sm); border: 1px solid var(--border-strong); background: var(--surface-3); color: var(--text); padding: 9px 14px; cursor: pointer; }
+  button.primary { background: var(--accent); color: #17181c; border-color: var(--accent); }
+  button.primary:hover { background: #ffc285; }
+  button:disabled { opacity: .45; cursor: default; }
+  .muted { color: var(--text-muted); font-size: 13px; }
+  #report { margin-top: 16px; }
+  #report:empty { display: none; }
+  .sec { margin: 0 0 12px; }
+  .sec h3 { margin: 0 0 6px; font-size: 14px; font-weight: 600; }
+  .ok h3 { color: var(--green); }
+  .warn h3 { color: var(--accent); }
+  .sec ul { margin: 0; padding-left: 18px; }
+  .sec li { margin: 2px 0; }
+  code, .chip { font-family: var(--mono); font-size: 13px; }
+  .chip { display: inline-block; background: var(--accent-soft); color: var(--accent); border-radius: 6px; padding: 1px 7px; margin: 2px 4px 2px 0; }
+  .n { color: var(--text-muted); font-family: var(--mono); }
+  mark { background: var(--accent-soft); color: var(--accent); border-radius: 4px; padding: 0 2px; }
+  #highlight { white-space: pre-wrap; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; font-size: 14px; }
+  .err { color: var(--red-text); background: var(--red-soft); border-radius: var(--radius-sm); padding: 10px 12px; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Text<span>Clean</span></h1>
+    <p>Убирает скрытые символы и типографику ИИ, показывает фразы-штампы. Текст никуда не отправляется: всё считается в браузере.</p>
+  </header>
+
+  <div class="grid">
+    <section class="card">
+      <h2>Исходный текст</h2>
+      <textarea id="src" placeholder="Вставьте письмо сюда…" spellcheck="false"></textarea>
+      <div class="bar">
+        <select id="lang" title="Язык">
+          <option value="auto">Язык: авто</option>
+          <option value="et">Эстонский</option>
+          <option value="ru">Русский</option>
+          <option value="en">Английский</option>
+        </select>
+        <button class="primary" id="run">Очистить</button>
+        <button id="paste">Вставить из буфера</button>
+        <span class="muted" id="status"></span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Чистый текст <button id="copy" disabled>Копировать</button></h2>
+      <textarea id="out" readonly placeholder="Здесь появится результат"></textarea>
+    </section>
+  </div>
+
+  <section class="card" id="report-card" style="margin-top:16px; display:none">
+    <h2>Отчёт</h2>
+    <div id="report"></div>
+    <div id="hl-wrap" style="display:none">
+      <h2 style="margin:6px 0">Где штампы</h2>
+      <div id="highlight"></div>
+    </div>
+  </section>
+</main>
+
+<script>
+"use strict";
+const CYR = /[Ѐ-ӿ]/g;
+const LAT = /[A-Za-zÀ-ɏ]/g;
+const WORD = /[\p{L}\p{M}]+/gu;
+let RULES = null;
+
+const count = (s, re) => (s.match(re) || []).length;
+const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const bump = (m, k, n = 1) => m.set(k, (m.get(k) || 0) + n);
+
+function detectLang(t) {
+  const c = count(t, CYR), l = count(t, LAT);
+  if (c > l) return "ru";
+  if (/[õäöüÕÄÖÜšž]/.test(t)) return "et";
+  return "en";
+}
+
+function fixChars(t, fixes) {
+  const table = RULES.chars.map(([a, b, r, label]) => [parseInt(a, 16), parseInt(b, 16), r, label]);
+  let out = "";
+  for (const ch of t) {               // for..of идёт по кодпойнтам (нужно для U+E00xx)
+    const cp = ch.codePointAt(0);
+    const hit = table.find(([a, b]) => a <= cp && cp <= b);
+    if (hit && hit[2] !== ch) { bump(fixes, hit[3]); out += hit[2]; }
+    else out += ch;
+  }
+  return out;
+}
+
+function fixHomoglyphs(t, lang, fixes) {
+  const { cyr_to_lat: c2l, lat_to_cyr: l2c } = RULES.homoglyphs;
+  return t.replace(WORD, w => {
+    const nc = count(w, CYR), nl = count(w, LAT);
+    if (!nc || !nl) return w;
+    const toCyr = nc > nl || (nc === nl && lang === "ru");
+    const tbl = toCyr ? l2c : c2l;
+    const nw = [...w].map(ch => tbl[ch] || ch).join("");
+    if (nw !== w) bump(fixes, "подменённые буквы (латиница/кириллица в одном слове)");
+    return nw;
+  });
+}
+
+function fixReplace(t, fixes) {
+  for (const [pat, repl, label] of RULES.replace) {
+    const re = new RegExp(pat, "gmu");
+    const n = count(t, re);
+    if (n) { t = t.replace(re, repl); bump(fixes, label, n); }
+  }
+  return t;
+}
+
+function warnings(t, lang) {
+  const low = t.toLowerCase();
+  const phrases = [];
+  for (const [p, hint] of (RULES.phrases[lang] || [])) {
+    const n = low.split(p).length - 1;
+    if (n) phrases.push({ p, n, hint });
+  }
+  const lim = RULES.limits;
+  const longSent = t.split(/(?<=[.!?])\s+|\n+/)
+    .map(s => ({ s, n: (s.match(WORD) || []).length }))
+    .filter(x => x.n > lim.long_sentence_words);
+  const longWords = [...new Set((t.match(WORD) || []).filter(w => w.length >= lim.long_word_chars))].sort();
+  return { phrases, longSent, longWords };
+}
+
+function highlight(t, phrases) {
+  if (!phrases.length) return "";
+  const low = t.toLowerCase();
+  const marks = [];
+  for (const { p } of phrases) {
+    let i = 0;
+    while ((i = low.indexOf(p, i)) !== -1) { marks.push([i, i + p.length]); i += p.length; }
+  }
+  marks.sort((a, b) => a[0] - b[0]);
+  let html = "", pos = 0;
+  for (const [a, b] of marks) {
+    if (a < pos) continue;
+    html += esc(t.slice(pos, a)) + "<mark>" + esc(t.slice(a, b)) + "</mark>";
+    pos = b;
+  }
+  return html + esc(t.slice(pos));
+}
+
+function render(fixes, w, lang) {
+  const names = { et: "эстонский", ru: "русский", en: "английский" };
+  let h = `<p class="muted">Язык: ${names[lang]}</p>`;
+  if (fixes.size) {
+    h += `<div class="sec ok"><h3>Исправлено автоматически</h3><ul>` +
+      [...fixes].sort((a, b) => b[1] - a[1]).map(([k, n]) => `<li><span class="n">${n} ×</span> ${esc(k)}</li>`).join("") + `</ul></div>`;
+  } else {
+    h += `<div class="sec ok"><h3>Скрытых символов и типографики не найдено</h3></div>`;
+  }
+  if (w.phrases.length) {
+    h += `<div class="sec warn"><h3>Штампы — перепишите своими словами</h3><ul>` +
+      w.phrases.map(x => `<li><span class="chip">${esc(x.p)}</span>${x.n > 1 ? `<span class="n">×${x.n}</span> ` : ""}${esc(x.hint)}</li>`).join("") + `</ul></div>`;
+  }
+  if (w.longSent.length) {
+    h += `<div class="sec warn"><h3>Длинные предложения — лучше разбить</h3><ul>` +
+      w.longSent.map(x => `<li><span class="n">${x.n} слов:</span> ${esc(x.s.split(/\s+/).slice(0, 8).join(" "))} …</li>`).join("") + `</ul></div>`;
+  }
+  if (w.longWords.length) {
+    h += `<div class="sec warn"><h3>Очень длинные слова — поискать проще</h3>` +
+      w.longWords.map(x => `<span class="chip">${esc(x)}</span>`).join("") + `</div>`;
+  }
+  if (!w.phrases.length && !w.longSent.length && !w.longWords.length) {
+    h += `<div class="sec ok"><h3>Штампов не найдено</h3></div>`;
+  }
+  return h;
+}
+
+function run() {
+  const src = document.getElementById("src").value;
+  if (!src.trim()) return;
+  const sel = document.getElementById("lang").value;
+  const lang = sel === "auto" ? detectLang(src) : sel;
+  const fixes = new Map();
+  let t = fixChars(src, fixes);
+  t = fixHomoglyphs(t, lang, fixes);
+  t = fixReplace(t, fixes);
+  const w = warnings(t, lang);
+  document.getElementById("out").value = t;
+  document.getElementById("copy").disabled = false;
+  document.getElementById("report").innerHTML = render(fixes, w, lang);
+  const hl = highlight(t, w.phrases);
+  document.getElementById("highlight").innerHTML = hl;
+  document.getElementById("hl-wrap").style.display = hl ? "" : "none";
+  document.getElementById("report-card").style.display = "";
+}
+
+document.getElementById("run").onclick = run;
+document.getElementById("src").addEventListener("keydown", e => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) run(); });
+document.getElementById("copy").onclick = async () => {
+  const out = document.getElementById("out");
+  try { await navigator.clipboard.writeText(out.value); }
+  catch { out.select(); document.execCommand("copy"); }
+  document.getElementById("status").textContent = "Скопировано";
+  setTimeout(() => document.getElementById("status").textContent = "", 1500);
+};
+document.getElementById("paste").onclick = async () => {
+  try { document.getElementById("src").value = await navigator.clipboard.readText(); run(); }
+  catch { document.getElementById("status").textContent = "Браузер не дал доступ к буферу — вставьте вручную"; }
+};
+
+fetch("rules.json", { cache: "no-store" })
+  .then(r => r.json())
+  .then(r => { RULES = r; })
+  .catch(() => {
+    document.getElementById("run").disabled = true;
+    document.getElementById("status").innerHTML = '<span class="err">Не удалось загрузить rules.json</span>';
+  });
+</script>
+</body>
+</html>
