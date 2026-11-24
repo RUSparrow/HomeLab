@@ -139,7 +139,9 @@ def clamav() -> dict:
     if scanned:
         facts.insert(3, ["Проверено файлов", _fmt_int(scanned.group(1))])
     return {**base, "level": level, "summary": summary, "facts": facts,
-            "items": [f"{path} — {virus}" for path, virus in found[:20]]}
+            "items": [f"{path} — {virus}" for path, virus in found[:20]],
+            "values": {"infected": n_infected, "last_scan": started_dt.timestamp() if started_dt else None,
+                       "scanned": int(scanned.group(1)) if scanned else None}}
 
 
 # -------------------------------------------------------------- Fail2ban
@@ -513,7 +515,7 @@ def minecraft_status(running: bool) -> dict:
                 "facts": [["Ошибка", str(exc)[:120]]]}
     players = info.get("players", {})
     names = [p.get("name") for p in players.get("sample", []) or []]
-    return {"level": "ok",
+    return {"level": "ok", "values": {"players": players.get("online", 0), "max_players": players.get("max")},
             "summary": f"Игроков онлайн: {players.get('online', 0)} из {players.get('max', '?')}",
             "facts": [["Версия", (info.get("version") or {}).get("name", "?")],
                       ["Игроки", ", ".join(names) or "никого"],

@@ -6,10 +6,10 @@ from pathlib import Path
 
 import requests
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 
-from app import history, insights
+from app import exporter, history, insights
 from app.metrics import collect_all, get_docker_containers
 
 FRONTEND_DIR = Path(os.getenv("FRONTEND_DIR", Path(__file__).resolve().parent.parent.parent / "frontend"))
@@ -57,6 +57,12 @@ def metrics():
     data["network"] = {k: history.latest().get(k) for k in ("rx", "tx")}
     data["insights"] = insights.collect(data["docker"], data["plex"], data["amnezia"])
     return data
+
+
+@app.get("/metrics", response_class=PlainTextResponse)
+def prometheus_metrics():
+    """Экспорт для Prometheus — по нему Grafana строит графики сервисов."""
+    return PlainTextResponse(exporter.render(metrics()), media_type="text/plain; version=0.0.4")
 
 
 @app.get("/api/history")

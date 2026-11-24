@@ -147,7 +147,7 @@ async function fetchHistory() {
 function setRange(range) {
   state.range = range;
   try { localStorage.setItem("sm-range", range); } catch { /* не критично */ }
-  document.querySelectorAll(".range__btn").forEach((b) => b.classList.toggle("is-active", b.dataset.range === range));
+  document.querySelectorAll(".range__btn[data-range]").forEach((b) => b.classList.toggle("is-active", b.dataset.range === range));
   document.querySelectorAll("[data-range-label]").forEach((el) => { el.textContent = RANGE_LABELS[range]; });
   fetchHistory();
 }
@@ -793,9 +793,99 @@ $("update-project").addEventListener("click", async () => {
 
 $("pricefinder-link").href = `${location.protocol}//${location.hostname}:8082`;
 
-document.querySelectorAll(".range__btn").forEach((btn) => {
+document.querySelectorAll(".range__btn[data-range]").forEach((btn) => {
   btn.addEventListener("click", () => setRange(btn.dataset.range));
 });
 loadRange();
 setRange(state.range);
 startPolling();
+
+
+/* ---------- Графики Grafana (встроенные дашборды) ---------- */
+
+const GRAFANA_PORT = 3000;
+// Высота дашборда на широком экране; на телефоне Grafana ставит панели
+// в одну колонку, поэтому там окно фиксированной высоты с прокруткой.
+const DASHBOARDS = {
+  server: { uid: "homelab-server", height: 1640 },
+  containers: { uid: "homelab-containers", height: 1060 },
+  services: { uid: "homelab-services", height: 1180, minRange: "24h" },
+  logs: { uid: "homelab-logs", height: 1040, maxRange: "6h" },
+};
+const RANGE_ORDER = ["1h", "6h", "24h"];
+
+const charts = { dash: "server", loaded: false };
+
+function grafanaUrl(dash, embed) {
+  const cfg = DASHBOARDS[dash];
+  let range = state.range;
+  if (cfg.minRange && RANGE_ORDER.indexOf(range) < RANGE_ORDER.indexOf(cfg.minRange)) range = cfg.minRange;
+  if (cfg.maxRange && RANGE_ORDER.indexOf(range) > RANGE_ORDER.indexOf(cfg.maxRange)) range = cfg.maxRange;
+  const base = `${location.protocol}//${location.hostname}:${GRAFANA_PORT}/d/${cfg.uid}`;
+  const params = new URLSearchParams({ from: `now-${range}`, to: "now", theme: "dark" });
+  if (embed) params.set("kiosk", "");
+  return `${base}?${params.toString().replace("kiosk=", "kiosk")}`;
+}
+
+function renderCharts() {
+  const frame = document.getElementById("charts-frame");
+  const open = document.getElementById("charts-open");
+  if (!frame) return;
+  open.href = grafanaUrl(charts.dash, false);
+  if (!charts.loaded) return;
+  const mobile = window.matchMedia("(max-width: 768px)").matches;
+  let iframe = frame.querySelector("iframe");
+  if (!iframe) {
+    frame.innerHTML = "";
+    iframe = document.createElement("iframe");
+    iframe.title = "Графики Grafana";
+    frame.appendChild(iframe);
+  }
+  iframe.style.height = mobile ? "80vh" : `${DASHBOARDS[charts.dash].height}px`;
+  const url = grafanaUrl(charts.dash, true);
+  if (iframe.dataset.src !== url) {
+    iframe.dataset.src = url;
+    iframe.src = url;
+  }
+}
+
+function setupCharts() {
+  const frame = document.getElementById("charts-frame");
+  if (!frame) return;
+  try {
+    const saved = localStorage.getItem("sm-dash");
+    if (saved && DASHBOARDS[saved]) charts.dash = saved;
+  } catch { /* не критично */ }
+
+  const tabs = document.querySelectorAll("#chart-tabs [data-dash]");
+  const markTabs = () => tabs.forEach((b) => {
+    const active = b.dataset.dash === charts.dash;
+    b.classList.toggle("is-active", active);
+    b.setAttribute("aria-selected", String(active));
+  });
+  tabs.forEach((btn) => btn.addEventListener("click", () => {
+    charts.dash = btn.dataset.dash;
+    try { localStorage.setItem("sm-dash", charts.dash); } catch { /* не критично */ }
+    charts.loaded = true;
+    markTabs();
+    renderCharts();
+  }));
+  markTabs();
+
+  // Grafana тяжёлая — грузим её, только когда раздел появился на экране.
+  const io = new IntersectionObserver((entries) => {
+    if (entries.some((e) => e.isIntersecting)) {
+      charts.loaded = true;
+      renderCharts();
+      io.disconnect();
+    }
+  }, { rootMargin: "300px" });
+  io.observe(frame);
+  renderCharts();
+
+  // Переключатель периода наверху страницы действует и на графики.
+  document.querySelectorAll(".range__btn[data-range]").forEach((b) =>
+    b.addEventListener("click", () => setTimeout(renderCharts, 0)));
+}
+
+setupCharts();

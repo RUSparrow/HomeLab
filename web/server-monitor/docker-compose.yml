@@ -23,6 +23,10 @@ services:
       - ../../tools/syncthing/data/config:/data/syncthing:ro
     pid: host
     restart: unless-stopped
+    networks:
+      - default
+      # Prometheus забирает /metrics панели
+      - monitoring
     environment:
       TZ: Europe/Tallinn
       SYSFS_PATH: /sys
@@ -61,3 +65,7 @@ services:
       retries: 3
       start_period: 15s
     restart: unless-stopped
+
+networks:
+  monitoring:
+    external: true

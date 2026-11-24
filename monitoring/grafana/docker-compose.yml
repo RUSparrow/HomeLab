@@ -2,12 +2,28 @@ name: grafana
 
 services:
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana:13.2.1
     container_name: grafana
     ports:
       - "3000:3000"
+    environment:
+      TZ: Europe/Tallinn
+      # Графики встраиваются в Server Monitor (iframe); смотреть их
+      # можно без входа — сайт доступен только из домашней сети.
+      GF_SECURITY_ALLOW_EMBEDDING: "true"
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      GF_AUTH_ANONYMOUS_ORG_NAME: Main Org.
+      GF_USERS_DEFAULT_LANGUAGE: ru-RU
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /var/lib/grafana-dashboards/server.json
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      GF_NEWS_NEWS_FEED_ENABLED: "false"
     volumes:
       - ./data:/var/lib/grafana
+      - ./provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./dashboards:/var/lib/grafana-dashboards:ro
     networks:
       - monitoring
     restart: unless-stopped

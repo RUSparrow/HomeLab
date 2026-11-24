@@ -6,7 +6,7 @@
   <meta name="color-scheme" content="dark">
   <title>Server Monitor</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23131720'/%3E%3Cpath d='M6 20l5-6 5 4 5-8 5 6' fill='none' stroke='%233b82f6' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="/static/css/style.css?v=31">
+  <link rel="stylesheet" href="/static/css/style.css?v=32">
 </head>
 <body class="is-loading">
   <div class="dashboard" id="dashboard">
@@ -83,6 +83,24 @@
       </div>
     </section>
 
+    <section class="section panel" aria-labelledby="charts-title">
+      <div class="panel__head">
+        <h2 class="section__title" id="charts-title">Графики</h2>
+        <div class="charts-tools">
+          <div class="range" role="tablist" aria-label="Дашборд Grafana" id="chart-tabs">
+            <button type="button" class="range__btn is-active" data-dash="server" role="tab">Сервер</button>
+            <button type="button" class="range__btn" data-dash="containers" role="tab">Контейнеры</button>
+            <button type="button" class="range__btn" data-dash="services" role="tab">Сервисы</button>
+            <button type="button" class="range__btn" data-dash="logs" role="tab">Логи</button>
+          </div>
+          <a class="charts-open" id="charts-open" target="_blank" rel="noopener">Открыть в Grafana ↗</a>
+        </div>
+      </div>
+      <div class="charts-frame" id="charts-frame">
+        <p class="charts-placeholder" id="charts-placeholder">Графики загрузятся, когда вы до них прокрутите…</p>
+      </div>
+    </section>
+
     <section class="section panel" aria-labelledby="docker-title">
       <div class="panel__head">
         <h2 class="section__title" id="docker-title">Docker</h2>
@@ -102,6 +120,6 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="/static/js/app.js?v=31"></script>
+  <script src="/static/js/app.js?v=32"></script>
 </body>
 </html>

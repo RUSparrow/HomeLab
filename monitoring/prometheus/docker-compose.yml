@@ -2,27 +2,59 @@ name: prometheus
 
 services:
   prometheus:
-    image: prom/prometheus:latest
+    image: prom/prometheus:v3.14.0
     container_name: prometheus
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--storage.tsdb.path=/prometheus"
+      # История для графиков Grafana: 90 дней, но не больше 5 ГБ
+      - "--storage.tsdb.retention.time=90d"
+      - "--storage.tsdb.retention.size=5GB"
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - ./data:/prometheus
     ports:
       - "9090:9090"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - monitoring
     restart: unless-stopped
 
   node-exporter:
-    image: prom/node-exporter:latest
+    image: prom/node-exporter:v1.12.1
     container_name: node-exporter
+    # Сеть и процессы хоста — иначе видны только интерфейсы самого контейнера
+    network_mode: host
+    pid: host
     command:
       - "--path.rootfs=/host"
+      - "--web.listen-address=:9100"
+      - "--collector.filesystem.mount-points-exclude=^/(dev|proc|sys|run|snap|var/lib/docker|var/snap)($$|/)"
+      - "--collector.netdev.device-exclude=^(lo|veth.*|br-.*|docker.*)$$"
     volumes:
       - /:/host:ro,rslave
+    restart: unless-stopped
+
+  # Нагрузка по каждому контейнеру: CPU, память, сеть, диск
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.55.1
+    container_name: cadvisor
+    command:
+      - "--docker_only=true"
+      - "--housekeeping_interval=30s"
+      - "--store_container_labels=false"
+      - "--whitelisted_container_labels=com.docker.compose.project"
+      - "--disable_metrics=advtcp,cpu_topology,cpuset,hugetlb,memory_numa,percpu,process,referenced_memory,resctrl,sched,tcp,udp"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    devices:
+      - /dev/kmsg
+    privileged: true
     networks:
       - monitoring
     restart: unless-stopped
