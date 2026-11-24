@@ -1,57 +1,45 @@
 # Generated Graphify output
 graphify-out/
+graph.html
 
-# Git internals
+# Git internals / generated wiki
 .git/
+openwiki/
 
-# Minecraft runtime
-minecraft/data/HomeLab/
-minecraft/data/world/
-minecraft/data/world_old/
-minecraft/data/world_nether/
-minecraft/data/world_the_end/
-minecraft/data/logs/
-minecraft/data/libraries/
-minecraft/data/.cache/
-minecraft/data/crash-reports/
-minecraft/data/modernfix/
+# Secrets — никогда не в граф
+.env
+*.env
+**/*.env
 
-# Minecraft generated/runtime files
-minecraft/backups/
+# Runtime data of all services (data/ next to each docker-compose.yml)
+**/data/
+**/backups/
+
+# Minecraft runtime (world, libraries, logs)
+games/minecraft/data/
 
 # Plex runtime
-plex/config/
-plex/transcode/
-plex/cache/
+media/plex/config/
+media/plex/transcode/
+media/plex/cache/
 
-# Monitoring runtime data
-monitoring/grafana/data/
-monitoring/loki/data/
-monitoring/prometheus/data/
-monitoring/alloy/data/
+# ClamAV signatures and reports
+security/clamav/database/
+security/clamav/reports/
 
-# Portainer runtime
-portainer/data/
-
-# Syncthing runtime
-syncthing/data/
-syncthing/config/
-
-# Amnezia private/runtime data and installer
-amnezia/clients/
-amnezia/configs/
-amnezia/installer/
-
-# Old WireGuard runtime/private data
-vpn/wireguard/server/
-vpn/wireguard/peer*/
-vpn/wireguard/wg_confs/
-vpn/duckdns/
+# VPN private/runtime data
+vpn/amnezia/clients/
+vpn/amnezia/configs/
+vpn/amnezia/installer/
+vpn/archive/
+vpn/duckdns/config/
 
 # Installers / binaries not useful for architecture
-tv/
+tools/tv/
 
-# Caches and logs
+# Caches, deps and logs
 **/*.log
 **/__pycache__/
 **/.cache/
+**/node_modules/
+**/.venv/
