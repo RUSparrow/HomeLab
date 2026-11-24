@@ -129,6 +129,8 @@ button, input { font: inherit; color: inherit; }
 }
 .logo-icon svg { width: 19px; height: 19px; }
 
+.nav__links { display: flex; gap: 8px; }
+
 .nav__back {
   padding: 8px 14px;
   border: 1px solid var(--border);
@@ -493,6 +495,8 @@ button, input { font: inherit; color: inherit; }
 @media (max-width: 600px) {
   .container { width: calc(100% - 32px); }
   .nav { min-height: 60px; }
+  .nav__back { padding: 6px 10px; font-size: 0.82rem; }
+  #textcheck-link { display: none; }
   .hero { padding-top: 52px; padding-bottom: 40px; }
   .hero__description { font-size: 0.98rem; }
   .search { gap: 4px; padding: 5px; }

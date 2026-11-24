@@ -9,6 +9,11 @@ const monitorLink = document.getElementById("monitor-link");
 
 let currentSearch = 0;
 
+const textcheckLink = document.getElementById("textcheck-link");
+if (textcheckLink) {
+  textcheckLink.href = `${window.location.protocol}//${window.location.hostname}:8084`;
+}
+
 if (monitorLink) {
   monitorLink.href = `${window.location.protocol}//${window.location.hostname}:8080`;
 }

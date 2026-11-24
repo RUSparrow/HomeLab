@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
-  <link rel="stylesheet" href="/static/css/style.css?v=33">
+  <link rel="stylesheet" href="/static/css/style.css?v=34">
 </head>
 <body class="is-loading">
   <div class="dashboard" id="dashboard">
@@ -21,6 +21,9 @@
       <div class="header__right">
         <a class="icon-link" id="pricefinder-link" href="#" title="PriceFinder" aria-label="Открыть PriceFinder">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg>
+        </a>
+        <a class="icon-link" id="textcheck-link" href="#" title="Проверка текста" aria-label="Открыть проверку текста">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h14M4 12h8M4 17h6"></path><path d="m14 17 2.5 2.5L21 14"></path></svg>
         </a>
         <button class="btn btn--primary" id="update-project" type="button" title="git pull и пересборка панели">Обновить проект</button>
         <div class="conn" id="conn" role="status" aria-live="polite">
@@ -123,6 +126,6 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="/static/js/app.js?v=33"></script>
+  <script src="/static/js/app.js?v=34"></script>
 </body>
 </html>

@@ -25,6 +25,7 @@ DOCKER_DESCRIPTIONS = {
     "duckdns": "Обновление домена DuckDNS",
     "fail2ban-exporter": "Метрики Fail2ban",
     "grafana": "Панели мониторинга",
+    "languagetool": "Проверка орфографии и грамматики",
     "loki": "Хранение и поиск логов",
     "minecraft": "Игровой сервер Minecraft",
     "minecraft-backup": "Резервные копии Minecraft",
@@ -37,6 +38,7 @@ DOCKER_DESCRIPTIONS = {
     "server-monitor": "Панель мониторинга сервера",
     "smartctl-exporter": "Метрики состояния дисков",
     "syncthing": "Синхронизация файлов",
+    "textcheck-api": "Формы слов для проверки текста",
     "website": "Веб-сайт",
     "websites": "Веб-шлюз для сайтов",
 }
@@ -53,6 +55,7 @@ LINK_OVERRIDES = {
     "portainer": ("https://{ip}:9443", None),
     "plex": ("http://{ip}:32400/web", None),
     "server-monitor": ("http://{ip}:8080", None),
+    "languagetool": ("http://{ip}:8084", None),
     "minecraft": ("", GAME_SERVER_ADDRESS),
     "duckdns": ("", DUCKDNS_DOMAIN),
 }

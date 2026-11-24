@@ -1,0 +1,23 @@
+name: textcheck
+
+# Проверка текста: орфография/грамматика (LanguageTool) + формы слов (pymorphy3).
+# Веб-интерфейс отдаёт web-gateway на :8084.
+services:
+  languagetool:
+    image: erikvl87/languagetool:latest
+    container_name: languagetool
+    environment:
+      Java_Xms: 256m
+      Java_Xmx: 1500m
+      langtool_maxTextLength: "50000"
+    restart: unless-stopped
+
+  textcheck-api:
+    build: ./api
+    container_name: textcheck-api
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

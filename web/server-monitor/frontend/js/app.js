@@ -792,6 +792,7 @@ $("update-project").addEventListener("click", async () => {
 });
 
 $("pricefinder-link").href = `${location.protocol}//${location.hostname}:8082`;
+$("textcheck-link").href = `${location.protocol}//${location.hostname}:8084`;
 
 document.querySelectorAll(".range__btn[data-range]").forEach((btn) => {
   btn.addEventListener("click", () => setRange(btn.dataset.range));

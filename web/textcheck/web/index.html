@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0e0e11">
+  <meta name="description" content="Проверка орфографии, грамматики и признаков ИИ-текста">
+  <title>Проверка текста</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%2317181c'/%3E%3Cpath d='M6 8h12M6 12h7M6 16h5' stroke='%23eaeaec' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='m14 16 2 2 4-5' fill='none' stroke='%23fbb26a' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="/css/style.css?v=2">
+</head>
+<body>
+  <header class="header">
+    <nav class="nav container">
+      <a class="nav__logo" href="/">
+        <span class="logo-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M4 7h14M4 12h8M4 17h6"></path><path class="tick" d="m14 17 2.5 2.5L21 14"></path></svg>
+        </span>
+        <span>Проверка текста</span>
+      </a>
+      <div class="nav__links">
+        <a class="nav__link" id="pf-link" href="#">PriceFinder</a>
+        <a class="nav__link" id="monitor-link" href="#">Server Monitor</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container layout">
+    <section class="editor" aria-label="Текст">
+      <div class="toolbar">
+        <label class="select">
+          <span class="visually-hidden">Язык текста</span>
+          <select id="lang">
+            <option value="auto">Язык: автоопределение</option>
+            <option value="ru-RU">Русский</option>
+            <option value="en-US">English</option>
+            <option value="de-DE">Deutsch</option>
+          </select>
+        </label>
+        <span class="toolbar__stats" id="stats">0 слов</span>
+        <div class="toolbar__actions">
+          <button type="button" class="btn" id="edit-btn" hidden>Редактировать</button>
+          <button type="button" class="btn btn--primary" id="check-btn">
+            Проверить <kbd>Ctrl+Enter</kbd>
+          </button>
+        </div>
+      </div>
+
+      <div class="sheet">
+        <textarea id="input" spellcheck="false" placeholder="Вставьте текст: письмо, пост, сообщение. Проверю орфографию, грамматику и признаки того, что текст написал ИИ."></textarea>
+        <div class="doc" id="doc" hidden></div>
+        <div class="sheet__busy" id="busy" hidden><span class="spinner" aria-hidden="true"></span>Проверяю…</div>
+      </div>
+
+      <p class="hint" id="hint">Подчёркнутое можно нажать — появятся исправления. Нажатие на любое русское слово покажет все его формы.</p>
+    </section>
+
+    <aside class="side" aria-label="Итоги проверки">
+      <section class="panel verdict" id="verdict">
+        <h2>Похоже ли на ИИ</h2>
+        <div class="meter" aria-hidden="true"><div class="meter__fill" id="ai-meter"></div></div>
+        <p class="verdict__text" id="ai-verdict">Проверьте текст, чтобы увидеть оценку.</p>
+        <ul class="reasons" id="ai-reasons"></ul>
+        <p class="verdict__note">Это эвристика по типичным оборотам и ритму, а не доказательство.</p>
+      </section>
+
+      <section class="panel">
+        <h2>Найдено</h2>
+        <div class="filters" id="filters">
+          <label class="filter filter--spell"><input type="checkbox" data-cat="spell" checked><span>Орфография</span><b data-count="spell">0</b></label>
+          <label class="filter filter--grammar"><input type="checkbox" data-cat="grammar" checked><span>Грамматика и пунктуация</span><b data-count="grammar">0</b></label>
+          <label class="filter filter--style"><input type="checkbox" data-cat="style" checked><span>Стиль</span><b data-count="style">0</b></label>
+          <label class="filter filter--ai"><input type="checkbox" data-cat="ai" checked><span>Признаки ИИ</span><b data-count="ai">0</b></label>
+          <label class="filter filter--hidden"><input type="checkbox" data-cat="hidden" checked><span>Скрытые символы и подмена букв</span><b data-count="hidden">0</b></label>
+        </div>
+        <div class="side__actions">
+          <button type="button" class="btn btn--block" id="fix-all-btn" disabled>Исправить все опечатки</button>
+          <button type="button" class="btn btn--block" id="clean-btn" disabled>Убрать скрытые символы</button>
+          <button type="button" class="btn btn--block" id="copy-btn">Скопировать текст</button>
+        </div>
+      </section>
+    </aside>
+  </main>
+
+  <div class="pop" id="pop" role="dialog" aria-modal="false" hidden>
+    <p class="pop__title" id="pop-title"></p>
+    <p class="pop__msg" id="pop-msg"></p>
+    <div class="pop__options" id="pop-options"></div>
+    <div class="pop__forms" id="pop-forms" hidden>
+      <p class="pop__sub" id="pop-forms-title">Формы слова</p>
+      <div class="pop__options" id="pop-forms-list"></div>
+    </div>
+    <div class="pop__foot">
+      <button type="button" class="link-btn" id="pop-ignore">Пропустить</button>
+      <button type="button" class="link-btn" id="pop-learn" hidden>Не считать ошибкой</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="/js/aimarks.js?v=1"></script>
+  <script src="/js/app.js?v=1"></script>
+</body>
+</html>
