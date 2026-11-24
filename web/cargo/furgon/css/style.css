@@ -1,0 +1,211 @@
+/* Фургон за час — коробки для переезда, синий скотч и белый фургон */
+:root {
+  --bg: #ffffff;
+  --soft: #f2f4f8;
+  --ink: #1b1e2b;
+  --ink-2: #5b6072;
+  --line: #e1e4ec;
+  --blue: #2a52f4;
+  --blue-dark: #1b3ed0;
+  --blue-soft: #e8edff;
+  --kraft: #c99a62;
+  --kraft-light: #ecd7bb;
+  --head: "Unbounded", system-ui, sans-serif;
+  --body: "Golos Text", system-ui, sans-serif;
+  --r: 22px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 1.03rem/1.6 var(--body); -webkit-font-smoothing: antialiased; }
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+h1, h2, h3 { font-family: var(--head); font-weight: 700; margin: 0; letter-spacing: -0.02em; }
+h2 { font-size: clamp(1.6rem, 3.4vw, 2.4rem); line-height: 1.15; }
+h3 { font-size: 1.05rem; font-weight: 500; line-height: 1.3; }
+p { margin: 0; }
+:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+
+.wrap { width: min(1160px, calc(100% - 40px)); margin-inline: auto; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 54px; padding: 0 26px; border: 0; border-radius: 999px;
+  background: var(--blue); color: #fff; font: 600 1.05rem var(--body); text-decoration: none; cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+.btn:hover { background: var(--blue-dark); }
+.btn:active { transform: scale(0.98); }
+.btn--small { min-height: 44px; padding: 0 18px; font-size: 0.98rem; }
+.btn--light { background: var(--blue-soft); color: var(--blue); }
+.btn--light:hover { background: #d9e1ff; }
+.link { border: 0; background: none; padding: 0; color: var(--blue); font: 500 0.95rem var(--body); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+
+/* ---------- Шапка ---------- */
+.top { position: sticky; top: 0; z-index: 30; background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.top__in { display: flex; align-items: center; gap: 24px; min-height: 72px; }
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 700 0.86rem/1.05 var(--head); }
+.logo__van { width: 46px; height: 32px; }
+.logo__van path { fill: var(--blue); }
+.logo__van circle { fill: #fff; stroke: var(--ink); stroke-width: 3; }
+.nav { display: flex; gap: 26px; margin-left: auto; }
+.nav a { text-decoration: none; color: var(--ink-2); font-weight: 500; }
+.nav a:hover { color: var(--blue); }
+
+/* ---------- Первый экран ---------- */
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 48px; align-items: center; padding-block: 56px 72px; }
+.hero h1 { font-size: clamp(2.1rem, 4.6vw, 3.6rem); line-height: 1.06; }
+.lead { margin-top: 18px; font-size: 1.15rem; color: var(--ink-2); max-width: 44ch; }
+
+.calc { margin-top: 32px; padding: 24px; border-radius: var(--r); background: var(--soft); display: grid; gap: 20px; }
+.calc__label { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; font-weight: 500; }
+.calc__label b { font: 700 1.25rem var(--head); color: var(--blue); }
+.calc input[type="range"] { width: 100%; height: 28px; accent-color: var(--blue); cursor: pointer; }
+.calc__ticks { display: flex; justify-content: space-between; padding: 0 4px; color: var(--ink-2); font-size: 0.8rem; }
+.pills { display: flex; gap: 8px; flex-wrap: wrap; }
+.pills label { flex: 1; min-width: 92px; }
+.pills input { position: absolute; opacity: 0; }
+.pills span { display: block; padding: 11px 10px; border-radius: 999px; background: #fff; border: 2px solid var(--line); text-align: center; font-weight: 500; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
+.pills span:hover { border-color: var(--blue); }
+.pills input:checked + span { background: var(--blue); border-color: var(--blue); color: #fff; }
+.pills input:focus-visible + span { outline: 3px solid var(--blue); outline-offset: 2px; }
+.calc__inline { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
+.stepper { display: flex; align-items: center; gap: 10px; font-weight: 500; }
+.stepper span { margin-right: 4px; }
+.stepper button { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--line); background: #fff; font: 500 1.3rem var(--body); cursor: pointer; }
+.stepper button:hover { border-color: var(--blue); color: var(--blue); }
+.stepper output { min-width: 1.4ch; text-align: center; font: 700 1.2rem var(--head); }
+.check { display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 500; }
+.check input { width: 22px; height: 22px; accent-color: var(--blue); cursor: pointer; }
+.calc__total { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 18px; border-top: 2px dashed var(--line); }
+.calc__total small { display: block; color: var(--ink-2); font-size: 0.86rem; }
+.calc__total b { font: 700 2.3rem/1 var(--head); }
+
+.hero__pic { position: relative; margin: 0; }
+.hero__pic img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: 28% 70%; border-radius: 32px; }
+.tag { position: absolute; padding: 10px 16px; border-radius: 14px; background: var(--kraft-light); color: #5d4223; font: 700 1.05rem var(--head); box-shadow: 0 10px 24px rgba(27, 30, 43, 0.15); }
+.tag::before { content: ""; position: absolute; left: 50%; top: -6px; width: 34px; height: 12px; transform: translateX(-50%) rotate(-3deg); background: rgba(42, 82, 244, 0.55); border-radius: 2px; }
+.tag--a { left: -18px; top: 18%; transform: rotate(-4deg); }
+.tag--b { right: 22px; bottom: -18px; transform: rotate(3deg); }
+
+/* ---------- Что влезет ---------- */
+.fit { background: var(--soft); padding-block: 80px; }
+.fit__head p { margin-top: 12px; color: var(--ink-2); max-width: 52ch; }
+.fit__grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 32px; margin-top: 32px; align-items: start; }
+.items { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.item {
+  position: relative; display: grid; gap: 2px; padding: 14px 16px; text-align: left;
+  border: 2px solid transparent; border-radius: 16px; background: #fff; cursor: pointer;
+  font: 500 1rem var(--body); color: var(--ink);
+  transition: border-color 0.15s, transform 0.1s;
+}
+.item:hover { border-color: var(--blue); }
+.item:active { transform: scale(0.97); }
+.item small { color: var(--ink-2); font-size: 0.82rem; }
+.item.has { border-color: var(--blue); background: var(--blue-soft); }
+.item__count { position: absolute; top: -8px; right: -6px; min-width: 28px; height: 28px; padding: 0 8px; border-radius: 999px; background: var(--blue); color: #fff; font: 700 0.85rem/28px var(--head); text-align: center; }
+.item__minus { position: absolute; bottom: 8px; right: 8px; width: 26px; height: 26px; border-radius: 50%; border: 0; background: #fff; color: var(--ink-2); font-size: 1.1rem; line-height: 1; cursor: pointer; }
+.item__minus:hover { color: var(--blue); }
+
+.load { position: sticky; top: 96px; padding: 24px; border-radius: var(--r); background: #fff; text-align: center; }
+.load__van { width: 100%; max-width: 380px; }
+.load__box { fill: #fff; stroke: var(--ink); stroke-width: 4; }
+.load__fill { fill: var(--kraft); transition: width 0.35s ease, fill 0.2s; }
+.load__fill.is-over { fill: #e5484d; }
+.load__cab { fill: #fff; stroke: var(--ink); stroke-width: 4; stroke-linejoin: round; }
+.load__glass { fill: var(--blue-soft); stroke: var(--ink); stroke-width: 3; }
+.load__wheel { fill: var(--ink); }
+.load__hub { fill: #c9cdd8; }
+.load__num { margin-top: 10px; color: var(--ink-2); }
+.load__num b { font: 700 2.2rem var(--head); color: var(--ink); }
+.load__verdict { margin: 6px 0 14px; font-weight: 600; font-size: 1.08rem; }
+.load__verdict.ok { color: #12805c; }
+.load__verdict.over { color: #d1373c; }
+
+/* ---------- Машина ---------- */
+.van { padding-block: 88px 24px; }
+.van__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 28px; }
+.spec { padding: 22px; border-radius: 18px; border: 2px solid var(--line); }
+.spec b { display: block; font: 700 1.8rem var(--head); color: var(--blue); }
+.spec span { color: var(--ink-2); }
+
+/* ---------- Услуги ---------- */
+.services { padding-block: 72px 24px; }
+.cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 28px; }
+.card { padding: 22px; border-radius: 18px; background: var(--soft); }
+.card h3 { margin-bottom: 8px; }
+.card p { color: var(--ink-2); font-size: 0.97rem; }
+
+/* ---------- Цены ---------- */
+.prices { padding-block: 72px 24px; }
+.price-list { list-style: none; margin: 24px 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px; }
+.price-list li { display: flex; justify-content: space-between; gap: 16px; padding: 16px 0; border-bottom: 2px dashed var(--line); }
+.price-list b { font: 700 1.05rem var(--head); white-space: nowrap; }
+.note { margin-top: 16px; color: var(--ink-2); font-size: 0.93rem; }
+
+/* ---------- Шаги ---------- */
+.steps { padding-block: 72px 24px; }
+.steps ol { list-style: none; counter-reset: s; margin: 24px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.steps li { counter-increment: s; display: grid; gap: 6px; padding: 22px; border-radius: 18px; border: 2px solid var(--line); }
+.steps li::before { content: counter(s); width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; background: var(--blue); color: #fff; font: 700 1.1rem var(--head); }
+.steps b { font-weight: 600; font-size: 1.1rem; }
+.steps span { color: var(--ink-2); }
+
+/* ---------- Вопросы ---------- */
+.faq { padding-block: 72px 96px; }
+.faq > * { max-width: 820px; }
+.faq h2 { margin-bottom: 16px; }
+details { border-radius: 16px; background: var(--soft); margin-top: 10px; }
+summary { list-style: none; cursor: pointer; padding: 18px 56px 18px 22px; position: relative; font-weight: 600; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; position: absolute; right: 18px; top: 50%; transform: translateY(-50%); width: 30px; height: 30px; border-radius: 50%; background: #fff; display: grid; place-items: center; font-size: 1.3rem; color: var(--blue); transition: transform 0.2s; }
+details[open] summary::after { transform: translateY(-50%) rotate(45deg); }
+details p { padding: 0 22px 20px; color: var(--ink-2); }
+
+/* ---------- Подвал ---------- */
+.foot { background: var(--ink); color: rgba(255, 255, 255, 0.78); padding-block: 40px; }
+.foot__in { display: flex; flex-wrap: wrap; gap: 24px 48px; align-items: center; justify-content: space-between; }
+.foot b { font: 700 1.1rem var(--head); color: #fff; }
+.foot__links { display: flex; gap: 20px; font-weight: 600; color: #fff; }
+.foot__credit { flex-basis: 100%; font-size: 0.8rem; color: rgba(255, 255, 255, 0.5); }
+
+.dock { display: none; }
+
+@media (max-width: 980px) {
+  .nav { display: none; }
+  .top .btn--small { margin-left: auto; }
+  .hero { grid-template-columns: 1fr; gap: 32px; padding-top: 32px; }
+  .hero__pic { order: -1; }
+  .hero__pic img { aspect-ratio: 16 / 10; border-radius: 24px; }
+  .fit__grid { grid-template-columns: 1fr; }
+  .load { position: static; order: -1; }
+  .cards { grid-template-columns: 1fr 1fr; }
+  .van__grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 600px) {
+  .wrap { width: calc(100% - 32px); }
+  .top__in { min-height: 62px; }
+  .top .btn--small { display: none; }
+  .tag--a { left: 10px; }
+  .calc { padding: 18px; margin-top: 24px; }
+  .calc__total b { font-size: 1.9rem; }
+  .cards, .steps ol, .price-list { grid-template-columns: 1fr; }
+  .van__grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .spec { padding: 16px; }
+  .spec b { font-size: 1.35rem; }
+  .items { grid-template-columns: 1fr 1fr; }
+  .fit { padding-block: 56px; }
+  .foot { padding-bottom: 104px; }
+  .dock {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+    background: rgba(255, 255, 255, 0.94); backdrop-filter: blur(8px); border-top: 1px solid var(--line);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; }
+}

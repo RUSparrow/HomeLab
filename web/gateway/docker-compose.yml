@@ -10,11 +10,15 @@ services:
       - "8082:8082"
       - "8083:8083"
       - "8084:8084"
+      - "8085:8085"
+      - "8086:8086"
+      - "8087:8087"
     volumes:
       - ../server-monitor/frontend:/sites/server-monitor:ro
       - ../pricefinder/web:/sites/pricefinder:ro
       - ../business-card:/sites/business-card:ro
       - ../textcheck/web:/sites/textcheck:ro
+      - ../cargo:/sites/cargo:ro
       - ../../graph.html:/usr/share/nginx/html/graph.html:ro
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
     networks:

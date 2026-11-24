@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0e6b43">
+  <meta name="description" content="Перевозки фурой Mercedes-Benz Actros из Эстонии по Балтии и Европе: полная загрузка и догруз, 33 паллеты, до 24 тонн.">
+  <title>Белая линия — фура по Балтии и Европе</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230e6b43'/%3E%3Crect x='3' y='3' width='26' height='26' rx='4' fill='none' stroke='white' stroke-width='2'/%3E%3Cpath d='M16 7v18' stroke='white' stroke-width='3' stroke-dasharray='4 3'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Sans+Extra+Condensed:wght@600;800&family=Fira+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="css/style.css?v=1">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap top__in">
+      <a class="logo" href="#">
+        <span class="logo__sign" aria-hidden="true"><i></i></span>
+        <span class="logo__name">Белая линия</span>
+      </a>
+      <nav class="nav" aria-label="Разделы">
+        <a href="#truck">Машина</a>
+        <a href="#routes">Направления</a>
+        <a href="#prices">Цены</a>
+        <a href="#faq">Вопросы</a>
+      </nav>
+      <a class="top__phone" href="tel:+37250000101">+372 5000 0101</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <img class="hero__img" src="img/actros.jpg" srcset="img/actros-900.jpg 900w, img/actros.jpg 1800w" sizes="100vw" alt="Белый тягач Mercedes-Benz Actros с полуприцепом на трассе">
+      <div class="wrap hero__in">
+        <div class="hero__text">
+          <h1>Фура до 24 тонн из Эстонии в Балтию и Европу</h1>
+          <p>Mercedes-Benz Actros с тентованным полуприцепом 13,6 м. Возим полной машиной или догрузом — от одной паллеты.</p>
+          <div class="hero__cta">
+            <a class="btn btn--sign" href="tel:+37250000101">Позвонить диспетчеру</a>
+            <a class="btn btn--ghost" data-wa href="#">Написать в WhatsApp</a>
+          </div>
+        </div>
+
+        <form class="calc" id="calc" aria-labelledby="calc-title">
+          <h2 id="calc-title" class="calc__title">Посчитать рейс</h2>
+          <div class="calc__row">
+            <label>Откуда
+              <select id="from">
+                <option value="tallinn">Таллинн</option>
+                <option value="tartu">Тарту</option>
+                <option value="parnu">Пярну</option>
+                <option value="narva">Нарва</option>
+              </select>
+            </label>
+            <label>Куда
+              <select id="to"></select>
+            </label>
+          </div>
+          <fieldset class="seg" id="load">
+            <legend>Загрузка</legend>
+            <label><input type="radio" name="load" value="full" checked><span>Вся фура</span></label>
+            <label><input type="radio" name="load" value="part"><span>Догруз</span></label>
+          </fieldset>
+          <label class="calc__pallets" id="pallets-wrap" hidden>Паллет: <b id="pallets-val">6</b>
+            <input type="range" id="pallets" min="1" max="32" value="6">
+          </label>
+
+          <div class="sign" aria-live="polite">
+            <div class="sign__route"><span id="r-from">Таллинн</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m-5-6 6 6-6 6"/></svg><span id="r-to">Рига</span></div>
+            <div class="sign__meta"><span id="r-km">310 км</span><span id="r-days">1 день в пути</span></div>
+            <div class="sign__price">от <b id="r-price">620</b> €</div>
+          </div>
+          <p class="calc__note">Ориентир без НДС. Точную цену диспетчер назовёт за 15 минут.</p>
+          <button class="btn btn--sign btn--wide" type="submit">Отправить заявку в WhatsApp</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="truck wrap" id="truck">
+      <div class="truck__head">
+        <h2>Одна машина, которую мы знаем до болта</h2>
+        <p>Стандартная еврофура: в неё помещается всё, что помещается в любую другую тентованную фуру в Европе.</p>
+      </div>
+      <dl class="plate">
+        <div><dt>Тягач</dt><dd>Mercedes-Benz Actros L, Euro 6</dd></div>
+        <div><dt>Полуприцеп</dt><dd>Тент 13,6 × 2,45 × 2,7 м</dd></div>
+        <div><dt>Объём</dt><dd>86 м³</dd></div>
+        <div><dt>Паллеты</dt><dd>33 европаллеты</dd></div>
+        <div><dt>Масса груза</dt><dd>до 24 т</dd></div>
+        <div><dt>Погрузка</dt><dd>Сзади, сбоку и сверху — тент снимается</dd></div>
+        <div><dt>Крепление</dt><dd>24 ремня, борта, угловые</dd></div>
+        <div><dt>Контроль</dt><dd>GPS-ссылка на машину в пути</dd></div>
+      </dl>
+    </section>
+
+    <section class="routes" id="routes">
+      <div class="wrap routes__in">
+        <div class="routes__head">
+          <h2>Куда ездим регулярно</h2>
+          <p>Нажмите на город — калькулятор посчитает рейс из Таллинна.</p>
+        </div>
+        <ol class="road" id="road"></ol>
+      </div>
+    </section>
+
+    <section class="cargo wrap">
+      <div class="cargo__col">
+        <h2>Возим</h2>
+        <ul class="ticks">
+          <li>Паллеты и коробки со склада</li>
+          <li>Стройматериалы: плиты, утеплитель, металл</li>
+          <li>Оборудование и станки до 24 т</li>
+          <li>Мебель и товары на экспорт</li>
+          <li>Длинномеры до 13,5 м</li>
+        </ul>
+      </div>
+      <div class="cargo__col cargo__col--no">
+        <h2>Не возим</h2>
+        <ul class="crosses">
+          <li>Опасные грузы по ADR</li>
+          <li>Продукты, которым нужен холод</li>
+          <li>Скот и живых животных</li>
+        </ul>
+        <p class="muted">Для таких грузов подскажем проверенных перевозчиков.</p>
+      </div>
+    </section>
+
+    <section class="prices wrap" id="prices">
+      <h2>Цены</h2>
+      <div class="table">
+        <div class="table__row"><span>Полная фура по Балтии</span><b>от 1,45 € за км</b></div>
+        <div class="table__row"><span>Минимальный заказ</span><b>450 €</b></div>
+        <div class="table__row"><span>Догруз</span><b>от 0,07 € за км за паллету</b></div>
+        <div class="table__row"><span>Паром Таллинн — Хельсинки</span><b>+280 €</b></div>
+        <div class="table__row"><span>Простой сверх 24 часов на погрузке</span><b>150 € в сутки</b></div>
+      </div>
+      <p class="muted">Цены без НДС. Работаем с компаниями и частными лицами, выставляем счёт.</p>
+    </section>
+
+    <section class="steps wrap">
+      <h2>Как заказать рейс</h2>
+      <ol class="steps__list">
+        <li><b>Заявка</b><span>Звонок или сообщение: откуда, куда, что и когда.</span></li>
+        <li><b>Цена и договор</b><span>Фиксируем цену и дату погрузки, высылаем заявку-договор.</span></li>
+        <li><b>Рейс</b><span>Присылаем ссылку на машину и CMR после выгрузки.</span></li>
+      </ol>
+    </section>
+
+    <section class="faq wrap" id="faq">
+      <h2>Частые вопросы</h2>
+      <details><summary>Застрахован ли груз?</summary><p>Да, ответственность перевозчика застрахована по конвенции CMR. Для дорогого груза оформим дополнительную страховку на полную стоимость.</p></details>
+      <details><summary>Какие документы нужны?</summary><p>По ЕС достаточно счёта или накладной на груз, CMR оформляем сами. Для экспорта за пределы ЕС понадобится таможенная декларация — подскажем брокера.</p></details>
+      <details><summary>Как быстро подадите машину?</summary><p>По Эстонии обычно на следующий рабочий день. Международный рейс планируем за 2–3 дня.</p></details>
+      <details><summary>Как оплатить?</summary><p>Компаниям — по счёту после выгрузки. Частным лицам — 30 % предоплаты, остальное после доставки.</p></details>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap foot__in">
+      <div>
+        <b>Белая линия</b>
+        <p>Таллинн · <a href="tel:+37250000101">+372 5000 0101</a> · <a href="mailto:info@example.com">info@example.com</a></p>
+      </div>
+      <p class="foot__credit">Фото: Kotivalo, <a href="https://commons.wikimedia.org/wiki/File:White_MB_Actros_L_on_road_E18.jpg">Wikimedia Commons</a>, CC BY-SA 4.0</p>
+    </div>
+  </footer>
+
+  <div class="dock">
+    <a class="btn btn--sign" href="tel:+37250000101">Позвонить</a>
+    <a class="btn btn--ghost-dark" data-wa href="#">WhatsApp</a>
+  </div>
+
+  <script src="js/app.js?v=1"></script>
+</body>
+</html>
