@@ -19,7 +19,8 @@ services:
       - ../business-card:/sites/business-card:ro
       - ../textcheck/web:/sites/textcheck:ro
       - ../cargo:/sites/cargo:ro
-      - ../../graph.html:/usr/share/nginx/html/graph.html:ro
+      - ./../graph:/sites/graph:ro
+      - ../../graphify-out:/sites/graph-data:ro
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
     networks:
       - server-monitor

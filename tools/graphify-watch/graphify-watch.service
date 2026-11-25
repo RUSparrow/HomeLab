@@ -1,0 +1,14 @@
+[Unit]
+Description=graphify: пересборка графа HomeLab при изменении кода
+After=default.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/HomeLab
+ExecStart=%h/.local/bin/graphify watch %h/HomeLab
+Restart=always
+RestartSec=10
+Nice=10
+
+[Install]
+WantedBy=default.target

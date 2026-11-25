@@ -1,45 +1,6 @@
-# Generated Graphify output
-graphify-out/
-graph.html
-
-# Git internals / generated wiki
-.git/
-openwiki/
-
-# Secrets — никогда не в граф
-.env
-*.env
-**/*.env
-
-# Runtime data of all services (data/ next to each docker-compose.yml)
-**/data/
-**/backups/
-
-# Minecraft runtime (world, libraries, logs)
-games/minecraft/data/
-
-# Plex runtime
-media/plex/config/
-media/plex/transcode/
-media/plex/cache/
-
-# ClamAV signatures and reports
-security/clamav/database/
-security/clamav/reports/
-
-# VPN private/runtime data
-vpn/amnezia/clients/
-vpn/amnezia/configs/
-vpn/amnezia/installer/
-vpn/archive/
-vpn/duckdns/config/
-
-# Installers / binaries not useful for architecture
-tools/tv/
-
-# Caches, deps and logs
-**/*.log
-**/__pycache__/
-**/.cache/
-**/node_modules/
-**/.venv/
+# Чужие библиотеки — не наш код, только раздувают граф
+*.min.js
+web/cargo/shared/OrbitControls.js
+web/graph/vendor/
+# Данные игровых серверов — не конфигурация HomeLab
+games/*/data/

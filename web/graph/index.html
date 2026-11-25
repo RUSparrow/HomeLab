@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0e0e11">
+  <title>Граф HomeLab</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2317181c'/%3E%3Cpath d='M9 22 16 9l7 13zM9 22h14' fill='none' stroke='%23878b91' stroke-width='1.6'/%3E%3Ccircle cx='16' cy='9' r='3.4' fill='%23fbb26a'/%3E%3Ccircle cx='9' cy='22' r='2.6' fill='%23eaeaec'/%3E%3Ccircle cx='23' cy='22' r='2.6' fill='%23eaeaec'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="css/style.css?v=1">
+</head>
+<body>
+  <div id="graph" aria-label="Трёхмерный граф кода HomeLab"></div>
+
+  <header class="panel head">
+    <div class="head__title">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M9 22 16 9l7 13zM9 22h14" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="9" r="3.4" class="hub"/><circle cx="9" cy="22" r="2.6"/><circle cx="23" cy="22" r="2.6"/></svg>
+      <h1>Граф HomeLab</h1>
+    </div>
+    <p class="live" id="live"><span class="live__dot"></span><span id="live-text">Загружаю граф…</span></p>
+    <dl class="stats">
+      <div><dt>Узлов</dt><dd id="s-nodes">—</dd></div>
+      <div><dt>Связей</dt><dd id="s-links">—</dd></div>
+      <div><dt>Файлов</dt><dd id="s-files">—</dd></div>
+    </dl>
+    <label class="search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg>
+      <input id="search" type="search" placeholder="Найти функцию, файл, заметку…" autocomplete="off" aria-label="Поиск по графу">
+    </label>
+    <ul class="results" id="results" role="listbox" hidden></ul>
+  </header>
+
+  <section class="panel legend" aria-label="Проекты">
+    <div class="legend__head">
+      <div class="seg" role="radiogroup" aria-label="Чем раскрашивать">
+        <button type="button" data-color="project" aria-pressed="true">Проекты</button>
+        <button type="button" data-color="community" aria-pressed="false">Сообщества</button>
+      </div>
+      <button type="button" class="link" id="show-all" hidden>Показать всё</button>
+    </div>
+    <ul class="legend__list" id="legend"></ul>
+  </section>
+
+  <aside class="panel info" id="info" hidden aria-live="polite">
+    <button type="button" class="info__close" id="info-close" aria-label="Закрыть">×</button>
+    <p class="info__kind" id="i-kind"></p>
+    <h2 id="i-title"></h2>
+    <p class="info__file" id="i-file"></p>
+    <dl class="info__facts">
+      <div><dt>Проект</dt><dd id="i-project"></dd></div>
+      <div><dt>Связей</dt><dd id="i-degree"></dd></div>
+    </dl>
+    <div id="i-links"></div>
+  </aside>
+
+  <div class="toolbar panel" role="toolbar" aria-label="Вид">
+    <button type="button" id="t-rotate" aria-pressed="true" title="Медленное вращение">Вращение</button>
+    <button type="button" id="t-flow" aria-pressed="true" title="Бегущие точки по связям">Поток</button>
+    <button type="button" id="t-labels" aria-pressed="false" title="Подписи главных узлов">Подписи</button>
+    <button type="button" id="t-fit" title="Показать весь граф">Весь граф</button>
+  </div>
+
+  <ol class="feed" id="feed" aria-live="polite"></ol>
+
+  <a class="classic" href="/classic" title="Стандартная страница graphify">Классический вид</a>
+
+  <script src="vendor/3d-force-graph.min.js"></script>
+  <script type="module" src="js/app.js?v=4"></script>
+</body>
+</html>
