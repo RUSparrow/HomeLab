@@ -89,9 +89,9 @@ const P = (id, w, d, h, kg, stack = true, tilt = false) => ({ id, w, d, h, kg, s
 const planner = mountPlanner($("planner"), {
   lang: i18n.lang,
   vehicle: {
-    L: 1360, W: 245, H: 270, payload: 24000, deck: 120, wheel: 52, ldm: true,
-    axles: [-190, 150, 1000, 1130, 1260],
-    cab: { l: 2.4, w: 2.5, h: 2.9, y: 0.8 },
+    // Внутренние размеры еврофуры: 13,6 × 2,48 × 2,7 м; паллеты ставим с зазором 1 см
+    kind: "semi", L: 1360, W: 248, H: 270, payload: 24000, deck: 120, front: 3.4,
+    clearance: 1, ldm: true,
   },
   colors: {
     body: 0xf4f5f2, edge: 0x15191d, floor: 0x8a8f94, cab: 0xf7f7f5,

@@ -15,16 +15,14 @@ const P = (id, w, d, h, kg, stack, tilt) => ({ id, w, d, h, kg, stack, tilt, nam
 const planner = mountPlanner($("planner"), {
   lang: i18n.lang,
   vehicle: {
-    L: 420, W: 210, H: 220, payload: 1200, deck: 90, wheel: 36,
-    axles: [-140, 280],
-    cab: { l: 1.9, w: 2.0, h: 2.0, y: 0.55 },
+    kind: "tent", L: 420, W: 210, H: 220, payload: 1200, deck: 90, front: 2.45, clearance: 1,
   },
   colors: {
-    body: 0xd9dde1, edge: 0x2a3036, floor: 0x9a8f80, cab: 0xf6f7f8,
+    body: 0xd9dde1, edge: 0x2a3036, floor: 0x9a8f80, cab: 0xf7f8f9,
     cargo: [0xd9b682, 0xf08a24, 0x7d8a96, 0xc79b63, 0x4f6d7a, 0xa3b18a],
   },
   presets: [
-    P("euro", 120, 80, 120, 400, true, false), P("fin", 120, 100, 120, 450, true, false),
+    P("euro", 120, 80, 120, 140, true, false), P("fin", 120, 100, 120, 160, true, false),
     P("bag", 90, 90, 100, 1000, false, false), P("board", 420, 60, 40, 300, true, false),
     P("roll", 120, 120, 100, 150, false, false), P("box", 60, 40, 40, 15, true, true),
   ],

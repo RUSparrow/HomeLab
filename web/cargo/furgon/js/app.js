@@ -41,9 +41,9 @@ const P = (id, w, d, h, kg, stack, tilt) => ({ id, w, d, h, kg, stack, tilt, nam
 const planner = mountPlanner($("planner"), {
   lang: i18n.lang,
   vehicle: {
-    L: 370, W: 187, H: 193, payload: 1400, deck: 55, wheel: 34,
-    axles: [-120, 290],
-    cab: { l: 1.7, w: 2.0, h: 1.95, y: 0.5 },
+    // Boxer L3H2: 3,7 × 1,87 × 1,93 м; между колёсными арками 1,42 м
+    kind: "van", L: 370, W: 187, H: 193, payload: 1400, deck: 55, front: 2.3,
+    arches: [{ x: 200, z: 0, l: 90, w: 22, h: 30 }, { x: 200, z: 165, l: 90, w: 22, h: 30 }],
   },
   colors: {
     body: 0xffffff, edge: 0x1b1e2b, floor: 0xb8bcc8, cab: 0xffffff,
@@ -56,7 +56,7 @@ const planner = mountPlanner($("planner"), {
     P("table", 120, 80, 75, 30, true, true), P("chair", 90, 85, 90, 30, false, false),
     P("bike", 175, 60, 100, 15, false, true), P("bag", 60, 40, 30, 8, true, true),
   ],
-  start: [["sofa", 1], ["ward", 1], ["fridge", 1], ["washer", 1], ["box", 14]],
+  start: [["sofa", 1], ["ward", 1], ["fridge", 1], ["washer", 1], ["box", 10]],
 });
 
 // ---------- Заявка ----------

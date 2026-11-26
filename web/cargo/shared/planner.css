@@ -138,3 +138,15 @@
 @media (prefers-reduced-motion: reduce) {
   .lang__menu, .pbar__track span { animation: none; transition: none; }
 }
+
+/* Двери и раскладка */
+.planner__doors { margin-left: auto; }
+.planner__views .planner__doors[aria-pressed="true"] { background: var(--pl-accent); border-color: var(--pl-accent); color: var(--pl-on-accent, #fff); }
+.planner__orient { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding-top: 4px; font-size: 0.9rem; color: var(--pl-muted); }
+.planner__orient span { margin-right: 4px; }
+.planner__orient button {
+  padding: 6px 12px; border: 1.5px solid var(--pl-line); border-radius: 999px;
+  background: var(--pl-bg); color: var(--pl-ink); font: inherit; font-weight: 500; cursor: pointer;
+}
+.planner__orient button[aria-pressed="true"] { border-color: var(--pl-accent); color: var(--pl-accent); }
+@media (max-width: 600px) { .planner__doors { margin-left: 0; } }

@@ -3,6 +3,7 @@
 // длине, ширине, высоте и весу.
 import * as THREE from "./three.module.min.js";
 import { OrbitControls } from "./OrbitControls.js";
+import { buildVehicle } from "./vehicles.js";
 
 const STR = {
   ru: {
@@ -16,6 +17,7 @@ const STR = {
     overweight: "Перегруз: {kg} кг сверх нормы", hint: "Крутите модель мышью или пальцем. Колесо — приблизить.",
     tooBig: "Это место больше кузова по одному из размеров", errDims: "Укажите длину, ширину и высоту",
     m: "м", t: "т", kgU: "кг",
+    orient: "Плоские места ставим:", oAuto: "Авто", oAlong: "Вдоль", oAcross: "Поперёк", doorsRear: "Открыть ворота", doorsRearClose: "Закрыть ворота", doorsVan: "Открыть двери", doorsVanClose: "Закрыть двери", tarpOpen: "Открыть тент", tarpOpenClose: "Закрыть тент",
   },
   et: {
     presets: "Lisa ühe klõpsuga", custom: "Oma koorem, cm", len: "Pikkus", wid: "Laius", hei: "Kõrgus",
@@ -28,6 +30,7 @@ const STR = {
     overweight: "Ülekaal: {kg} kg üle lubatu", hint: "Pööra mudelit hiire või sõrmega. Ratas — suumi.",
     tooBig: "See koorem on mõnes mõõdus kastist suurem", errDims: "Sisesta pikkus, laius ja kõrgus",
     m: "m", t: "t", kgU: "kg",
+    orient: "Alused paigutame:", oAuto: "Auto", oAlong: "Pikuti", oAcross: "Põiki", doorsRear: "Ava uksed", doorsRearClose: "Sulge uksed", doorsVan: "Ava uksed", doorsVanClose: "Sulge uksed", tarpOpen: "Ava kardin", tarpOpenClose: "Sulge kardin",
   },
   en: {
     presets: "Add with one tap", custom: "Your cargo, cm", len: "Length", wid: "Width", hei: "Height",
@@ -40,6 +43,7 @@ const STR = {
     overweight: "Overweight by {kg} kg", hint: "Drag to rotate the model. Scroll or pinch to zoom.",
     tooBig: "This item is larger than the cargo body in one dimension", errDims: "Enter length, width and height",
     m: "m", t: "t", kgU: "kg",
+    orient: "Place pallets:", oAuto: "Auto", oAlong: "Lengthwise", oAcross: "Crosswise", doorsRear: "Open doors", doorsRearClose: "Close doors", doorsVan: "Open doors", doorsVanClose: "Close doors", tarpOpen: "Open curtain", tarpOpenClose: "Close curtain",
   },
   fi: {
     presets: "Lisää yhdellä napautuksella", custom: "Oma kuorma, cm", len: "Pituus", wid: "Leveys", hei: "Korkeus",
@@ -52,6 +56,7 @@ const STR = {
     overweight: "Ylipaino: {kg} kg yli sallitun", hint: "Pyöritä mallia hiirellä tai sormella. Rulla — zoomaa.",
     tooBig: "Kuorma on jossain mitassa lavaa suurempi", errDims: "Syötä pituus, leveys ja korkeus",
     m: "m", t: "t", kgU: "kg",
+    orient: "Lavat asetetaan:", oAuto: "Auto", oAlong: "Pitkittäin", oAcross: "Poikittain", doorsRear: "Avaa ovet", doorsRearClose: "Sulje ovet", doorsVan: "Avaa ovet", doorsVanClose: "Sulje ovet", tarpOpen: "Avaa pressu", tarpOpenClose: "Sulje pressu",
   },
   de: {
     presets: "Mit einem Tipp hinzufügen", custom: "Eigene Ladung, cm", len: "Länge", wid: "Breite", hei: "Höhe",
@@ -64,17 +69,35 @@ const STR = {
     overweight: "Überladen um {kg} kg", hint: "Modell mit Maus oder Finger drehen. Mausrad — Zoom.",
     tooBig: "Dieses Stück ist in einer Richtung größer als der Laderaum", errDims: "Länge, Breite und Höhe angeben",
     m: "m", t: "t", kgU: "kg",
+    orient: "Paletten stellen:", oAuto: "Auto", oAlong: "Längs", oAcross: "Quer", doorsRear: "Türen öffnen", doorsRearClose: "Türen schließen", doorsVan: "Türen öffnen", doorsVanClose: "Türen schließen", tarpOpen: "Plane öffnen", tarpOpenClose: "Plane schließen",
   },
 };
 
 // ---------------------------------------------------------------------------
 // Укладка: «крайние точки» — первая подходящая точка ближе к кабине,
 // сначала по полу поперёк, потом вверх, затем к дверям.
+// clearance — зазор между местами (см): паллеты никогда не встают вплотную.
+// orient — как ставить нештабелируемые «плоские» места: along (длинной
+// стороной вдоль кузова), across (поперёк), free, auto (лучший из трёх).
+// obstacles — то, что занимает пол (колёсные арки фургона).
 // ---------------------------------------------------------------------------
-export function pack(container, pieces) {
+export function pack(container, pieces, opts = {}) {
+  if ((opts.orient || "auto") !== "auto") return packOnce(container, pieces, opts);
+  const tries = ["along", "across", "free"].map((o) => packOnce(container, pieces, { ...opts, orient: o }));
+  tries.sort((a, b) => a.unplaced.length - b.unplaced.length || a.usedLen - b.usedLen);
+  return tries[0];
+}
+
+function packOnce(container, pieces, { clearance = 0, orient = "free", obstacles = [] } = {}) {
   const { L, W, H } = container;
-  const placed = [], unplaced = [];
+  const placed = obstacles.map((o) => ({ x: o.x, y: o.z, z: 0, l: o.l, w: o.w, h: o.h, stack: true, obstacle: true }));
+  const unplaced = [];
   let points = [{ x: 0, y: 0, z: 0 }];
+  for (const o of placed) {
+    points.push({ x: o.x + o.l, y: o.y, z: 0 }, { x: o.x, y: o.y + o.w, z: 0 }, { x: o.x, y: o.y, z: o.h });
+    // Вдоль препятствия тоже можно ставить: от передней стенки рядом с аркой
+    points.push({ x: 0, y: o.y + o.w, z: 0 }, { x: 0, y: Math.max(0, o.y), z: 0 });
+  }
 
   const order = [...pieces].sort((a, b) =>
     b.w * b.d * b.h - a.w * a.d * a.h || Math.max(b.w, b.d) - Math.max(a.w, a.d));
@@ -99,14 +122,20 @@ export function pack(container, pieces) {
 
   for (const piece of order) {
     const { w, d, h } = piece;
-    const orients = [[w, d, h], [d, w, h]];
+    let orients = [[w, d, h], [d, w, h]];
+    if (!piece.tilt && w !== d) {
+      if (orient === "along") orients = [[Math.max(w, d), Math.min(w, d), h]];
+      if (orient === "across") orients = [[Math.min(w, d), Math.max(w, d), h]];
+    }
     if (piece.tilt) orients.push([w, h, d], [h, w, d], [d, h, w], [h, d, w]);
+    // Зазор — только по полу; по высоте места стоят друг на друге
+    orients = orients.map(([l, ww, hh]) => [l + clearance, ww + clearance, hh]);
     points.sort((a, b) => a.x - b.x || a.z - b.z || a.y - b.y);
 
     let best = null;
     for (const pt of points) {
       for (const [l, ww, hh] of orients) {
-        if (pt.x + l > L || pt.y + ww > W || pt.z + hh > H) continue;
+        if (pt.x + l > L + clearance || pt.y + ww > W + clearance || pt.z + hh > H) continue;
         if (overlaps(pt.x, pt.y, pt.z, l, ww, hh)) continue;
         if (!supported(pt.x, pt.y, pt.z, l, ww)) continue;
         const score = pt.x + l;               // меньше расходуем длину кузова
@@ -116,13 +145,15 @@ export function pack(container, pieces) {
     }
 
     if (!best) { unplaced.push(piece); continue; }
-    const box = { x: best.x, y: best.y, z: best.z, l: best.l, w: best.w, h: best.h, piece, stack: piece.stack };
+    const box = { x: best.x, y: best.y, z: best.z, l: best.l, w: best.w, h: best.h, cl: clearance, piece, stack: piece.stack };
     placed.push(box);
     points.push({ x: box.x + box.l, y: box.y, z: box.z }, { x: box.x, y: box.y + box.w, z: box.z }, { x: box.x, y: box.y, z: box.z + box.h });
     points = points.filter((p) => p.x < L && p.y < W && p.z < H &&
       !placed.some((q) => p.x >= q.x && p.x < q.x + q.l && p.y >= q.y && p.y < q.y + q.w && p.z >= q.z && p.z < q.z + q.h));
   }
-  return { placed, unplaced };
+  const cargo = placed.filter((p) => !p.obstacle);
+  const usedLen = Math.max(0, ...cargo.map((b) => b.x + b.l));
+  return { placed: cargo, unplaced, usedLen };
 }
 
 // ---------------------------------------------------------------------------
@@ -132,6 +163,7 @@ export function mountPlanner(root, opts) {
   const { vehicle, presets, colors, start = [], maxPieces = 400 } = opts;
   let lang = opts.lang || "ru";
   let lines = [];                 // { key, name(fn|string), w, d, h, qty, kg, stack, tilt, color }
+  let orient = "auto";
   let nextKey = 1;
   const s = (k, vars = {}) => (STR[lang]?.[k] ?? STR.ru[k]).replace(/\{(\w+)\}/g, (_, v) => vars[v]);
   const presetName = (p) => (typeof p.name === "function" ? p.name(lang) : p.name);
@@ -165,11 +197,18 @@ export function mountPlanner(root, opts) {
         <button type="button" data-view="side" data-s="vside"></button>
         <button type="button" data-view="top" data-s="vtop"></button>
         <button type="button" data-view="rear" data-s="vrear"></button>
+        <button type="button" class="planner__doors" aria-pressed="false"></button>
       </div>
       <div class="planner__canvas"></div>
       <p class="planner__hint" data-s="hint"></p>
       <div class="planner__status" role="status" aria-live="polite"></div>
       <div class="planner__bars"></div>
+      <div class="planner__orient" role="group">
+        <span data-s="orient"></span>
+        <button type="button" data-orient="auto" aria-pressed="true" data-s="oAuto"></button>
+        <button type="button" data-orient="along" aria-pressed="false" data-s="oAlong"></button>
+        <button type="button" data-orient="across" aria-pressed="false" data-s="oAcross"></button>
+      </div>
     </div>`;
 
   const $ = (sel) => root.querySelector(sel);
@@ -197,62 +236,23 @@ export function mountPlanner(root, opts) {
   const deckY = vehicle.deck / 100;     // высота пола кузова над землёй
   const center = new THREE.Vector3(L / 2, deckY + H / 2, W / 2);
 
-  buildVehicle();
+  const veh = buildVehicle(vehicle, colors);
+  scene.add(veh.group);
+  // Мягкая тень под машиной
+  const front = vehicle.front;
+  const shadow = new THREE.Mesh(new THREE.PlaneGeometry(L + front + 2.5, W + 2.2), new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.08, depthWrite: false }));
+  shadow.rotation.x = -Math.PI / 2;
+  shadow.position.set((L - front) / 2, 0.002, W / 2);
+  scene.add(shadow);
   const cargoGroup = new THREE.Group();
   cargoGroup.position.y = deckY;
   scene.add(cargoGroup);
 
   function mat(color, extra = {}) { return new THREE.MeshStandardMaterial({ color, roughness: 0.75, metalness: 0.05, ...extra }); }
 
-  function buildVehicle() {
-    const g = new THREE.Group();
-    const body = colors.body;
-    // Пол кузова
-    const floor = new THREE.Mesh(new THREE.BoxGeometry(L, 0.08, W), mat(colors.floor));
-    floor.position.set(L / 2, deckY - 0.04, W / 2);
-    g.add(floor);
-    // Стенки: прозрачные, чтобы видеть груз, с контуром
-    const shell = new THREE.Mesh(new THREE.BoxGeometry(L, H, W), mat(body, { transparent: true, opacity: 0.12, depthWrite: false, side: THREE.DoubleSide }));
-    shell.position.copy(center);
-    g.add(shell);
-    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(L, H, W)), new THREE.LineBasicMaterial({ color: colors.edge }));
-    edges.position.copy(center);
-    g.add(edges);
-    // Передняя стенка — плотная (за ней кабина)
-    const front = new THREE.Mesh(new THREE.BoxGeometry(0.04, H, W), mat(body, { transparent: true, opacity: 0.5 }));
-    front.position.set(0.02, deckY + H / 2, W / 2);
-    g.add(front);
-    // Кабина
-    const cab = vehicle.cab;
-    const cabMesh = new THREE.Mesh(new THREE.BoxGeometry(cab.l, cab.h, cab.w), mat(colors.cab));
-    cabMesh.position.set(-cab.l / 2 - 0.1, cab.y + cab.h / 2, W / 2);
-    g.add(cabMesh);
-    const glass = new THREE.Mesh(new THREE.BoxGeometry(0.05, cab.h * 0.32, cab.w * 0.86), mat(0x2b3440, { roughness: 0.2, metalness: 0.4 }));
-    glass.position.set(-cab.l - 0.12, cab.y + cab.h * 0.7, W / 2);
-    g.add(glass);
-    // Рама и колёса
-    const frame = new THREE.Mesh(new THREE.BoxGeometry(L + cab.l, 0.18, W * 0.6), mat(0x3a3f45));
-    frame.position.set((L - cab.l) / 2, deckY - 0.2, W / 2);
-    g.add(frame);
-    const wheelGeo = new THREE.CylinderGeometry(vehicle.wheel / 100, vehicle.wheel / 100, 0.3, 24);
-    wheelGeo.rotateX(Math.PI / 2);
-    const wheelMat = mat(0x1f2328);
-    for (const ax of vehicle.axles) for (const side of [0.1, W - 0.1]) {
-      const wh = new THREE.Mesh(wheelGeo, wheelMat);
-      wh.position.set(ax / 100, vehicle.wheel / 100, side);
-      g.add(wh);
-    }
-    // Земля с мягкой тенью
-    const shadow = new THREE.Mesh(new THREE.PlaneGeometry(L + cab.l + 3, W + 2.5), new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.07 }));
-    shadow.rotation.x = -Math.PI / 2;
-    shadow.position.set((L - cab.l) / 2, 0.001, W / 2);
-    g.add(shadow);
-    scene.add(g);
-  }
-
   // Камера: расстояние подбираем так, чтобы машина с кабиной целиком влезла в кадр
-  const fullLen = L + vehicle.cab.l + 0.3;
-  const midX = (L - vehicle.cab.l) / 2;
+  const fullLen = L + front + 0.3;
+  const midX = (L - front) / 2;
   controls.target.set(midX, deckY * 0.6 + H / 2, W / 2);
   function dist(span) {
     const vfov = (camera.fov * Math.PI) / 180;
@@ -278,15 +278,15 @@ export function mountPlanner(root, opts) {
   let drops = [];
   function rebuildCargo(result) {
     cargoGroup.clear();
-    const now = performance.now();
+    const now = performance.now() + (reduceMotion || doorT > 0.9 ? 0 : 650);
     const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
     drops = [];
     result.placed.forEach((b, i) => {
-      const geo = new THREE.BoxGeometry(b.l / 100 - 0.01, b.h / 100 - 0.01, b.w / 100 - 0.01);
+      const geo = new THREE.BoxGeometry((b.l - b.cl) / 100 - 0.005, b.h / 100 - 0.006, (b.w - b.cl) / 100 - 0.005);
       const mesh = new THREE.Mesh(geo, mat(b.piece.color));
       const edges = new THREE.LineSegments(new THREE.EdgesGeometry(geo), new THREE.LineBasicMaterial({ color: 0x1b1f24, transparent: true, opacity: 0.55 }));
       mesh.add(edges);
-      const target = new THREE.Vector3((b.x + b.l / 2) / 100, (b.z + b.h / 2) / 100, (b.y + b.w / 2) / 100);
+      const target = new THREE.Vector3((b.x + b.l / 2) / 100, (b.z + b.h / 2) / 100 + 0.002, (b.y + b.w / 2) / 100);
       mesh.position.copy(target);
       if (!reduce) {
         mesh.position.y += 2.2;
@@ -294,6 +294,12 @@ export function mountPlanner(root, opts) {
       }
       cargoGroup.add(mesh);
     });
+    if (!reduceMotion && result.placed.length) {
+      clearTimeout(closeTimer);
+      setDoors(true);
+      const endAt = Math.min(result.placed.length * 28, 1400) + 420 + (now - performance.now()) + 700;
+      if (!doorsPinned) closeTimer = setTimeout(() => { if (!doorsPinned) setDoors(false); }, endAt);
+    }
     // Не поместившееся — красным рядом с машиной
     let ux = 0;
     for (const p of result.unplaced.slice(0, 40)) {
@@ -306,10 +312,28 @@ export function mountPlanner(root, opts) {
     kick();
   }
 
+  let doorT = 0, doorTarget = 0, doorsPinned = false, closeTimer = 0, lastNow = 0;
+  const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function setDoors(open, pinned = doorsPinned) {
+    doorTarget = open ? 1 : 0;
+    doorsPinned = pinned;
+    const b = $(".planner__doors");
+    if (b) { b.setAttribute("aria-pressed", String(open)); b.textContent = s(open ? veh.openKey + "Close" : veh.openKey); }
+    if (reduceMotion) { doorT = doorTarget; veh.setOpen(doorT); }
+    kick();
+  }
+
   let running = false;
-  function kick() { if (!running) { running = true; requestAnimationFrame(tick); } }
+  function kick() { if (!running) { running = true; lastNow = performance.now(); requestAnimationFrame(tick); } }
   function tick(now) {
     let busy = controls.update();
+    const dt = Math.min(64, now - lastNow);
+    lastNow = now;
+    if (doorT !== doorTarget) {
+      doorT = doorTarget > doorT ? Math.min(doorTarget, doorT + dt / 1100) : Math.max(doorTarget, doorT - dt / 1100);
+      veh.setOpen(doorT);
+      busy = true;
+    }
     if (camAnim) {
       const k = Math.min(1, (now - camAnim.t0) / camAnim.dur);
       const e = 1 - Math.pow(1 - k, 3);
@@ -354,7 +378,7 @@ export function mountPlanner(root, opts) {
   function update() {
     const pieces = [];
     for (const l of lines) for (let i = 0; i < l.qty && pieces.length < maxPieces; i++) pieces.push(l);
-    const result = pack(vehicle, pieces);
+    const result = pack(vehicle, pieces, { clearance: vehicle.clearance || 0, orient, obstacles: vehicle.arches || [] });
     rebuildCargo(result);
     renderList();
     renderStats(result, pieces);
@@ -397,7 +421,8 @@ export function mountPlanner(root, opts) {
     const tons = vehicle.payload >= 5000;
     const kgText = (v) => (tons ? `${num(v / 1000)} ${s("t")}` : `${num(v, 0)} ${s("kgU")}`);
     let lenText = `${num(maxX / 100)} ${s("of")} ${num(vehicle.L / 100)} ${m}`;
-    if (vehicle.ldm) lenText += ` · ${s("ldm", { n: num((maxX / 100) * (maxY / 100) / 2.4) })}`;
+    // Загрузочный метр — метр длины полуприцепа шириной 2,4 м; шире 2,4 м не считаем
+    if (vehicle.ldm) lenText += ` · ${s("ldm", { n: num((maxX / 100) * Math.min(1, maxY / 240)) })}`;
     $(".planner__bars").innerHTML =
       bar(s("byLen"), maxX, vehicle.L, lenText) +
       bar(s("byWid"), maxY, vehicle.W, `${num(maxY / 100, 2)} ${s("of")} ${num(vehicle.W / 100, 2)} ${m}`) +
@@ -418,6 +443,7 @@ export function mountPlanner(root, opts) {
 
   function renderTexts() {
     root.querySelectorAll("[data-s]").forEach((el) => { el.textContent = s(el.dataset.s); });
+    $(".planner__doors").textContent = s(doorTarget > 0.5 ? veh.openKey + "Close" : veh.openKey);
     $(".planner__presets").innerHTML = presets.map((p) =>
       `<button type="button" class="planner__preset" data-preset="${p.id}">${presetName(p)}<small>${p.w}×${p.d}×${p.h}</small></button>`).join("");
   }
@@ -460,6 +486,16 @@ export function mountPlanner(root, opts) {
   });
 
   root.querySelectorAll("[data-view]").forEach((b) => b.addEventListener("click", () => goView(b.dataset.view)));
+  root.querySelectorAll("[data-orient]").forEach((b) => b.addEventListener("click", () => {
+    orient = b.dataset.orient;
+    root.querySelectorAll("[data-orient]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    update();
+  }));
+  $(".planner__doors").addEventListener("click", () => {
+    clearTimeout(closeTimer);
+    const open = doorTarget < 0.5;
+    setDoors(open, open);
+  });
 
   // Стартовый пример
   for (const [id, qty] of start) {
