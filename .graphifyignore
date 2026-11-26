@@ -47,6 +47,7 @@ tools/tv/
 # Чужие библиотеки — не наш код, только раздувают граф
 *.min.js
 web/cargo/shared/OrbitControls.js
+web/cargo/shared/RoundedBoxGeometry.js
 web/graph/vendor/
 
 # Данные игровых серверов (на случай других игр рядом с minecraft)
