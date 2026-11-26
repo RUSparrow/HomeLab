@@ -77,14 +77,16 @@ const STR = {
 // Укладка: «крайние точки» — первая подходящая точка ближе к кабине,
 // сначала по полу поперёк, потом вверх, затем к дверям.
 // clearance — зазор между местами (см): паллеты никогда не встают вплотную.
-// orient — как ставить нештабелируемые «плоские» места: along (длинной
-// стороной вдоль кузова), across (поперёк), free, auto (лучший из трёх).
+// orient — как ставить «плоские» места: along (длинной стороной вдоль кузова),
+// across (поперёк), free, auto (вдоль, а другие схемы — только если влезет больше).
 // obstacles — то, что занимает пол (колёсные арки фургона).
 // ---------------------------------------------------------------------------
 export function pack(container, pieces, opts = {}) {
   if ((opts.orient || "auto") !== "auto") return packOnce(container, pieces, opts);
+  // Как грузят на практике: стандартная схема «вдоль, по 3 в ряд» (33 европаллеты),
+  // сколько бы мест ни было. Другую берём, только если по ней влезает больше.
   const tries = ["along", "across", "free"].map((o) => packOnce(container, pieces, { ...opts, orient: o }));
-  tries.sort((a, b) => a.unplaced.length - b.unplaced.length || a.usedLen - b.usedLen);
+  tries.sort((a, b) => a.unplaced.length - b.unplaced.length);   // сортировка устойчивая — «вдоль» первым
   return tries[0];
 }
 
