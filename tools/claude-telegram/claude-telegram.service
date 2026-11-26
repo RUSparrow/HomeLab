@@ -1,0 +1,12 @@
+[Unit]
+Description=Claude Code with the Telegram channel in tmux session "telegram"
+After=default.target claude-rc.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/tmux new-session -d -s telegram -c %h/HomeLab %h/HomeLab/tools/claude-telegram/claude-telegram.sh
+ExecStop=/usr/bin/tmux kill-session -t telegram
+
+[Install]
+WantedBy=default.target
