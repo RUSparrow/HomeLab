@@ -3,7 +3,7 @@
 // длине, ширине, высоте и весу.
 import * as THREE from "./three.module.min.js";
 import { OrbitControls } from "./OrbitControls.js";
-import { buildVehicle } from "./vehicles.js";
+import { buildVehicle } from "./vehicles.js?v=3";
 
 const STR = {
   ru: {

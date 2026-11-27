@@ -68,23 +68,13 @@ p { margin: 0; }
 .hero h1 { font-size: clamp(2.5rem, 5.4vw, 4.4rem); }
 .hero__text p { margin-top: 20px; font-size: 1.15rem; color: #3c454d; max-width: 44ch; }
 .hero__cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 32px; }
-.hero__pic { position: relative; margin: 0; border-radius: 10px; overflow: hidden; box-shadow: 0 30px 60px rgba(29, 34, 38, 0.25); }
-.hero__pic img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+.hero__pic { position: relative; margin: 0; }
+.hero__pic img { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: contain; }
 
-/* Шторки из тента с люверсами — раздвигаются при загрузке */
-.curtain {
-  position: absolute; top: 0; bottom: 0; width: 50.5%;
-  background:
-    radial-gradient(circle at 50% 50%, #8c949b 0 4px, #e4e7ea 4px 6px, transparent 6.5px) 0 18px / 100% 46px repeat-y,
-    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.06) 0 2px, transparent 2px 26px),
-    linear-gradient(90deg, #c4cad0, #d9dde1 40%, #c9ced3);
-  pointer-events: none;
-}
-.curtain--l { left: 0; background-position: right 14px top 18px, 0 0, 0 0; background-size: 14px 46px, auto, auto; }
-.curtain--r { right: 0; background-position: left 14px top 18px, 0 0, 0 0; background-size: 14px 46px, auto, auto; }
-.curtain { transform: translateX(var(--off)); }
-.curtain--l { --off: -101%; }
-.curtain--r { --off: 101%; }
+/* 3D-модель вместо фото: пока грузится — кадр той же модели */
+.showcase { position: absolute; inset: 0; }
+.showcase canvas { display: block; width: 100%; height: 100%; }
+.showcase.is-3d + .showcase__still, .hero__pic:has(.showcase.is-3d) .showcase__still { visibility: hidden; }
 
 /* Стяжной ремень через низ первого экрана */
 .strap { position: absolute; left: 0; right: 0; bottom: 28px; height: 22px; background: repeating-linear-gradient(90deg, var(--strap) 0 6px, var(--strap-dark) 6px 7px); box-shadow: 0 3px 0 rgba(0, 0, 0, 0.15); }
@@ -166,18 +156,14 @@ p { margin: 0; }
 
 /* ---------- Движение ---------- */
 @media (prefers-reduced-motion: no-preference) {
-  /* Шторки тента раздвигаются один раз при загрузке */
-  .curtain { animation: curtain-open 1.1s 0.3s cubic-bezier(0.7, 0, 0.2, 1) both; }
-  @keyframes curtain-open { from { transform: translateX(0); } to { transform: translateX(var(--off)); } }
-
   @supports (animation-timeline: scroll()) {
     /* Ремень под шапкой затягивается по мере чтения */
     .strap-progress span { animation: tighten linear both; animation-timeline: scroll(root); }
     @keyframes tighten { to { transform: scaleX(1); } }
 
     /* Фото плавно уходит вверх при прокрутке */
-    .hero__pic img { animation: pic-out linear both; animation-timeline: view(); animation-range: exit 0% exit 100%; }
-    @keyframes pic-out { to { transform: scale(1.12) translateY(-6%); } }
+    .hero__pic { animation: pic-out linear both; animation-timeline: view(); animation-range: exit 0% exit 100%; }
+    @keyframes pic-out { to { transform: scale(0.9) translateY(-8%); opacity: 0.6; } }
 
     /* Строки сравнения выезжают, как груз на погрузчике */
     .cmp__row { animation: fork-in linear both; animation-timeline: view(); animation-range: entry 0% entry 70%; }

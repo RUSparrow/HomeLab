@@ -1,5 +1,5 @@
 import { createI18n } from "/shared/i18n.js";
-import { mountPlanner } from "/shared/planner.js";
+import { mountPlanner } from "/shared/planner.js?v=3";
 import { DICT } from "./lang.js";
 
 const WHATSAPP = "37250000202";

@@ -105,6 +105,22 @@ function hingedDoor(w, h, m, hingeX, y, hingeZ, side) {
   return pivot;
 }
 
+// Лобовое стекло: тонкая плита, уложенная по наклону от низа (xb, yb) к верху (xt, yt)
+function windshield(g, xb, yb, xt, yt, width, cz) {
+  const dx = xt - xb, dy = yt - yb, len = Math.hypot(dx, dy);
+  const glass = new THREE.Mesh(new THREE.BoxGeometry(0.03, len - 0.06, width), GLASS());
+  glass.rotation.z = -(Math.PI / 2 - Math.atan2(dy, dx));   // верх уходит назад, к салону
+  const nx = -dy / len, ny = dx / len;                       // наружная нормаль: вперёд и вверх
+  glass.position.set((xb + xt) / 2 + nx * 0.045, (yb + yt) / 2 + ny * 0.045, cz);
+  g.add(glass);
+}
+
+// Зеркало на кронштейне
+function mirror(g, x, y, z, side) {
+  g.add(box(0.05, 0.05, 0.22, DARK(), x, y + 0.05, z - side * 0.11));
+  g.add(box(0.1, 0.34, 0.09, DARK(), x, y - 0.08, z));
+}
+
 const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
 // =====================================================================
@@ -219,22 +235,20 @@ function van(v, c) {
   cabMesh.position.z = zL + 0.04;
   g.add(cabMesh);
   // Стёкла: лобовое по наклону и боковые окна
-  const ws = new THREE.Mesh(new THREE.PlaneGeometry(W + 2 * t - 0.25, Math.hypot(0.6, top - 0.12 - 1.42) - 0.08), GLASS());
-  const ang = Math.atan2(top - 0.12 - 1.42, 0.6);
-  ws.position.set(-1.15 - 0.015, (top - 0.12 + 1.42) / 2 + 0.01, W / 2);
-  ws.rotation.set(0, -Math.PI / 2, 0);
-  ws.rotateX(-(Math.PI / 2 - ang));
-  g.add(ws);
+  windshield(g, -1.45, 1.42, -0.85, top - 0.12, W + 2 * t - 0.22, W / 2);
   for (const z of [zL - 0.002, zR + 0.002]) {
     const win = flat([[-0.3, top - 0.18], [-0.82, top - 0.18], [-1.35, 1.5], [-0.3, 1.5]], GLASS(), z);
     if (z > W) win.rotation.y = 0; else win.material.side = THREE.DoubleSide;
     g.add(win);
   }
   // Морда: решётка, фары, бампер, зеркала
-  g.add(box(0.04, 0.24, 1.0, DARK(), xFront - 0.02, 0.78, W / 2));
-  g.add(rbox(0.16, 0.3, W + 2 * t + 0.04, 0.05, DARK(), xFront + 0.02, 0.52, W / 2));
-  for (const z of [zL + 0.22, zR - 0.22]) g.add(box(0.05, 0.12, 0.32, LAMP(), xFront - 0.01, 1.0, z));
-  for (const z of [zL - 0.22, zR + 0.22]) g.add(box(0.12, 0.32, 0.08, DARK(), -1.35, 1.72, z));
+  // Кабина скруглена на 4 см — решётку, фары и бампер ставим поверх скругления
+  g.add(box(0.05, 0.26, 1.05, DARK(), xFront - 0.055, 0.8, W / 2));
+  for (let i = 0; i < 3; i++) g.add(box(0.06, 0.03, 1.0, STEEL(), xFront - 0.07, 0.72 + i * 0.08, W / 2));
+  g.add(rbox(0.18, 0.3, W + 2 * t + 0.06, 0.05, DARK(), xFront - 0.02, 0.52, W / 2));
+  for (const z of [zL + 0.24, zR - 0.24]) g.add(box(0.05, 0.13, 0.36, LAMP(), xFront - 0.055, 1.0, z));
+  mirror(g, -1.38, 1.72, zL - 0.2, -1);
+  mirror(g, -1.38, 1.72, zR + 0.2, 1);
 
   // --- Грузовой отсек: прозрачные борта, крыша, проём сдвижной двери ---
   g.add(deck(L, W, D, 0x6f747a, 0.06, 0.02));
@@ -316,21 +330,19 @@ function tent(v, c) {
   const cab = new THREE.Mesh(new THREE.ExtrudeGeometry(s, { depth: cw - 0.08, bevelEnabled: true, bevelThickness: 0.04, bevelSize: 0.04, bevelSegments: 3, curveSegments: 16 }), white);
   cab.position.z = cz - cw / 2 + 0.04;
   g.add(cab);
-  const ang = Math.atan2(cabTop - 0.12 - 1.45, 0.55);
-  const ws = new THREE.Mesh(new THREE.PlaneGeometry(cw - 0.22, Math.hypot(0.55, cabTop - 0.12 - 1.45) - 0.08), GLASS());
-  ws.position.set(-1.275 - 0.015, (cabTop - 0.12 + 1.45) / 2 + 0.01, cz);
-  ws.rotation.set(0, -Math.PI / 2, 0);
-  ws.rotateX(-(Math.PI / 2 - ang));
-  g.add(ws);
+  windshield(g, -1.55, 1.45, -1.0, cabTop - 0.12, cw - 0.2, cz);
   for (const z of [cz - cw / 2 - 0.002, cz + cw / 2 + 0.002]) {
     const win = flat([[-0.25, cabTop - 0.18], [-0.95, cabTop - 0.18], [-1.45, 1.52], [-0.25, 1.52]], GLASS(), z);
     win.material.side = THREE.DoubleSide;
     g.add(win);
   }
-  g.add(box(0.04, 0.3, 1.3, DARK(), xFront - 0.02, 0.8, cz));
-  g.add(rbox(0.18, 0.32, cw + 0.04, 0.05, DARK(), xFront + 0.03, 0.54, cz));
-  for (const z of [cz - cw / 2 + 0.22, cz + cw / 2 - 0.22]) g.add(box(0.05, 0.11, 0.36, LAMP(), xFront - 0.01, 1.02, z));
-  for (const z of [cz - cw / 2 - 0.22, cz + cw / 2 + 0.22]) g.add(box(0.12, 0.32, 0.08, DARK(), -1.45, 1.78, z));
+  // Морда современного фургона: широкая решётка с ламелями, узкие фары, тёмный бампер
+  g.add(box(0.05, 0.3, 1.35, DARK(), xFront - 0.055, 0.84, cz));
+  for (let i = 0; i < 3; i++) g.add(box(0.06, 0.03, 1.3, STEEL(), xFront - 0.07, 0.75 + i * 0.09, cz));
+  g.add(rbox(0.2, 0.34, cw + 0.06, 0.05, DARK(), xFront - 0.02, 0.55, cz));
+  for (const z of [cz - cw / 2 + 0.26, cz + cw / 2 - 0.26]) g.add(box(0.05, 0.1, 0.4, LAMP(), xFront - 0.055, 1.04, z));
+  mirror(g, -1.48, 1.8, cz - cw / 2 - 0.2, -1);
+  mirror(g, -1.48, 1.8, cz + cw / 2 + 0.2, 1);
   // Обтекатель на крыше кабины — до высоты тента
   const sp = new THREE.Shape([new THREE.Vector2(fx, cabTop), new THREE.Vector2(-0.95, cabTop), new THREE.Vector2(fx, D + H - 0.05)]);
   const spoiler = new THREE.Mesh(new THREE.ExtrudeGeometry(sp, { depth: cw - 0.2, bevelEnabled: false }), mat(c.cab, { side: THREE.DoubleSide }));
