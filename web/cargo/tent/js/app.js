@@ -1,6 +1,6 @@
 import { createI18n } from "/shared/i18n.js";
-import { mountPlanner } from "/shared/planner.js?v=3";
-import { mountShowcase } from "/shared/showcase.js?v=4";
+import { mountPlanner } from "/shared/planner.js?v=4";
+import { mountShowcase } from "/shared/showcase.js?v=5";
 import { DICT } from "./lang.js";
 
 const WHATSAPP = "37250000303";

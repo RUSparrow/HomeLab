@@ -2,8 +2,8 @@
 // при появлении один раз открывает двери или тент и показывает груз.
 // Без управления мышью — это картинка, а не инструмент.
 import * as THREE from "./three.module.min.js";
-import { buildVehicle } from "./vehicles.js?v=3";
-import { pack } from "./planner.js?v=3";
+import { buildVehicle } from "./vehicles.js?v=4";
+import { pack } from "./planner.js?v=4";
 
 export function mountShowcase(el, { vehicle, colors, cargo = [], view = [0.62, 0.32, 0.72], openDelay = 900 }) {
   let renderer;

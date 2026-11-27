@@ -1,5 +1,5 @@
 import { createI18n } from "/shared/i18n.js";
-import { mountPlanner } from "/shared/planner.js?v=3";
+import { mountPlanner } from "/shared/planner.js?v=4";
 import { DICT } from "./lang.js";
 
 // Контакты: поменять на настоящие в одном месте

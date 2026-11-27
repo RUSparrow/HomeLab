@@ -1,5 +1,5 @@
 import { createI18n } from "/shared/i18n.js";
-import { mountPlanner } from "/shared/planner.js?v=3";
+import { mountPlanner } from "/shared/planner.js?v=4";
 import { DICT } from "./lang.js";
 
 const WHATSAPP = "37250000202";
@@ -42,7 +42,7 @@ const planner = mountPlanner($("planner"), {
   lang: i18n.lang,
   vehicle: {
     // Boxer L3H2: 3,7 × 1,87 × 1,93 м; между колёсными арками 1,42 м
-    kind: "van", L: 370, W: 187, H: 193, payload: 1400, deck: 55, front: 2.3,
+    kind: "van", L: 370, W: 187, H: 193, payload: 1400, deck: 55, front: 2.3, viewSide: -1,
     arches: [{ x: 200, z: 0, l: 90, w: 22, h: 30 }, { x: 200, z: 165, l: 90, w: 22, h: 30 }],
   },
   colors: {

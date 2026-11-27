@@ -3,7 +3,7 @@
 // длине, ширине, высоте и весу.
 import * as THREE from "./three.module.min.js";
 import { OrbitControls } from "./OrbitControls.js";
-import { buildVehicle } from "./vehicles.js?v=3";
+import { buildVehicle } from "./vehicles.js?v=4";
 
 const STR = {
   ru: {
@@ -261,9 +261,11 @@ export function mountPlanner(root, opts) {
     const hfov = 2 * Math.atan(Math.tan(vfov / 2) * Math.max(0.6, camera.aspect));
     return (span / 2) / Math.tan(Math.min(vfov, hfov) / 2) * 0.86;
   }
+  // С какой стороны смотреть по умолчанию: у фургона — с правого борта, где сдвижная дверь
+  const viewSide = vehicle.viewSide || 1;
   const VIEWS = {
-    iso:  () => { const d = dist(Math.hypot(fullLen, W, H + deckY)); const dir = new THREE.Vector3(0.55, 0.5, 0.67).normalize(); return controls.target.clone().addScaledVector(dir, d); },
-    side: () => controls.target.clone().add(new THREE.Vector3(0, 0.3, dist(fullLen) + W / 2)),
+    iso:  () => { const d = dist(Math.hypot(fullLen, W, H + deckY)); const dir = new THREE.Vector3(0.55, 0.5, 0.67 * viewSide).normalize(); return controls.target.clone().addScaledVector(dir, d); },
+    side: () => controls.target.clone().add(new THREE.Vector3(0, 0.3, (dist(fullLen) + W / 2) * viewSide)),
     top:  () => controls.target.clone().add(new THREE.Vector3(0, dist(fullLen) + H, 0.01)),
     rear: () => controls.target.clone().add(new THREE.Vector3(dist(Math.max(W, H + deckY)) * 1.3 + fullLen / 2, 0.4, 0)),
   };

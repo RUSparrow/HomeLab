@@ -266,9 +266,10 @@ function van(v, c) {
     return s;
   };
   const wall = wallMat(0xffffff, 0.2);
-  const wl = new THREE.Mesh(new THREE.ShapeGeometry(sideShape(false), 16), wall);
+  // Кабина смотрит в сторону −x, поэтому правый борт (со сдвижной дверью, как в Европе) — сторона zL
+  const wl = new THREE.Mesh(new THREE.ShapeGeometry(sideShape(true), 16), wall);
   wl.position.z = zL;
-  const wr = new THREE.Mesh(new THREE.ShapeGeometry(sideShape(true), 16), wall);
+  const wr = new THREE.Mesh(new THREE.ShapeGeometry(sideShape(false), 16), wall);
   wr.position.z = zR;
   g.add(wl, wr);
   const roof = new THREE.Mesh(new THREE.PlaneGeometry(xr - fx, zR - zL), wallMat(0xffffff, 0.22));
@@ -287,8 +288,8 @@ function van(v, c) {
   const slide = new THREE.Group();
   slide.add(box(1.28, top - 0.12 - D - 0.02, 0.04, dm, 0.76, (top - 0.12 + D + 0.02) / 2, 0));
   slide.add(outline(1.28, top - 0.12 - D - 0.02, 0.04, 0x3a4148, 0.76, (top - 0.12 + D + 0.02) / 2, 0));
-  slide.add(box(0.05, 0.22, 0.05, STEEL(), 0.25, D + 0.9, 0.04));
-  slide.position.z = zR + 0.005;
+  slide.add(box(0.05, 0.22, 0.05, STEEL(), 0.25, D + 0.9, -0.04));
+  slide.position.z = zL - 0.005;
   g.add(slide);
   const half = (zR - zL) / 2, dh = top - bot - 0.06;
   const left = hingedDoor(half, dh, dm, xr + 0.02, bot + 0.03, zL, 1);
@@ -299,7 +300,7 @@ function van(v, c) {
     // Сдвижная: сначала отходит от борта, потом едет назад
     const a = ease(Math.min(1, t * 1.6));
     const out = Math.min(1, a * 4) * 0.09;
-    slide.position.set(Math.max(0, a - 0.2) / 0.8 * 1.3, 0, zR + 0.005 + out);
+    slide.position.set(Math.max(0, a - 0.2) / 0.8 * 1.3, 0, zL - 0.005 - out);
     const b = ease(Math.max(0, (t - 0.25) / 0.75)) * Math.PI * 1.45;
     left.rotation.y = b;
     right.rotation.y = -b;
