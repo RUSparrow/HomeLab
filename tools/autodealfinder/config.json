@@ -1,0 +1,20 @@
+{
+  "filters": {
+    "price_min": 2000,
+    "price_max": 60000,
+    "year_min": 2013,
+    "mileage_max_k": 250
+  },
+  "min_discount": 0.15,
+  "suspicious_discount": 0.45,
+  "min_comparables": 6,
+  "depreciation_per_year": 0.08,
+  "depreciation_per_10k_km": 0.01,
+  "market_days": 45,
+  "rss_every_sec": 120,
+  "request_gap_sec": 3,
+  "crawl_hour": 4,
+  "max_pages_per_brand": 80,
+  "skip_words": ["на запчасти", "на з/ч", "по запчастям", "rezerves daļām", "rezerves daļās", "uz daļām", "uz detaļām", "noma", "аренда", "izīrē", "līzing"],
+  "warn_words": ["битый", "после дтп", "avārij", "bojāt", "не заводится", "neiedarbojas", "не на ходу", "nav braucoš", "без то", "bez ta", "ремонт", "remont", "problēm", "проблем"]
+}

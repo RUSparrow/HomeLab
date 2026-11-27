@@ -1,0 +1,12 @@
+name: autodealfinder
+
+# Машины ниже рынка с ss.com → группа в Telegram (бот @AutoDealFinderBot).
+# Токен и (необязательно) TELEGRAM_CHAT_ID — в .env рядом, он в .gitignore.
+services:
+  autodealfinder:
+    build: .
+    container_name: autodealfinder
+    env_file: .env
+    volumes:
+      - ./data:/data
+    restart: unless-stopped

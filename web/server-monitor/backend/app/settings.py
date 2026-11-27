@@ -19,6 +19,7 @@ AMNEZIA_CLIENT_NAMES = {
 
 DOCKER_DESCRIPTIONS = {
     "alloy": "Сбор логов и телеметрии",
+    "autodealfinder": "Выгодные авто с ss.com → Telegram",
     "amnezia-awg2": "VPN-сервер Amnezia",
     "clamav": "Антивирусная проверка файлов",
     "deploy-agent": "Агент развертывания",
