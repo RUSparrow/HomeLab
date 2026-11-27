@@ -288,6 +288,19 @@ def interesting(ad: dict) -> bool:
 def handle_new(ad: dict):
     if not interesting(ad):
         return
+    info = None
+    if ad.get("mileage_k") is None:
+        # В таблице пробега нет — берём точный со страницы объявления; без пробега не оцениваем
+        info = details(ad["url"])
+        km = num(info["opts"].get("Пробег, км", ""))
+        if not km:
+            return
+        ad["mileage_k"] = km // 1000
+        with dblock:
+            db.execute("UPDATE ads SET mileage_k=? WHERE id=?", (ad["mileage_k"], ad["id"]))
+            db.commit()
+        if not interesting(ad):
+            return
     est = market_price(ad)
     if not est:
         return
@@ -295,9 +308,14 @@ def handle_new(ad: dict):
     disc = 1 - ad["price"] / market
     if disc < CFG["min_discount"]:
         return
+    # Слишком большая «скидка» почти всегда ошибка в объявлении: неверный год
+    # (например, год ввоза вместо года выпуска), цена за месяц, продажа на запчасти
+    if disc > CFG["max_discount"]:
+        log.info("skip (too cheap to be real): %s %s %s € vs %s", ad["brand"], ad["model"], ad["price"], market)
+        return
     if db.execute("SELECT 1 FROM sent WHERE id=?", (ad["id"],)).fetchone():
         return
-    info = details(ad["url"])
+    info = info or details(ad["url"])
     full = (info["text"] + " " + ad.get("title", "")).lower()
     if any(w in full for w in CFG["skip_words"]):
         return
