@@ -171,7 +171,7 @@ button { font: inherit; color: inherit; }
 }
 
 .cards { display: grid; gap: 14px; }
-.cards--system { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.cards--system { grid-template-columns: repeat(6, minmax(0, 1fr)); }
 .cards--disks { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
 
 .card {
@@ -443,7 +443,7 @@ button { font: inherit; color: inherit; }
 .toast.is-error { border-left-color: var(--red); }
 
 /* ---------- Адаптивность ---------- */
-@media (max-width: 1100px) {
+@media (max-width: 1280px) {
   .cards--system { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @media (max-width: 860px) {
@@ -556,3 +556,9 @@ button { font: inherit; color: inherit; }
   .charts-tools .range { width: 100%; }
   .charts-tools .range__btn { flex: 1; padding: 5px 4px; }
 }
+
+/* ---------- Спидтест ---------- */
+#card-inet { display: flex; flex-direction: column; }
+#card-inet .card__meta { flex: 1; }
+.btn--small { align-self: flex-start; margin-top: 10px; height: 30px; padding: 0 12px; font-size: 0.78rem; }
+.card__meta .is-bad { color: var(--red-text); }

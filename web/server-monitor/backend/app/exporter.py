@@ -46,6 +46,13 @@ def render(data: dict) -> str:
         w.add("homelab_container_running", 1 if c["status"] == "running" else 0, "Контейнер запущен", labels)
         w.add("homelab_container_restarts", c.get("restart_count") or 0, "Перезапуски контейнера", labels)
 
+    st = (data.get("speedtest") or {}).get("last_ok")
+    if st:
+        w.add("homelab_speedtest_download_bps", st.get("down_bps"), "Скорость интернета: скачивание, бит/с")
+        w.add("homelab_speedtest_upload_bps", st.get("up_bps"), "Скорость интернета: отдача, бит/с")
+        w.add("homelab_speedtest_ping_ms", st.get("ping_ms"), "Задержка до Cloudflare, мс")
+        w.add("homelab_speedtest_timestamp_seconds", st.get("ts"), "Время последнего замера")
+
     vpn = data.get("amnezia") or {}
     w.add("homelab_vpn_up", 1 if vpn.get("available") else 0, "AmneziaWG работает")
     for peer in vpn.get("peers", []):

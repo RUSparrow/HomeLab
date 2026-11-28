@@ -263,19 +263,41 @@ function renderSystem(data) {
   const maxNet = Math.max(1, ...rx.filter((v) => v != null), ...tx.filter((v) => v != null));
   const netSvg = $("net-spark");
   setSpark(netSvg, (renderSpark(netSvg, rx, 0, maxNet) || "") + (renderSpark(netSvg, tx, 0, maxNet, "tx") || ""));
-  const link = net.link_mbit ? ` · карта ${net.link_mbit >= 1000 ? `${net.link_mbit / 1000} Гбит/с` : `${net.link_mbit} Мбит/с`}` : "";
+  const link = net.link_mbit ? ` · ${net.link_mbit >= 1000 ? `${net.link_mbit / 1000} Гбит/с` : `${net.link_mbit} Мбит/с`}` : "";
   setText($("net-hint"), `${net.interface || "eno1"}${link}`);
   const vpn = net.vpn || {};
   patch($("net-meta"), `Ср. ↓ <b>${fmtRate(state.history?.stats?.rx?.avg)}</b> · ↑ <b>${fmtRate(state.history?.stats?.tx?.avg)}</b>` +
-    ` · пик ↓ ${fmtRate(state.history?.stats?.rx?.max)}<br>` +
-    (vpn.rx != null ? `Из них VPN: ↓ <b>${fmtRate(vpn.rx)}</b> от клиентов · ↑ <b>${fmtRate(vpn.tx)}</b> к ним<br>` : "") +
-    `<span class="muted">Всё, что идёт через сетевую карту: интернет, домашняя сеть и VPN вместе. ` +
-    `↓ — в сервер, ↑ — из сервера. Это текущая нагрузка, а не скорость интернета.</span>`);
+    `<br>Пик ↓ ${fmtRate(state.history?.stats?.rx?.max)} · ↑ ${fmtRate(state.history?.stats?.tx?.max)}` +
+    (vpn.rx != null ? `<br>Из них VPN ↓ <b>${fmtRate(vpn.rx)}</b> · ↑ <b>${fmtRate(vpn.tx)}</b>` : ""));
+  renderSpeedtest(data.speedtest || {});
 
   const uptime = data.uptime || {};
   setText($("uptime-value"), fmtDuration(uptime.seconds));
   const bootDate = new Date((data.timestamp - uptime.seconds) * 1000);
   setText($("uptime-meta"), `Запущен ${fmtDate(bootDate)}`);
+}
+
+function renderSpeedtest(st) {
+  const ok = st.last_ok;
+  const last = st.last;
+  const btn = $("inet-run");
+  btn.disabled = !!st.running;
+  setText(btn, st.running ? "Идёт замер…" : "Замерить");
+  if (ok) {
+    patch($("inet-value"), `<span class="rx">↓ ${fmtRate(ok.down_bps / 8)}</span><span class="tx">↑ ${fmtRate(ok.up_bps / 8)}</span>`);
+    setText($("inet-hint"), ok.colo ? `узел ${ok.colo}` : "Cloudflare");
+    const hist = st.history || [];
+    const max = Math.max(1, ...hist.map((r) => Math.max(r[1], r[2])));
+    const svg = $("inet-spark");
+    setSpark(svg, hist.length > 1 ? (renderSpark(svg, hist.map((r) => r[1]), 0, max) || "") + (renderSpark(svg, hist.map((r) => r[2]), 0, max, "tx") || "") : "");
+  } else {
+    setText($("inet-value"), st.running ? "замер…" : "—");
+  }
+  const every = st.interval ? `каждые ${Math.round(st.interval / 3600)} ч` : "";
+  const failed = last && last.error ? `<br><span class="is-bad">Последний замер не удался: нет связи</span>` : "";
+  patch($("inet-meta"), ok
+    ? `Пинг <b>${fmtNumber(ok.ping_ms)} мс</b> · джиттер ${fmtNumber(ok.jitter_ms)} мс<br>Замер ${fmtAgo(ok.ts)} · ${every}${failed}`
+    : `Замеров ещё не было · ${every}${failed}`);
 }
 
 function renderDisks(data) {
@@ -808,6 +830,20 @@ $("stacks").addEventListener("click", (event) => {
     // Не мешаем выделять текст мышью.
     if (String(window.getSelection())) return;
     copyText(copyEl.dataset.copy);
+  }
+});
+
+$("inet-run").addEventListener("click", async () => {
+  const btn = $("inet-run");
+  btn.disabled = true;
+  setText(btn, "Идёт замер…");
+  try {
+    const res = await fetch("/api/speedtest/run", { method: "POST", headers: API_HEADERS });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    toast("Замер запущен, займёт около 20 секунд");
+  } catch (err) {
+    toast("Не удалось запустить замер", false);
+    btn.disabled = false;
   }
 });
 

@@ -9,7 +9,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 
-from app import exporter, history, insights
+from app import exporter, history, insights, speedtest
 from app.metrics import collect_all, get_docker_containers
 
 FRONTEND_DIR = Path(os.getenv("FRONTEND_DIR", Path(__file__).resolve().parent.parent.parent / "frontend"))
@@ -44,6 +44,7 @@ def health():
 @app.on_event("startup")
 def _start_history():
     history.start()
+    speedtest.start()
 
 
 @app.on_event("shutdown")
@@ -87,6 +88,7 @@ def metrics():
     data = collect_all()
     data["network"] = {k: history.latest().get(k) for k in ("rx", "tx")}
     data["network"].update(interface="eno1", link_mbit=_link_speed(), vpn=_vpn_rate(data.get("amnezia") or {}))
+    data["speedtest"] = speedtest.status()
     data["insights"] = insights.collect(data["docker"], data["plex"], data["amnezia"])
     return data
 
@@ -95,6 +97,15 @@ def metrics():
 def prometheus_metrics():
     """Экспорт для Prometheus — по нему Grafana строит графики сервисов."""
     return PlainTextResponse(exporter.render(metrics()), media_type="text/plain; version=0.0.4")
+
+
+@app.post("/api/speedtest/run", status_code=202)
+def speedtest_run():
+    """Замер по кнопке: идёт в фоне ~20 с, результат придёт с очередным /api/metrics."""
+    if speedtest.status()["running"]:
+        return {"started": False, "detail": "Замер уже идёт"}
+    threading.Thread(target=speedtest.run_now, daemon=True).start()
+    return {"started": True}
 
 
 @app.get("/api/history")

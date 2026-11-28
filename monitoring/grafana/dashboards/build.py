@@ -208,6 +208,14 @@ server = dashboard("homelab-server", "HomeLab · Сервер", [
     timeseries(18, "Свободное место", [
         target(f'node_filesystem_avail_bytes{{{FS}}}', "{{mountpoint}}"),
     ], "bytes", x=0, y=34, w=24, h=7, fill=0, overrides=rename(MOUNT_NAMES), legend_calcs=("lastNotNull", "min")),
+    timeseries(19, "Скорость интернета (спидтест)", [
+        target("homelab_speedtest_download_bps", "Скачивание ↓"),
+        target("homelab_speedtest_upload_bps", "Отдача ↑", ref="B"),
+    ], "bps", x=0, y=41, w=16, h=8, fill=0, legend_calcs=("lastNotNull", "mean", "min"),
+        description="Скорость канала провайдера: замер до ближайшего узла Cloudflare (Таллин) "
+                    "каждые 4 часа или по кнопке в Server Monitor. Ступеньки — это отдельные замеры."),
+    timeseries(20, "Пинг до Cloudflare", [target("homelab_speedtest_ping_ms", "Пинг")],
+               "ms", x=16, y=41, w=8, h=8, fill=0, legend_calcs=("lastNotNull", "mean", "max")),
 ], tags=("server",))
 
 # -------------------------------------------------------------- Контейнеры

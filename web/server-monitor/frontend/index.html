@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
-  <link rel="stylesheet" href="/static/css/style.css?v=35">
+  <link rel="stylesheet" href="/static/css/style.css?v=37">
 </head>
 <body class="is-loading">
   <div class="dashboard" id="dashboard">
@@ -68,11 +68,19 @@
           <p class="card__meta" id="temp-meta">&nbsp;</p>
         </article>
 
-        <article class="card" id="card-net">
-          <div class="card__head"><span class="card__label">Трафик сервера</span><span class="card__hint" id="net-hint">eno1</span></div>
+        <article class="card" id="card-net" title="Всё, что идёт через сетевую карту сервера: интернет, домашняя сеть и VPN вместе. ↓ — в сервер, ↑ — из сервера. Это текущая нагрузка, а не скорость интернета — она в карточке «Интернет».">
+          <div class="card__head"><span class="card__label">Трафик</span><span class="card__hint" id="net-hint">eno1</span></div>
           <div class="card__value card__value--net" id="net-value">—</div>
           <svg class="spark spark--net" id="net-spark" viewBox="0 0 100 28" preserveAspectRatio="none" aria-hidden="true"></svg>
           <p class="card__meta" id="net-meta">&nbsp;</p>
+        </article>
+
+        <article class="card" id="card-inet" title="Скорость канала провайдера: замер до ближайшего узла Cloudflare. Идёт сам каждые несколько часов, или по кнопке.">
+          <div class="card__head"><span class="card__label">Интернет</span><span class="card__hint" id="inet-hint">спидтест</span></div>
+          <div class="card__value card__value--net" id="inet-value">—</div>
+          <svg class="spark spark--net" id="inet-spark" viewBox="0 0 100 28" preserveAspectRatio="none" aria-hidden="true"></svg>
+          <p class="card__meta" id="inet-meta">&nbsp;</p>
+          <button type="button" class="btn btn--small" id="inet-run">Замерить</button>
         </article>
 
         <article class="card" id="card-uptime">
@@ -127,6 +135,6 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="/static/js/app.js?v=35"></script>
+  <script src="/static/js/app.js?v=37"></script>
 </body>
 </html>
