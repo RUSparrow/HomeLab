@@ -69,6 +69,10 @@ def enrich(offers, query):
     for o in offers:
         if not_store(o["store"]):
             continue
+        # Американские страницы глобальных магазинов (samsung.com/us/…) — не доставляют в ЕС
+        path = urllib.parse.urlparse(o["url"]).path.lower()
+        if path.startswith(("/us/", "/en-us/", "/en_us/")):
+            continue
         s = seller(o["store"])
         trust, why = offer_trust(s, o["confirmed"], o["in_stock"])
         flags = []

@@ -265,6 +265,8 @@ def filter_results(query, results):
         domain = get_domain(r["url"])
         if domain_matches(domain, NON_STORE_DOMAINS) or not_store(domain):
             continue
+        if urlparse(r["url"]).path.lower().startswith(("/us/", "/en-us/", "/en_us/")):
+            continue
         if any(m in r["url"].lower() for m in SEARCH_PAGE_MARKERS):
             continue
         if not is_relevant(query, r["title"], r["snippet"], r["url"]):
