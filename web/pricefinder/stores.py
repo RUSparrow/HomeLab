@@ -118,6 +118,7 @@ NOT_STORES = {
         "idealo.de", "idealo.at", "billiger.de", "guenstiger.de", "ceneo.pl", "skapiec.pl",
         "kelkoo.com", "pangoly.com", "gpuprix.com", "pctechvault.com", "originalpricing.com",
         "versus.com", "camelcamelcamel.com", "keepa.com", "pcpartpicker.com", "hinnavaatlus.com",
+        "hardwareschotte.de", "eponuda.com", "heureka.cz", "pricespy.de", "preisvergleich.de",
     },
     "media": {  # обзоры, новости, сделки
         "pcguide.com", "pcgameshardware.de", "computerbase.de", "hardwaredealz.com", "mydealz.de",

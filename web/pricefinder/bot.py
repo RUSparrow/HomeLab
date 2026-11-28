@@ -50,6 +50,7 @@ NON_STORE_DOMAINS = {
     "techpowerup.com", "anandtech.com", "notebookcheck.net", "amd.com",
     "intel.com", "nvidia.com", "facebook.com", "x.com", "twitter.com",
     "instagram.com", "tiktok.com", "quora.com", "medium.com",
+    "bing.com", "yahoo.com", "search.yahoo.com",  # рекламные и служебные ссылки поисковиков
 }
 
 SEARCH_PAGE_MARKERS = ("/search", "searchpage", "?q=", "&q=", "?query=", "?keyword=", "/pl?", "?s=")
@@ -221,14 +222,25 @@ def availability(raw):
 # Поиск
 # ---------------------------------------------------------
 
+# Какие поисковики отвечают с этого сервера (проверено): Yahoo быстрый и понимает site:,
+# Bing — запасной. DuckDuckGo, Google, Brave, Mojeek, Startpage отсюда ничего не отдают,
+# а при выборе «auto» библиотека попадала на них и ~60 % запросов пропадали.
+SEARCH_BACKENDS = ("yahoo", "bing")
+
+
 def run_search_query(template, region, query):
     search_query = template.format(q=query)
-    try:
-        with DDGS() as ddgs:
-            return list(ddgs.text(search_query, region=region, safesearch="off", max_results=RESULTS_PER_QUERY))
-    except Exception as exc:
-        log(f"Ошибка поиска [{search_query}]: {exc}")
-        return []
+    for backend in SEARCH_BACKENDS:
+        try:
+            results = DDGS().text(search_query, region=region, safesearch="off",
+                                  max_results=RESULTS_PER_QUERY, backend=backend)
+        except Exception as exc:
+            log(f"[{backend}] нет ответа на «{search_query}»: {str(exc)[:80]}")
+            continue
+        if results:
+            return results
+    log(f"Ничего не нашлось: {search_query}")
+    return []
 
 
 def search(query):
