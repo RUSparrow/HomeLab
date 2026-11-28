@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap">
-  <link rel="stylesheet" href="/css/style.css?v=11">
+  <link rel="stylesheet" href="/css/style.css?v=12">
 </head>
 <body>
   <header class="header">
@@ -55,6 +55,7 @@
           </svg>
           <span>Найти</span>
         </button>
+        <ul class="suggest" id="suggest" role="listbox" aria-label="Подсказки" hidden></ul>
       </form>
 
       <div class="popular" id="history" hidden>
@@ -93,7 +94,24 @@
         <p>Введите модель товара или выберите пример выше. Проверка магазинов занимает 1–3 минуты.</p>
       </div>
 
+      <div class="tools" id="tools" hidden>
+        <div class="tools__row" role="group" aria-label="Сортировка">
+          <span class="tools__label">Сортировать</span>
+          <button type="button" data-sort="best" aria-pressed="true" title="Дешевле, но с учётом надёжности продавца">Лучшие</button>
+          <button type="button" data-sort="price" aria-pressed="false">Дешевле</button>
+          <button type="button" data-sort="trust" aria-pressed="false">Надёжнее</button>
+          <button type="button" data-sort="country" aria-pressed="false">По стране</button>
+        </div>
+        <div class="tools__row tools__countries" id="countries" role="group" aria-label="Страна магазина"></div>
+        <p class="tools__note">Надёжность — насколько можно верить предложению: проверенный ли магазин, взята ли цена из карточки товара и есть ли товар в наличии. Сравнивалки цен, обзоры и барахолки не показываем.</p>
+      </div>
+
       <div class="offers" id="offers"></div>
+
+      <details class="hidden-offers" id="hidden-offers" hidden>
+        <summary>Скрыто: <b id="hidden-count">0</b> — нет в наличии, цена не подтверждена, готовые ПК или другой товар</summary>
+        <div class="offers" id="offers-hidden"></div>
+      </details>
     </section>
   </main>
 
@@ -104,6 +122,6 @@
     </div>
   </footer>
 
-  <script src="/js/main.js?v=10"></script>
+  <script src="/js/main.js?v=11"></script>
 </body>
 </html>

@@ -1,0 +1,125 @@
+# Каталог для подсказок при вводе: точные названия популярных товаров.
+# Одна строка — один вариант. Порядок внутри группы — по популярности.
+
+# Процессоры AMD
+Ryzen 7 9800X3D
+Ryzen 9 9950X3D
+Ryzen 9 9900X3D
+Ryzen 9 9950X
+Ryzen 9 9900X
+Ryzen 7 9700X
+Ryzen 5 9600X
+Ryzen 5 9600
+Ryzen 7 7800X3D
+Ryzen 5 7600X
+Ryzen 5 7500F
+Ryzen 7 5700X3D
+Ryzen 7 5800X3D
+Ryzen 5 5600
+# Процессоры Intel
+Core Ultra 9 285K
+Core Ultra 7 265K
+Core Ultra 7 265KF
+Core Ultra 5 245K
+Core Ultra 5 245KF
+Core Ultra 5 225F
+Core i5-14400F
+Core i7-14700K
+Core i9-14900K
+Core i5-12400F
+# Видеокарты NVIDIA
+RTX 5090
+RTX 5080
+RTX 5070 Ti
+RTX 5070
+RTX 5060 Ti 16GB
+RTX 5060 Ti 8GB
+RTX 5060
+RTX 5050
+RTX 4060
+RTX 4070 Super
+# Видеокарты AMD и Intel
+RX 9070 XT
+RX 9070
+RX 9060 XT 16GB
+RX 9060 XT 8GB
+RX 7800 XT
+RX 7600
+Arc B580
+Arc B570
+# SSD
+Samsung 990 PRO 2TB
+Samsung 990 PRO 1TB
+Samsung 990 PRO 4TB
+Samsung 990 EVO Plus 2TB
+Samsung 990 EVO Plus 1TB
+Samsung 9100 PRO 2TB
+WD Black SN850X 2TB
+WD Black SN850X 1TB
+WD Black SN8100 2TB
+Crucial T500 2TB
+Crucial T705 2TB
+Crucial P3 Plus 2TB
+Kingston KC3000 2TB
+Kingston NV3 1TB
+Kingston NV3 2TB
+Lexar NM790 2TB
+# Оперативная память
+DDR5 6000 CL30 32GB
+DDR5 6000 CL30 64GB
+DDR5 6000 CL30 16GB
+DDR5 6400 CL32 32GB
+DDR5 5600 32GB
+DDR4 3200 CL16 32GB
+Kingston FURY Beast DDR5 6000 32GB
+G.Skill Flare X5 DDR5 6000 CL30 32GB
+Corsair Vengeance DDR5 6000 CL30 32GB
+G.Skill Trident Z5 Neo RGB DDR5 6000 32GB
+# Материнские платы
+B850 Tomahawk WiFi
+B850 AORUS Elite WiFi7
+X870E Taichi
+ASUS TUF Gaming B850-Plus WiFi
+MSI MAG B650 Tomahawk WiFi
+Z890 AORUS Elite WiFi7
+# Блоки питания и охлаждение
+Corsair RM850x
+Seasonic Focus GX-850
+be quiet! Pure Power 12 M 850W
+Arctic Liquid Freezer III 360
+Thermalright Peerless Assassin 120 SE
+Noctua NH-D15 G2
+# Мониторы
+LG 27GR93U
+Samsung Odyssey G6 OLED
+Dell S2725DS
+ASUS ROG Swift PG27AQDM
+# Консоли и игры
+PlayStation 5 Pro
+PlayStation 5 Slim Digital
+Nintendo Switch 2
+Steam Deck OLED 512GB
+Xbox Series X
+DualSense Edge
+# Телефоны и планшеты
+iPhone 17 Pro 256GB
+iPhone 17 256GB
+iPhone 17 Pro Max 256GB
+iPhone 16 128GB
+Samsung Galaxy S25 Ultra
+Samsung Galaxy S25
+Google Pixel 10 Pro
+iPad Air M3 11
+iPad 11 128GB
+# Ноутбуки
+MacBook Air M4 13
+MacBook Pro M4 14
+Lenovo Legion 5 RTX 5070
+ASUS ROG Strix G16 RTX 5070 Ti
+# Аудио и прочее
+AirPods Pro 3
+AirPods 4
+Sony WH-1000XM6
+Logitech G Pro X Superlight 2
+Logitech MX Master 3S
+Apple Watch Series 11

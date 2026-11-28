@@ -245,89 +245,171 @@ function showMessage(titleText, messageText, symbol = "i") {
   emptyState.hidden = false;
 }
 
-function renderOffers(items) {
-  offers.replaceChildren();
+// ---------- Результаты: надёжность, сортировка, фильтр по странам ----------
+const COUNTRY_ORDER = ["EE", "LV", "LT", "FI", "SE", "NO", "DK", "DE", "AT", "PL"];
+const FLAG_TEXT = {
+  out_of_stock: "нет в наличии",
+  unconfirmed: "цена не подтверждена",
+  no_price: "цена не найдена",
+  bundle: "готовый ПК или комплект",
+  outlier: "похоже, другой товар",
+};
+let allOffers = [];
+let sortMode = "best";
+const countryFilter = new Set();
 
-  for (const item of items) {
-    const card = document.createElement("article");
-    card.className = "offer";
+function trustLevel(t) {
+  return t >= 85 ? "high" : t >= 60 ? "mid" : "low";
+}
 
-    const details = document.createElement("div");
-    details.className = "offer__details";
+function sortOffers(list) {
+  const price = (o) => (o.price_eur ?? Infinity);
+  const rank = (c) => { const i = COUNTRY_ORDER.indexOf(c); return i === -1 ? 99 : i; };
+  const by = {
+    // «Лучшие»: дешёвое у ненадёжного продавца опускаем — цена делится на корень из надёжности
+    best: (a, b) => price(a) / Math.sqrt((a.trust || 1) / 100) - price(b) / Math.sqrt((b.trust || 1) / 100),
+    price: (a, b) => price(a) - price(b),
+    trust: (a, b) => (b.trust - a.trust) || (price(a) - price(b)),
+    country: (a, b) => (rank(a.country) - rank(b.country)) || (price(a) - price(b)),
+  }[sortMode];
+  return [...list].sort(by);
+}
 
-    const store = document.createElement("div");
-    store.className = "offer__store";
-    store.textContent = item.store || "Источник не указан";
+function offerCard(item) {
+  const card = document.createElement("article");
+  card.className = "offer" + (item.main ? "" : " offer--muted");
 
-    const title = document.createElement("div");
-    title.className = "offer__title";
-    title.textContent = item.title || "Название товара не указано";
+  const details = document.createElement("div");
+  details.className = "offer__details";
 
-    const status = document.createElement("div");
-    status.className = "offer__status";
-    if (item.in_stock === true) {
-      status.textContent = "В наличии";
-    } else if (item.in_stock === false) {
-      status.textContent = "Нет в наличии";
-    } else {
-      status.textContent = "Наличие не подтверждено";
+  const store = document.createElement("div");
+  store.className = "offer__store";
+  const name = document.createElement("span");
+  name.textContent = item.seller || item.store || "Магазин не указан";
+  store.appendChild(name);
+  if (item.country) {
+    const c = document.createElement("span");
+    c.className = "offer__country";
+    c.textContent = item.country;
+    c.title = item.country_name || item.country;
+    store.appendChild(c);
+  }
+  const trust = document.createElement("span");
+  trust.className = `trust trust--${trustLevel(item.trust)}`;
+  trust.textContent = `Надёжность ${item.trust}%`;
+  trust.title = (item.trust_why || []).join(" · ");
+  store.appendChild(trust);
+
+  const title = document.createElement("div");
+  title.className = "offer__title";
+  title.textContent = item.title || "Название товара не указано";
+
+  const status = document.createElement("div");
+  status.className = "offer__status";
+  status.textContent = (item.trust_why || []).filter((w) => w !== "проверенный продавец").join(" · ");
+
+  details.append(store, title, status);
+  if (!item.main && item.flags?.length) {
+    const why = document.createElement("div");
+    why.className = "offer__flags";
+    for (const f of item.flags) {
+      const chip = document.createElement("span");
+      chip.textContent = FLAG_TEXT[f] || f;
+      why.appendChild(chip);
     }
+    details.appendChild(why);
+  }
 
-    details.append(store, title, status);
-
-    const right = document.createElement("div");
-    right.className = "offer__right";
-
-    const price = document.createElement("div");
-    price.className = "offer__price";
-
-    if (item.price !== null && item.price !== undefined && item.price !== "") {
-      const numericPrice = Number(item.price);
-      price.textContent = Number.isFinite(numericPrice)
-        ? formatPrice(numericPrice, item.currency)
-        : "Цена не указана";
-    } else {
-      price.textContent = "Цена не указана";
-    }
-
-    right.appendChild(price);
-
-    if (item.price_eur != null && item.currency && item.currency.toUpperCase() !== "EUR") {
-      const eur = document.createElement("div");
-      eur.className = "offer__eur";
-      eur.textContent = `≈ ${formatPrice(item.price_eur, "EUR")}`;
-      right.appendChild(eur);
-    }
-
-    if (item.price != null && item.confirmed === false) {
-      card.classList.add("offer--unconfirmed");
-      const note = document.createElement("div");
-      note.className = "offer__note";
-      note.textContent = "Цена найдена в тексте страницы — проверьте на сайте";
-      details.appendChild(note);
-    }
-
-    if (item.url) {
-      try {
-        const url = new URL(item.url, window.location.origin);
-        if (url.protocol === "https:" || url.protocol === "http:") {
-          const link = document.createElement("a");
-          link.className = "offer__link";
-          link.href = url.href;
-          link.target = "_blank";
-          link.rel = "noopener noreferrer";
-          link.textContent = "Открыть магазин";
-          right.appendChild(link);
-        }
-      } catch {
-        // Не показываем ссылку, если адрес некорректен.
+  const right = document.createElement("div");
+  right.className = "offer__right";
+  const price = document.createElement("div");
+  price.className = "offer__price";
+  if (item.price != null && Number.isFinite(Number(item.price))) {
+    price.textContent = formatPrice(Number(item.price), item.currency);
+  } else {
+    price.textContent = "Цена на сайте";
+    price.classList.add("offer__price--none");
+  }
+  right.appendChild(price);
+  if (item.price_eur != null && item.currency && item.currency.toUpperCase() !== "EUR") {
+    const eur = document.createElement("div");
+    eur.className = "offer__eur";
+    eur.textContent = `≈ ${formatPrice(item.price_eur, "EUR")}`;
+    right.appendChild(eur);
+  }
+  if (item.url) {
+    try {
+      const url = new URL(item.url, window.location.origin);
+      if (url.protocol === "https:" || url.protocol === "http:") {
+        const link = document.createElement("a");
+        link.className = "offer__link";
+        link.href = url.href;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = "Открыть магазин";
+        right.appendChild(link);
       }
+    } catch {
+      // Не показываем ссылку, если адрес некорректен.
     }
+  }
+  card.append(details, right);
+  return card;
+}
 
-    card.append(details, right);
-    offers.appendChild(card);
+function renderCountryChips() {
+  const box = document.getElementById("countries");
+  const present = [...new Set(allOffers.filter((o) => o.country).map((o) => o.country))]
+    .sort((a, b) => { const i = COUNTRY_ORDER.indexOf(a), j = COUNTRY_ORDER.indexOf(b); return (i === -1 ? 99 : i) - (j === -1 ? 99 : j); });
+  box.replaceChildren();
+  if (present.length < 2) return;
+  const all = document.createElement("button");
+  all.type = "button";
+  all.textContent = "Все страны";
+  all.setAttribute("aria-pressed", String(countryFilter.size === 0));
+  all.addEventListener("click", () => { countryFilter.clear(); draw(); });
+  box.appendChild(all);
+  for (const c of present) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.textContent = c;
+    b.title = allOffers.find((o) => o.country === c)?.country_name || c;
+    b.setAttribute("aria-pressed", String(countryFilter.has(c)));
+    b.addEventListener("click", () => {
+      if (countryFilter.has(c)) countryFilter.delete(c); else countryFilter.add(c);
+      draw();
+    });
+    box.appendChild(b);
   }
 }
+
+function draw() {
+  const visible = allOffers.filter((o) => countryFilter.size === 0 || countryFilter.has(o.country));
+  const main = sortOffers(visible.filter((o) => o.main));
+  const hidden = sortOffers(visible.filter((o) => !o.main));
+
+  offers.replaceChildren(...main.map(offerCard));
+  const hiddenBox = document.getElementById("hidden-offers");
+  document.getElementById("offers-hidden").replaceChildren(...hidden.map(offerCard));
+  hiddenBox.hidden = hidden.length === 0;
+  document.getElementById("hidden-count").textContent = hidden.length;
+
+  document.getElementById("tools").hidden = allOffers.length === 0;
+  document.querySelectorAll("[data-sort]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.sort === sortMode)));
+  renderCountryChips();
+  resultsCount.textContent = formatCount(main.length);
+}
+
+function renderOffers(items) {
+  allOffers = Array.isArray(items) ? items : [];
+  countryFilter.clear();
+  draw();
+}
+
+document.querySelectorAll("[data-sort]").forEach((b) => b.addEventListener("click", () => {
+  sortMode = b.dataset.sort;
+  draw();
+}));
 
 function formatPrice(value, currency) {
   const code = String(currency || "").toUpperCase();
@@ -418,8 +500,10 @@ searchForm.addEventListener("submit", async (event) => {
     renderOffers(found);
     emptyState.classList.remove("pf-loading");
 
-    if (found.length > 0) {
+    if (found.some((o) => o.main)) {
       emptyState.hidden = true;
+    } else if (found.length > 0) {
+      showMessage("Надёжных предложений нет", "Всё найденное — без цены, не в наличии или от непроверенных сайтов. Загляните в «Скрыто» ниже.", "!");
     } else {
       showMessage(
         "Предложения не найдены",
@@ -428,7 +512,6 @@ searchForm.addEventListener("submit", async (event) => {
       );
     }
 
-    resultsCount.textContent = formatCount(found.length);
     loadHistory();
 
     if (job.log) {
@@ -467,8 +550,7 @@ async function showSavedOffers(item) {
   try {
     const data = await readJson(await fetch(`/api/products/${item.product_id}/offers`, { cache: "no-store" }));
     renderOffers(data.offers || []);
-    resultsCount.textContent = formatCount(data.count || 0);
-    if (data.count) {
+    if ((data.offers || []).some((o) => o.main)) {
       emptyState.hidden = true;
     } else {
       showMessage("Предложений нет", "Нажмите «Найти», чтобы поискать заново.", "!");
@@ -490,7 +572,7 @@ async function loadHistory() {
       chip.className = "query-chip query-chip--history";
       const price = item.min_price != null ? ` · от ${formatPrice(item.min_price, item.currency)}` : "";
       chip.textContent = `${item.query}${price}`;
-      chip.title = `${formatCount(item.offers)} — показать сохранённые результаты`;
+      chip.title = `${formatCount(item.offers)} от надёжных продавцов — показать`;
       chip.addEventListener("click", () => showSavedOffers(item));
       historyItems.appendChild(chip);
     }
@@ -501,3 +583,113 @@ async function loadHistory() {
 }
 
 loadHistory();
+
+
+/* ---------- Подсказки при вводе ---------- */
+
+const suggestBox = document.getElementById("suggest");
+let suggestItems = [];
+let suggestIndex = -1;
+let suggestTimer = 0;
+let suggestRun = 0;
+const SOURCE_LABEL = { history: "искали", catalog: "", web: "" };
+
+function closeSuggest() {
+  suggestBox.hidden = true;
+  suggestIndex = -1;
+  searchInput.setAttribute("aria-expanded", "false");
+  searchInput.removeAttribute("aria-activedescendant");
+}
+
+function highlight(text, query) {
+  const frag = document.createDocumentFragment();
+  const i = query ? text.toLowerCase().indexOf(query.toLowerCase()) : -1;
+  if (i < 0) {
+    frag.append(text);
+    return frag;
+  }
+  const b = document.createElement("b");
+  b.textContent = text.slice(i, i + query.length);
+  frag.append(text.slice(0, i), b, text.slice(i + query.length));
+  return frag;
+}
+
+function renderSuggest(query) {
+  suggestBox.replaceChildren();
+  if (!suggestItems.length) { closeSuggest(); return; }
+  suggestItems.forEach((item, i) => {
+    const li = document.createElement("li");
+    li.id = `suggest-${i}`;
+    li.role = "option";
+    li.className = `suggest__item suggest__item--${item.source}`;
+    li.setAttribute("aria-selected", String(i === suggestIndex));
+    const text = document.createElement("span");
+    text.append(highlight(item.text, query));
+    li.appendChild(text);
+    if (SOURCE_LABEL[item.source]) {
+      const tag = document.createElement("small");
+      tag.textContent = SOURCE_LABEL[item.source];
+      li.appendChild(tag);
+    }
+    // mousedown, а не click: иначе поле теряет фокус раньше, чем сработает выбор
+    li.addEventListener("mousedown", (e) => { e.preventDefault(); chooseSuggest(i); });
+    suggestBox.appendChild(li);
+  });
+  suggestBox.hidden = false;
+  searchInput.setAttribute("aria-expanded", "true");
+  if (suggestIndex >= 0) searchInput.setAttribute("aria-activedescendant", `suggest-${suggestIndex}`);
+}
+
+async function loadSuggest() {
+  const query = searchInput.value.trim();
+  const run = ++suggestRun;
+  try {
+    const data = await readJson(await fetch(`/api/suggest?q=${encodeURIComponent(query)}`, { cache: "no-store" }));
+    if (run !== suggestRun || document.activeElement !== searchInput) return;
+    suggestItems = data.items || [];
+    suggestIndex = -1;
+    renderSuggest(query);
+  } catch {
+    closeSuggest();
+  }
+}
+
+function chooseSuggest(i) {
+  const item = suggestItems[i];
+  if (!item) return;
+  searchInput.value = item.text;
+  closeSuggest();
+  searchForm.requestSubmit();
+}
+
+searchInput.setAttribute("role", "combobox");
+searchInput.setAttribute("aria-autocomplete", "list");
+searchInput.setAttribute("aria-controls", "suggest");
+searchInput.setAttribute("aria-expanded", "false");
+
+searchInput.addEventListener("input", () => {
+  clearTimeout(suggestTimer);
+  suggestTimer = setTimeout(loadSuggest, 150);
+});
+searchInput.addEventListener("focus", () => { if (!searchInput.disabled) loadSuggest(); });
+searchInput.addEventListener("blur", () => setTimeout(closeSuggest, 100));
+searchInput.addEventListener("keydown", (e) => {
+  if (suggestBox.hidden) return;
+  if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+    e.preventDefault();
+    const n = suggestItems.length;
+    suggestIndex = e.key === "ArrowDown" ? (suggestIndex + 1) % n : (suggestIndex - 1 + n) % n;
+    renderSuggest(searchInput.value.trim());
+  } else if (e.key === "Enter" && suggestIndex >= 0) {
+    e.preventDefault();
+    chooseSuggest(suggestIndex);
+  } else if (e.key === "Escape") {
+    closeSuggest();
+  } else if (e.key === "Tab" && suggestIndex >= 0) {
+    // Tab дописывает выбранный вариант, не запуская поиск
+    e.preventDefault();
+    searchInput.value = suggestItems[suggestIndex].text;
+    closeSuggest();
+  }
+});
+searchForm.addEventListener("submit", closeSuggest);

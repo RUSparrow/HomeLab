@@ -19,6 +19,8 @@ import requests
 from bs4 import BeautifulSoup
 from ddgs import DDGS
 
+from stores import not_store
+
 HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
@@ -54,21 +56,21 @@ SEARCH_PAGE_MARKERS = ("/search", "searchpage", "?q=", "&q=", "?query=", "?keywo
 
 # (суффикс запроса или site:домен, регион DuckDuckGo)
 SEARCH_PROFILES = [
-    ("{q}", "us-en"), ("{q} price", "us-en"), ("{q} buy", "us-en"),
+    ("{q}", "wt-wt"),
     # Эстония
     ("{q} hind", "ee-et"), ("{q} osta", "ee-et"),
-    ("site:arvutitark.ee {q}", "ee-et"), ("site:1a.ee {q}", "ee-et"),
-    ("site:kaup24.ee {q}", "ee-et"), ("site:galador.ee {q}", "ee-et"),
-    ("site:photopoint.ee {q}", "ee-et"), ("site:hinnavaatlus.ee {q}", "ee-et"),
+    ("site:arvutitark.ee {q}", "ee-et"), ("site:datagate.ee {q}", "ee-et"), ("site:1a.ee {q}", "ee-et"),
+    ("site:kaup24.ee {q}", "ee-et"), ("site:rde.ee {q}", "ee-et"), ("site:smarttech.ee {q}", "ee-et"),
+    ("site:euronics.ee {q}", "ee-et"), ("site:klick.ee {q}", "ee-et"), ("site:photopoint.ee {q}", "ee-et"),
     # Латвия
     ("{q} cena", "lv-lv"), ("site:1a.lv {q}", "lv-lv"), ("site:dateks.lv {q}", "lv-lv"),
     ("site:rdveikals.lv {q}", "lv-lv"),
     # Литва
-    ("{q} kaina", "lt-lt"), ("site:varle.lt {q}", "lt-lt"), ("site:skytech.lt {q}", "lt-lt"),
-    ("site:kilobaitas.lt {q}", "lt-lt"),
+    ("{q} kaina", "lt-lt"), ("site:varle.lt {q}", "lt-lt"), ("site:pigu.lt {q}", "lt-lt"),
+    ("site:skytech.lt {q}", "lt-lt"), ("site:kilobaitas.lt {q}", "lt-lt"),
     # Финляндия
     ("{q} hinta", "fi-fi"), ("site:verkkokauppa.com {q}", "fi-fi"), ("site:jimms.fi {q}", "fi-fi"),
-    ("site:gigantti.fi {q}", "fi-fi"), ("site:proshop.fi {q}", "fi-fi"),
+    ("site:gigantti.fi {q}", "fi-fi"), ("site:proshop.fi {q}", "fi-fi"), ("site:power.fi {q}", "fi-fi"),
     # Швеция / Норвегия / Дания
     ("{q} pris", "se-sv"), ("site:inet.se {q}", "se-sv"), ("site:webhallen.com {q}", "se-sv"),
     ("site:komplett.se {q}", "se-sv"), ("site:komplett.no {q}", "no-no"),
@@ -76,11 +78,10 @@ SEARCH_PROFILES = [
     # Германия
     ("{q} Preis", "de-de"), ("{q} kaufen", "de-de"), ("site:mindfactory.de {q}", "de-de"),
     ("site:alternate.de {q}", "de-de"), ("site:caseking.de {q}", "de-de"),
-    ("site:computeruniverse.net {q}", "de-de"), ("site:geizhals.eu {q}", "de-de"),
+    ("site:computeruniverse.net {q}", "de-de"), ("site:cyberport.de {q}", "de-de"),
     # Польша
     ("{q} cena", "pl-pl"), ("site:x-kom.pl {q}", "pl-pl"), ("site:morele.net {q}", "pl-pl"),
-    # Русскоязычные
-    ("{q} цена", "ru-ru"), ("{q} купить", "ru-ru"),
+    ("site:komputronik.pl {q}", "pl-pl"),
 ]
 
 CURRENCY_SYMBOLS = {"€": "EUR", "$": "USD", "£": "GBP", "zł": "PLN", "₽": "RUB", "kr": "SEK"}
@@ -262,7 +263,7 @@ def filter_results(query, results):
     filtered = []
     for r in results:
         domain = get_domain(r["url"])
-        if domain_matches(domain, NON_STORE_DOMAINS):
+        if domain_matches(domain, NON_STORE_DOMAINS) or not_store(domain):
             continue
         if any(m in r["url"].lower() for m in SEARCH_PAGE_MARKERS):
             continue
@@ -293,6 +294,25 @@ def _iter_jsonld(soup):
                 for key in ("@graph", "offers", "mainEntity", "itemListElement"):
                     if key in node:
                         stack.append(node[key])
+
+
+LISTING_TYPES = {"itemlist", "collectionpage", "searchresultspage", "offercatalog"}
+
+
+def page_kind(soup):
+    """product — карточка товара, listing — категория/поиск, None — непонятно."""
+    types = set()
+    for node in _iter_jsonld(soup):
+        t = node.get("@type")
+        for v in (t if isinstance(t, list) else [t]):
+            if isinstance(v, str):
+                types.add(v.lower())
+    og = soup.find("meta", property="og:type")
+    if "product" in types or (og and "product" in (og.get("content") or "").lower()):
+        return "product"
+    if types & LISTING_TYPES:
+        return "listing"
+    return None
 
 
 def price_from_jsonld(soup):
@@ -385,6 +405,11 @@ def inspect_page(result, query):
     if not is_relevant_strict(offer["query"], offer["title"], url):
         offer["status"] = "irrelevant"
         log(f"[{domain}] не тот товар: {offer['title'][:80]}")
+        return offer
+
+    if page_kind(soup) == "listing":
+        offer["status"] = "listing"
+        log(f"[{domain}] страница категории, а не товара: {offer['title'][:80]}")
         return offer
 
     price = price_from_jsonld(soup) or price_from_meta(soup) or price_from_text(soup.get_text(" ", strip=True))

@@ -14,7 +14,7 @@ COPY requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 
-COPY bot.py /app/bot.py
+COPY bot.py stores.py /app/
 COPY api /app/api
 
 CMD ["uvicorn", "api.main:app", "--host", "172.30.0.1", "--port", "8003"]
