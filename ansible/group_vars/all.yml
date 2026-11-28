@@ -15,8 +15,8 @@ data_disks: []
 media_path: /mnt/media             # mergerfs поверх data_disks; её отдают Plex и Samba
 
 # PriceFinder: роль и база в PostgreSQL на этой же машине.
-# Пароль должен совпадать с тем, что ждёт API (PRICEFINDER_DB_PASSWORD, по умолчанию — пробел).
-pricefinder_db_password: "{{ lookup('ansible.builtin.env', 'PRICEFINDER_DB_PASSWORD') | default(' ', true) }}"
+# Пароль берётся из web/pricefinder/.env — того же файла, что читает API.
+pricefinder_db_password: "{{ lookup('ansible.builtin.ini', 'PRICEFINDER_DB_PASSWORD', type='properties', file=homelab_path + '/web/pricefinder/.env', default='') }}"
 
 # Docker-сети, которые проекты используют как внешние. Создаются заранее.
 docker_networks:
@@ -49,6 +49,7 @@ compose_create_only:
 # Секреты, которых нет в git. Без них соответствующие сервисы не заработают.
 required_secrets:
   - { file: vpn/duckdns/.env, example: vpn/duckdns/.env.example, what: "токен DuckDNS" }
+  - { file: web/pricefinder/.env, example: web/pricefinder/.env.example, what: "пароль базы PriceFinder (любой, манифест сам задаст его в PostgreSQL)" }
   - { file: tools/autodealfinder/.env, example: tools/autodealfinder/.env.example, what: "токен бота AutoDealFinder" }
 
 # Службы systemd --user из репозитория (автозапуск Claude, Telegram, graphify)

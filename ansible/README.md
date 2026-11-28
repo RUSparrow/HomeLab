@@ -20,6 +20,7 @@ cd ~/HomeLab
 # 3. Секреты — их нет в git. Скопируйте примеры и заполните:
 cp vpn/duckdns/.env.example vpn/duckdns/.env
 cp tools/autodealfinder/.env.example tools/autodealfinder/.env
+cp web/pricefinder/.env.example web/pricefinder/.env   # придумать пароль базы
 #    плюс из бэкапа: web/business-card/profile.json
 
 # 4. Диски медиатеки: UUID дисков (lsblk -f) — в ansible/group_vars/all.yml → data_disks

@@ -8,3 +8,4 @@ services:
     container_name: pricefinder-api
     network_mode: host
     restart: unless-stopped
+    env_file: .env
