@@ -141,6 +141,9 @@ RAM = '100 * (1 - node_memory_MemAvailable_bytes{job="node",instance="node-expor
 TEMP = ('node_hwmon_temp_celsius{instance="node-exporter:9100",chip="platform_coretemp_0"} '
         '* on(instance, chip, sensor) group_left(label) node_hwmon_sensor_label{instance="node-exporter:9100",chip="platform_coretemp_0"}')
 NET_IF = 'device="eno1",instance="node-exporter:9100"'
+NET_DESC = "Сетевая карта eno1 — весь трафик сервера: интернет, домашняя сеть и VPN вместе. Входящий — данные, пришедшие в сервер, исходящий — ушедшие из него. Это текущая нагрузка, а не скорость интернета (её никто не замеряет)."
+VPN_RX = "sum(rate(homelab_vpn_peer_received_bytes[$__rate_interval]))"
+VPN_TX = "sum(rate(homelab_vpn_peer_sent_bytes[$__rate_interval]))"
 FS = 'instance="node-exporter:9100",mountpoint=~"/|/mnt/disk1|/mnt/disk2",fstype!~"tmpfs|overlay"'
 
 server = dashboard("homelab-server", "HomeLab · Сервер", [
@@ -151,10 +154,10 @@ server = dashboard("homelab-server", "HomeLab · Сервер", [
     stat(3, "Температура CPU", [target('max(node_hwmon_temp_celsius{instance="node-exporter:9100",chip="platform_coretemp_0",sensor="temp1"})')],
          "celsius", x=8, y=0, decimals=0,
          thresholds_=thresholds((None, "green"), (70, "yellow"), (85, "red"))),
-    stat(4, "Входящий трафик", [target(f'rate(node_network_receive_bytes_total{{{NET_IF}}}[$__rate_interval])')],
-         "Bps", x=12, y=0),
-    stat(5, "Исходящий трафик", [target(f'rate(node_network_transmit_bytes_total{{{NET_IF}}}[$__rate_interval])')],
-         "Bps", x=16, y=0),
+    stat(4, "Сервер ↓ принимает", [target(f'rate(node_network_receive_bytes_total{{{NET_IF}}}[$__rate_interval])')],
+         "Bps", x=12, y=0, description=NET_DESC),
+    stat(5, "Сервер ↑ отдаёт", [target(f'rate(node_network_transmit_bytes_total{{{NET_IF}}}[$__rate_interval])')],
+         "Bps", x=16, y=0, description=NET_DESC),
     stat(6, "Аптайм", [target('time() - node_boot_time_seconds{job="node",instance="node-exporter:9100"}')], "s", x=20, y=0, graph=False,
          decimals=0),
 
@@ -183,10 +186,13 @@ server = dashboard("homelab-server", "HomeLab · Сервер", [
                            "properties": [{"id": "displayName", "value": "Весь процессор"},
                                           {"id": "custom.lineWidth", "value": 3}]}]),
 
-    timeseries(14, "Сеть (eno1)", [
-        target(f'rate(node_network_receive_bytes_total{{{NET_IF}}}[$__rate_interval])', "Входящий ↓"),
-        target(f'-rate(node_network_transmit_bytes_total{{{NET_IF}}}[$__rate_interval])', "Исходящий ↑", ref="B"),
-    ], "Bps", x=0, y=20, description="Исходящий трафик показан вниз от нуля."),
+    timeseries(14, "Трафик сервера (сетевая карта eno1) и доля VPN", [
+        target(f'rate(node_network_receive_bytes_total{{{NET_IF}}}[$__rate_interval])', "Весь ↓ в сервер"),
+        target(f'-rate(node_network_transmit_bytes_total{{{NET_IF}}}[$__rate_interval])', "Весь ↑ из сервера", ref="B"),
+        target(VPN_RX, "VPN ↓ от клиентов", ref="C"),
+        target(f"-{VPN_TX}", "VPN ↑ клиентам", ref="D"),
+    ], "Bps", x=0, y=20, description=NET_DESC + " VPN — часть общего трафика: то, что прошло через "
+                                    "AmneziaWG от твоих устройств и к ним. Исходящий показан вниз от нуля."),
     timeseries(15, "Диски: чтение и запись", [
         target('sum by (device) (rate(node_disk_read_bytes_total{instance="node-exporter:9100",device=~"sd[a-z]"}[$__rate_interval]))', "{{device}} чтение"),
         target('-sum by (device) (rate(node_disk_written_bytes_total{instance="node-exporter:9100",device=~"sd[a-z]"}[$__rate_interval]))', "{{device}} запись", ref="B"),
@@ -215,13 +221,15 @@ containers = dashboard("homelab-containers", "HomeLab · Контейнеры", 
     timeseries(2, "Память по контейнерам", [
         target(f'sum by (name) (container_memory_working_set_bytes{{{C}}})', "{{name}}"),
     ], "bytes", x=12, y=0, h=10, stack=True, fill=40, legend_calcs=("lastNotNull", "max")),
-    timeseries(3, "Сеть: входящий трафик", [
+    timeseries(3, "Контейнеры: входящий трафик", [
         target(f'sum by (name) (rate(container_network_receive_bytes_total{{{C}}}[$__rate_interval]))', "{{name}}"),
     ], "Bps", x=0, y=10, fill=0,
-        description="Контейнеры с сетью хоста (node-exporter) здесь не видны."),
-    timeseries(4, "Сеть: исходящий трафик", [
+        description="Что каждый контейнер получает через свою Docker-сеть: и из интернета, и от других "
+                    "контейнеров (например, шлюз ↔ сайты). Контейнеры с сетью хоста (node-exporter, PriceFinder API) здесь не видны."),
+    timeseries(4, "Контейнеры: исходящий трафик", [
         target(f'sum by (name) (rate(container_network_transmit_bytes_total{{{C}}}[$__rate_interval]))', "{{name}}"),
-    ], "Bps", x=12, y=10, fill=0),
+    ], "Bps", x=12, y=10, fill=0,
+        description="Что каждый контейнер отдаёт через свою Docker-сеть: в интернет и другим контейнерам."),
     timeseries(5, "Диск: запись по контейнерам", [
         target(f'sum by (name) (rate(container_fs_writes_bytes_total{{{C}}}[$__rate_interval]))', "{{name}}"),
     ], "Bps", x=0, y=18, fill=0),
@@ -267,7 +275,9 @@ services = dashboard("homelab-services", "HomeLab · Сервисы и безо�
     timeseries(3, "Трафик VPN по клиентам", [
         target("sum by (peer) (rate(homelab_vpn_peer_sent_bytes[$__rate_interval]) "
                "+ rate(homelab_vpn_peer_received_bytes[$__rate_interval])) > 0", "{{peer}}"),
-    ], "Bps", x=0, y=17, h=8, fill=0),
+    ], "Bps", x=0, y=17, h=8, fill=0,
+        description="Сумма в обе стороны для каждого устройства, подключённого к AmneziaWG: "
+                    "сколько трафика оно гоняет через сервер в интернет и обратно."),
     timeseries(4, "Fail2ban: неудачные входы по SSH", [
         target('sum(increase(f2b_jail_failed_total{jail="sshd"}[$__interval]))', "Попытки", interval="15m"),
     ], x=12, y=17, h=8, draw="bars", fill=70, legend_calcs=("sum", "max"),

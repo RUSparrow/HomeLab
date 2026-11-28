@@ -51,10 +51,42 @@ def _stop_history():
     history.stop()
 
 
+_vpn_prev: dict = {}
+
+
+def _vpn_rate(vpn: dict) -> dict:
+    """Скорость VPN из счётчиков клиентов AmneziaWG: разница с прошлым замером.
+    rx — пришло на сервер от клиентов, tx — ушло клиентам (как у карты eno1)."""
+    peers = vpn.get("peers") or []
+    if not vpn.get("available") or not peers:
+        return {}
+    now = time.monotonic()
+    rx = sum(p.get("received_bytes") or 0 for p in peers)
+    tx = sum(p.get("sent_bytes") or 0 for p in peers)
+    prev = _vpn_prev.get("sample")
+    if prev and now - prev[0] < 3 and "rate" in _vpn_prev:
+        return _vpn_prev["rate"]  # частые запросы (Prometheus + вкладки) — отдаём прошлый расчёт
+    rate = {}
+    if prev and now > prev[0]:
+        dt = now - prev[0]
+        rate = {"rx": max(rx - prev[1], 0) / dt, "tx": max(tx - prev[2], 0) / dt}
+    _vpn_prev.update(sample=(now, rx, tx), rate=rate)
+    return rate
+
+
+def _link_speed(iface: str = "eno1") -> int | None:
+    try:
+        speed = int(open(f"/sys/class/net/{iface}/speed").read().strip())
+        return speed if speed > 0 else None
+    except (OSError, ValueError):
+        return None
+
+
 @app.get("/api/metrics")
 def metrics():
     data = collect_all()
     data["network"] = {k: history.latest().get(k) for k in ("rx", "tx")}
+    data["network"].update(interface="eno1", link_mbit=_link_speed(), vpn=_vpn_rate(data.get("amnezia") or {}))
     data["insights"] = insights.collect(data["docker"], data["plex"], data["amnezia"])
     return data
 

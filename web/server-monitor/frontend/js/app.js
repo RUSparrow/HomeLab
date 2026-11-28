@@ -263,8 +263,14 @@ function renderSystem(data) {
   const maxNet = Math.max(1, ...rx.filter((v) => v != null), ...tx.filter((v) => v != null));
   const netSvg = $("net-spark");
   setSpark(netSvg, (renderSpark(netSvg, rx, 0, maxNet) || "") + (renderSpark(netSvg, tx, 0, maxNet, "tx") || ""));
-  patch($("net-meta"), `Ср. ↓ <b>${fmtRate(state.history?.stats?.rx?.avg)}</b> · ↑ <b>${fmtRate(state.history?.stats?.tx?.avg)}</b><br>` +
-    `Пик ↓ ${fmtRate(state.history?.stats?.rx?.max)} · ↑ ${fmtRate(state.history?.stats?.tx?.max)}`);
+  const link = net.link_mbit ? ` · карта ${net.link_mbit >= 1000 ? `${net.link_mbit / 1000} Гбит/с` : `${net.link_mbit} Мбит/с`}` : "";
+  setText($("net-hint"), `${net.interface || "eno1"}${link}`);
+  const vpn = net.vpn || {};
+  patch($("net-meta"), `Ср. ↓ <b>${fmtRate(state.history?.stats?.rx?.avg)}</b> · ↑ <b>${fmtRate(state.history?.stats?.tx?.avg)}</b>` +
+    ` · пик ↓ ${fmtRate(state.history?.stats?.rx?.max)}<br>` +
+    (vpn.rx != null ? `Из них VPN: ↓ <b>${fmtRate(vpn.rx)}</b> от клиентов · ↑ <b>${fmtRate(vpn.tx)}</b> к ним<br>` : "") +
+    `<span class="muted">Всё, что идёт через сетевую карту: интернет, домашняя сеть и VPN вместе. ` +
+    `↓ — в сервер, ↑ — из сервера. Это текущая нагрузка, а не скорость интернета.</span>`);
 
   const uptime = data.uptime || {};
   setText($("uptime-value"), fmtDuration(uptime.seconds));
@@ -288,7 +294,7 @@ function renderDisks(data) {
       `<span class="badge badge--${smartBad ? "bad" : "ok"}" title="Самодиагностика диска">${smartBad ? "SMART: ошибка" : "SMART в норме"}</span>`;
     const facts = [
       smart.temperature != null ? `${Math.round(smart.temperature)} °C` : "",
-      smart.power_on_hours ? `наработка ${fmtDuration(smart.power_on_hours * 3600).replace(/ \d+ ч$/, "")}` : "",
+      smart.power_on_hours ? `наработка ${fmtDuration(smart.power_on_hours * 3600).replace(/ \d+ ч$/, "")} (${Math.round(smart.power_on_hours).toLocaleString("ru-RU")} ч)` : "",
     ].filter(Boolean).join(" · ");
     return `
       <article class="card ${lvl}">
@@ -632,14 +638,45 @@ function renderDocker(data) {
 
 /* ---------- Загрузка данных ---------- */
 
+/** Перезапускает CSS-анимацию: класс снимается и ставится заново. */
+function replay(el, cls) {
+  el.classList.remove(cls);
+  void el.offsetWidth;
+  el.classList.add(cls);
+}
+
 function setConnection(ok) {
   const conn = $("conn");
   conn.classList.toggle("is-ok", ok);
   conn.classList.toggle("is-error", !ok);
+  conn.classList.remove("is-late");
   $("dashboard").classList.toggle("is-stale", !ok && state.lastOk !== null);
-  const time = state.lastOk ? state.lastOk.toLocaleTimeString("ru-RU") : "";
-  setText($("conn-text"), ok ? `Онлайн · ${time}` : time ? `Нет связи · данные на ${time}` : "Нет связи с сервером");
+  if (ok) {
+    // Живой индикатор: волна от точки и полоска до следующего обновления
+    replay(conn, "is-tick");
+    replay($("stacks"), "is-tick");
+  }
+  renderConnText();
 }
+
+function renderConnText() {
+  const conn = $("conn");
+  if (!state.lastOk) return setText($("conn-text"), conn.classList.contains("is-error") ? "Нет связи с сервером" : "Подключение…");
+  const ago = Math.round((Date.now() - state.lastOk) / 1000);
+  const time = state.lastOk.toLocaleTimeString("ru-RU");
+  if (conn.classList.contains("is-error")) return setText($("conn-text"), `Нет связи · данные на ${time}`);
+  // Ответ задерживается дольше трёх циклов — сервер жив, но данные не свежие
+  const late = ago * 1000 > REFRESH_INTERVAL * 3;
+  conn.classList.toggle("is-late", late);
+  setText($("conn-text"), late ? `Задержка · данные ${fmtAgoShort(ago)}` : `Онлайн · ${ago < 2 ? "только что" : fmtAgoShort(ago)}`);
+  conn.title = `Последнее обновление: ${time}. Данные обновляются каждые ${REFRESH_INTERVAL / 1000} с.`;
+}
+
+function fmtAgoShort(sec) {
+  return sec < 60 ? `${sec} с назад` : `${Math.floor(sec / 60)} мин назад`;
+}
+
+setInterval(() => { if (!document.hidden) renderConnText(); }, 1000);
 
 async function fetchMetrics() {
   if (state.inFlight) return;

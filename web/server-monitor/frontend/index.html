@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
-  <link rel="stylesheet" href="/static/css/style.css?v=34">
+  <link rel="stylesheet" href="/static/css/style.css?v=35">
 </head>
 <body class="is-loading">
   <div class="dashboard" id="dashboard">
@@ -29,6 +29,7 @@
         <div class="conn" id="conn" role="status" aria-live="polite">
           <span class="conn__dot" aria-hidden="true"></span>
           <span class="conn__text" id="conn-text">Подключение…</span>
+          <span class="conn__bar" aria-hidden="true"></span>
         </div>
       </div>
     </header>
@@ -68,7 +69,7 @@
         </article>
 
         <article class="card" id="card-net">
-          <div class="card__head"><span class="card__label">Сеть</span><span class="card__hint" data-range-label>1 ч</span></div>
+          <div class="card__head"><span class="card__label">Трафик сервера</span><span class="card__hint" id="net-hint">eno1</span></div>
           <div class="card__value card__value--net" id="net-value">—</div>
           <svg class="spark spark--net" id="net-spark" viewBox="0 0 100 28" preserveAspectRatio="none" aria-hidden="true"></svg>
           <p class="card__meta" id="net-meta">&nbsp;</p>
@@ -126,6 +127,6 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="/static/js/app.js?v=34"></script>
+  <script src="/static/js/app.js?v=35"></script>
 </body>
 </html>
