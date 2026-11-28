@@ -1,39 +1,37 @@
 ---
-- name: Check Docker updates
+# Обновление Docker-образов всех запущенных сервисов.
+# Запуск: ansible-playbook update-server.yml -K
+# Список проектов — тот же, что у манифеста (group_vars/all.yml): новые сервисы
+# добавляются в одном месте.
+
+- name: Update HomeLab containers
   hosts: server
   become: true
 
-  vars:
-    compose_projects:
-      - /home/sparrow/HomeLab/vpn/duckdns
-      - /home/sparrow/HomeLab/web/gateway
-      - /home/sparrow/HomeLab/web/pricefinder
-      - /home/sparrow/HomeLab/web/server-monitor
-      - /home/sparrow/HomeLab/tools/syncthing
-      - /home/sparrow/HomeLab/tools/portainer
-      - /home/sparrow/HomeLab/games/minecraft
-      - /home/sparrow/HomeLab/monitoring/fail2ban-exporter
-      - /home/sparrow/HomeLab/monitoring/loki
-      - /home/sparrow/HomeLab/monitoring/grafana
-      - /home/sparrow/HomeLab/monitoring/smartctl-exporter
-      - /home/sparrow/HomeLab/monitoring/alloy
-      - /home/sparrow/HomeLab/monitoring/prometheus
   tasks:
-    - name: Pull Docker images
+    - name: Скачать новые образы
       ansible.builtin.command:
-        cmd: docker compose pull
-        chdir: "{{ item }}"
-      loop: "{{ compose_projects }}"
-      register: docker_pull
+        cmd: docker compose pull --quiet
+        chdir: "{{ homelab_path }}/{{ item }}"
+      loop: "{{ compose_projects + compose_create_only }}"
       changed_when: false
 
-    - name: Show pull results
-      ansible.builtin.debug:
-        msg: "{{ item.stdout_lines }}"
-      loop: "{{ docker_pull.results }}"
-
-    - name: Recreate Docker services
+    - name: Пересобрать свои образы и пересоздать изменившиеся контейнеры
       ansible.builtin.command:
-        cmd: docker compose up -d
-        chdir: "{{ item }}"
+        cmd: docker compose up -d --build
+        chdir: "{{ homelab_path }}/{{ item }}"
       loop: "{{ compose_projects }}"
+      register: compose_up
+      changed_when: "'Recreated' in compose_up.stderr or 'Started' in compose_up.stderr"
+
+    - name: ClamAV и Minecraft — только обновить образ, не запускать
+      ansible.builtin.command:
+        cmd: docker compose create --build
+        chdir: "{{ homelab_path }}/{{ item }}"
+      loop: "{{ compose_create_only }}"
+      changed_when: false
+
+    - name: Удалить старые образы
+      ansible.builtin.command: docker image prune -f
+      register: prune
+      changed_when: "'Total reclaimed space: 0B' not in prune.stdout"

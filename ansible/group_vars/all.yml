@@ -1,0 +1,58 @@
+# Настройки манифеста HomeLab. Всё, что зависит от машины, — здесь.
+homelab_user: sparrow
+homelab_home: "/home/{{ homelab_user }}"
+homelab_path: "{{ homelab_home }}/HomeLab"
+
+# LAN-адрес сервера: на него вешается экспортёр fail2ban (Prometheus ходит сюда)
+lan_ip: "{{ ansible_facts['default_ipv4']['address'] | default('127.0.0.1') }}"
+
+# Диски с медиатекой. На новом ПК впишите UUID (lsblk -f) — разметку манифест не трогает.
+# Пусто — диски не подключаются, /mnt/media остаётся пустой папкой.
+#   data_disks:
+#     - { uuid: "1234-abcd", path: /mnt/disk1 }
+#     - { uuid: "5678-ef01", path: /mnt/disk2 }
+data_disks: []
+media_path: /mnt/media             # mergerfs поверх data_disks; её отдают Plex и Samba
+
+# PriceFinder: роль и база в PostgreSQL на этой же машине.
+# Пароль должен совпадать с тем, что ждёт API (PRICEFINDER_DB_PASSWORD, по умолчанию — пробел).
+pricefinder_db_password: "{{ lookup('ansible.builtin.env', 'PRICEFINDER_DB_PASSWORD') | default(' ', true) }}"
+
+# Docker-сети, которые проекты используют как внешние. Создаются заранее.
+docker_networks:
+  - { name: monitoring, subnet: 172.24.0.0/16 }
+  # API PriceFinder слушает 172.30.0.1 — это шлюз именно этой сети
+  - { name: price-watcher_default, subnet: 172.30.0.0/16, gateway: 172.30.0.1 }
+
+# Compose-проекты в порядке запуска: веб-шлюз подключается к сетям остальных — он последний.
+compose_projects:
+  - vpn/duckdns
+  - monitoring/loki
+  - monitoring/prometheus
+  - monitoring/grafana
+  - monitoring/alloy
+  - monitoring/smartctl-exporter
+  - monitoring/fail2ban-exporter
+  - web/server-monitor
+  - web/textcheck
+  - web/pricefinder
+  - tools/autodealfinder
+  - tools/portainer
+  - tools/syncthing
+  - web/gateway
+
+# Только собрать/скачать, не запускать: ClamAV запускает таймер, Minecraft включают вручную
+compose_create_only:
+  - security/clamav
+  - games/minecraft
+
+# Секреты, которых нет в git. Без них соответствующие сервисы не заработают.
+required_secrets:
+  - { file: vpn/duckdns/.env, example: vpn/duckdns/.env.example, what: "токен DuckDNS" }
+  - { file: tools/autodealfinder/.env, example: tools/autodealfinder/.env.example, what: "токен бота AutoDealFinder" }
+
+# Службы systemd --user из репозитория (автозапуск Claude, Telegram, graphify)
+user_units:
+  - tools/claude-rc/claude-rc.service
+  - tools/claude-telegram/claude-telegram.service
+  - tools/graphify-watch/graphify-watch.service

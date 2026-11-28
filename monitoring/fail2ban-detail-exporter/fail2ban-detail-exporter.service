@@ -1,0 +1,15 @@
+[Unit]
+Description=Fail2ban detailed Prometheus exporter
+After=network.target fail2ban.service
+Requires=fail2ban.service
+
+[Service]
+Type=simple
+# Адрес подставляет ansible (install-homelab.yml) — LAN-адрес сервера
+Environment=F2B_EXPORTER_HOST=192.168.0.176
+ExecStart=/usr/bin/python3 /usr/local/bin/fail2ban-detail-exporter.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

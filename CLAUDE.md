@@ -14,3 +14,7 @@ See [AGENTS.md](AGENTS.md) for OpenWiki agent instructions.
 `graphify update . --force && cp graphify-out/graph.html graph.html`. `graph.html` и `graphify-out/` в git не хранятся.
 
 <!-- OPENWIKI:END -->
+
+## Чек-лист изменений
+
+После любого изменения сервера пройди [MAINTENANCE.md](MAINTENANCE.md): git, манифест Ansible, `.env.example`, списки Server Monitor, граф.

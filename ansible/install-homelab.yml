@@ -1,20 +1,50 @@
 ---
+# Ставит HomeLab на чистую Ubuntu Server 24.04+ так, как он устроен сейчас.
+# Запуск (из папки ansible):  ansible-playbook install-homelab.yml -K
+# Повторный запуск безопасен: уже сделанное пропускается.
+# Только часть: --tags docker,apps  (теги — в начале каждого блока).
+# Что манифест НЕ делает (по правилам сервера) — в README.md: VPN Amnezia, файрвол, SSH.
+
 - name: Install HomeLab
   hosts: server
   become: true
 
-  vars:
-    homelab_user: sparrow
+  handlers:
+    - name: restart fail2ban
+      ansible.builtin.systemd: { name: fail2ban, state: restarted }
+    - name: restart smbd
+      ansible.builtin.systemd: { name: smbd, state: restarted }
+    - name: reload systemd
+      ansible.builtin.systemd: { daemon_reload: true }
 
   tasks:
 
-    - name: Update apt cache
+    # ------------------------------------------------------------------
+    - name: Секреты на месте?
+      tags: [always]
+      block:
+        - name: Проверить файлы секретов
+          ansible.builtin.stat:
+            path: "{{ homelab_path }}/{{ item.file }}"
+          loop: "{{ required_secrets }}"
+          register: secret_files
+
+        - name: Без секретов дальше нельзя
+          ansible.builtin.fail:
+            msg: >-
+              Нет файлов с секретами: {{ secret_files.results | rejectattr('stat.exists') |
+              map(attribute='item') | map('to_json') | join(', ') }}.
+              Скопируйте пример (example) в file и заполните, либо запустите с -e allow_missing_secrets=true.
+          when:
+            - secret_files.results | rejectattr('stat.exists') | list | length > 0
+            - not (allow_missing_secrets | default(false) | bool)
+
+    # ------------------------------------------------------------------
+    - name: Базовые пакеты
+      tags: [base]
       ansible.builtin.apt:
         update_cache: true
         cache_valid_time: 3600
-
-    - name: Install required packages
-      ansible.builtin.apt:
         name:
           - ca-certificates
           - curl
@@ -22,114 +52,312 @@
           - git
           - gnupg
           - lsb-release
+          - jq
+          - unzip
+          - htop
+          - tmux
           - python3
           - python3-pip
           - python3-venv
-          - unzip
-          - htop
+          - python3-psycopg2     # для модулей postgresql в этом плейбуке
           - smartmontools
+          - lm-sensors
           - fail2ban
+          - unattended-upgrades
+          - postgresql
+          - mergerfs
+          - samba
         state: present
 
-    - name: Create Docker keyring directory
-      ansible.builtin.file:
-        path: /etc/apt/keyrings
-        state: directory
-        mode: "0755"
+    # ------------------------------------------------------------------
+    - name: Docker
+      tags: [docker]
+      block:
+        # Как на сервере: Docker из репозитория Ubuntu (docker.io + compose v2), без стороннего репо
+        - name: Docker и compose
+          ansible.builtin.apt:
+            name: [docker.io, docker-compose-v2, containerd]
 
-    - name: Add Docker GPG key
-      ansible.builtin.get_url:
-        url: https://download.docker.com/linux/ubuntu/gpg
-        dest: /etc/apt/keyrings/docker.asc
-        mode: "0644"
+        - name: Docker включён
+          ansible.builtin.systemd: { name: docker, enabled: true, state: started }
 
-    - name: Add Docker repository
-      ansible.builtin.deb822_repository:
-        name: docker
-        types: deb
-        uris: https://download.docker.com/linux/ubuntu
-        suites: "{{ ansible_facts['distribution_release'] }}"
-        components:
-          - stable
-        architectures:
-          - "{{ ansible_facts['architecture'] }}"
-        signed_by: /etc/apt/keyrings/docker.asc
-        state: present
+        - name: Пользователь в группе docker
+          ansible.builtin.user: { name: "{{ homelab_user }}", groups: docker, append: true }
 
-    - name: Update apt cache after adding Docker repository
-      ansible.builtin.apt:
-        update_cache: true
+    # ------------------------------------------------------------------
+    - name: Plex Media Server (ставится в систему, не в Docker)
+      tags: [plex]
+      block:
+        - name: Ключ репозитория Plex
+          ansible.builtin.get_url:
+            url: https://downloads.plex.tv/plex-keys/PlexSign.v2.key
+            dest: /etc/apt/keyrings/plexmediaserver.asc
+            mode: "0644"
 
-    - name: Install Docker
-      ansible.builtin.apt:
-        name:
-          - docker-ce
-          - docker-ce-cli
-          - containerd.io
-          - docker-buildx-plugin
-          - docker-compose-plugin
-        state: present
+        - name: Репозиторий Plex
+          ansible.builtin.deb822_repository:
+            name: plexmediaserver
+            types: deb
+            uris: https://downloads.plex.tv/repo/deb
+            suites: public
+            components: [main]
+            signed_by: /etc/apt/keyrings/plexmediaserver.asc
 
-    - name: Enable and start Docker
-      ansible.builtin.systemd:
-        name: docker
-        enabled: true
-        state: started
+        - name: Plex
+          ansible.builtin.apt: { update_cache: true, name: plexmediaserver }
 
-    - name: Add HomeLab user to docker group
-      ansible.builtin.user:
-        name: "{{ homelab_user }}"
-        groups: docker
-        append: true
+        - name: Plex включён
+          ansible.builtin.systemd: { name: plexmediaserver, enabled: true, state: started }
 
-    - name: Create HomeLab runtime directories
-      ansible.builtin.file:
-        path: "{{ item }}"
-        state: directory
-        owner: "{{ homelab_user }}"
-        group: "{{ homelab_user }}"
-        mode: "0755"
-      loop:
-        - "{{ homelab_path }}/media/plex/config"
-        - "{{ homelab_path }}/media/plex/transcode"
-        - "{{ homelab_path }}/media/plex/cache"
+    # ------------------------------------------------------------------
+    - name: Диски и медиатека
+      tags: [storage]
+      block:
+        - name: Точки монтирования
+          ansible.builtin.file: { path: "{{ item }}", state: directory, mode: "0755" }
+          loop: "{{ (data_disks | map(attribute='path') | list) + [media_path] }}"
 
-        - "{{ homelab_path }}/monitoring/grafana/data"
-        - "{{ homelab_path }}/monitoring/loki/data"
-        - "{{ homelab_path }}/monitoring/prometheus/data"
-        - "{{ homelab_path }}/monitoring/alloy/data"
+        - name: Диски с данными (только если заданы в group_vars)
+          ansible.posix.mount:
+            path: "{{ item.path }}"
+            src: "UUID={{ item.uuid }}"
+            fstype: ext4
+            opts: defaults,nofail,x-systemd.device-timeout=30s
+            state: mounted
+          loop: "{{ data_disks }}"
 
-        - "{{ homelab_path }}/tools/portainer/data"
+        - name: Объединённая медиатека mergerfs
+          ansible.posix.mount:
+            path: "{{ media_path }}"
+            src: "{{ data_disks | map(attribute='path') | join(':') }}"
+            fstype: fuse.mergerfs
+            opts: defaults,nofail,allow_other,use_ino,category.create=mfs,nonempty
+            state: mounted
+          when: data_disks | length > 0
 
-        - "{{ homelab_path }}/tools/syncthing/data"
+    # ------------------------------------------------------------------
+    - name: Samba — общая папка медиатеки в локальной сети
+      tags: [samba]
+      block:
+        - name: Папка [media] уже описана вручную?
+          ansible.builtin.command: grep -c "^\\[media\\]" /etc/samba/smb.conf
+          register: smb_media
+          changed_when: false
+          failed_when: false
+          check_mode: false
 
-        - "{{ homelab_path }}/games/minecraft/data"
-        - "{{ homelab_path }}/games/minecraft/backups"
+        - name: Общая папка media (если её ещё нет — иначе получится дубль)
+          ansible.builtin.blockinfile:
+            path: /etc/samba/smb.conf
+            marker: "# {mark} HomeLab media share (ansible)"
+            block: "{{ lookup('ansible.builtin.file', homelab_path + '/media/samba/smb-media.conf') }}"
+          when: smb_media.stdout | int == 0
+          notify: restart smbd
 
-        - "{{ homelab_path }}/vpn/duckdns/config"
+    # ------------------------------------------------------------------
+    - name: Безопасность — fail2ban и его экспортёр для Prometheus
+      tags: [security]
+      block:
+        - name: Правила fail2ban (SSH)
+          ansible.builtin.copy:
+            src: "{{ homelab_path }}/security/fail2ban/jail.local"
+            dest: /etc/fail2ban/jail.local
+            mode: "0644"
+          notify: restart fail2ban
 
-        - "{{ homelab_path }}/security/clamav/database"
-        - "{{ homelab_path }}/security/clamav/reports"
+        - name: Экспортёр fail2ban
+          ansible.builtin.copy:
+            src: "{{ homelab_path }}/monitoring/fail2ban-detail-exporter/fail2ban-detail-exporter.py"
+            dest: /usr/local/bin/fail2ban-detail-exporter.py
+            mode: "0755"
 
-    - name: Start Docker Compose projects
-      ansible.builtin.command:
-        cmd: docker compose up -d --build
-        chdir: "{{ homelab_path }}/{{ item }}"
-      loop:
-        - vpn/duckdns
-        - web/gateway
-        - web/pricefinder
-        - tools/syncthing
-        - tools/portainer
-        - games/minecraft
-        - monitoring/fail2ban-exporter
-        - monitoring/loki
-        - monitoring/grafana
-        - monitoring/smartctl-exporter
-        - monitoring/alloy
-        - monitoring/prometheus
+        - name: Служба экспортёра (на LAN-адресе этой машины)
+          ansible.builtin.copy:
+            content: "{{ lookup('ansible.builtin.file', homelab_path + '/monitoring/fail2ban-detail-exporter/fail2ban-detail-exporter.service') | regex_replace('F2B_EXPORTER_HOST=\\S+', 'F2B_EXPORTER_HOST=' + lan_ip) }}\n"
+            dest: /etc/systemd/system/fail2ban-detail-exporter.service
+            mode: "0644"
+          notify: reload systemd
 
-    - name: Build and start Server Monitor
-      ansible.builtin.command:
-        cmd: docker compose up -d --build
-        chdir: "{{ homelab_path }}/web/server-monitor"
+        - name: fail2ban и экспортёр включены
+          ansible.builtin.systemd: { name: "{{ item }}", enabled: true, state: started, daemon_reload: true }
+          loop: [fail2ban, fail2ban-detail-exporter]
+
+    # ------------------------------------------------------------------
+    - name: PostgreSQL для PriceFinder
+      tags: [postgres]
+      block:
+        - name: PostgreSQL включён
+          ansible.builtin.systemd: { name: postgresql, enabled: true, state: started }
+
+        - name: Роль pricewatcher
+          become_user: postgres
+          community.postgresql.postgresql_user:
+            name: pricewatcher
+            password: "{{ pricefinder_db_password }}"
+          no_log: true
+
+        - name: База pricewatcher
+          become_user: postgres
+          community.postgresql.postgresql_db: { name: pricewatcher, owner: pricewatcher }
+
+        - name: Таблицы уже есть?
+          become_user: postgres
+          community.postgresql.postgresql_query:
+            db: pricewatcher
+            query: "SELECT to_regclass('public.offers') IS NOT NULL AS ok"
+          register: pf_schema
+          changed_when: false
+
+        - name: Схема из репозитория (только в пустую базу)
+          ansible.builtin.command:
+            cmd: psql -h 127.0.0.1 -U pricewatcher -d pricewatcher -v ON_ERROR_STOP=1 -f {{ homelab_path }}/web/pricefinder/schema.sql
+          environment: { PGPASSWORD: "{{ pricefinder_db_password }}" }
+          when: not pf_schema.query_result[0].ok
+          no_log: true
+
+    # ------------------------------------------------------------------
+    - name: ClamAV — ночная проверка по таймеру
+      tags: [clamav]
+      block:
+        - name: Юниты таймера
+          ansible.builtin.copy:
+            src: "{{ homelab_path }}/security/clamav/systemd/{{ item }}"
+            dest: "/etc/systemd/system/{{ item }}"
+            mode: "0644"
+          loop: [clamav-nightly.service, clamav-nightly.timer]
+          notify: reload systemd
+
+        - name: Таймер включён (04:00)
+          ansible.builtin.systemd: { name: clamav-nightly.timer, enabled: true, state: started, daemon_reload: true }
+
+    # ------------------------------------------------------------------
+    - name: Docker-сервисы
+      tags: [apps]
+      block:
+        - name: Общие сети (проекты подключаются к ним как к внешним)
+          community.docker.docker_network:
+            name: "{{ item.name }}"
+            ipam_config:
+              - subnet: "{{ item.subnet }}"
+                gateway: "{{ item.gateway | default(omit) }}"
+          loop: "{{ docker_networks }}"
+
+        # Владелец — тот пользователь, от которого пишет контейнер (иначе сервис не запустится)
+        - name: Папки с данными сервисов
+          ansible.builtin.file:
+            path: "{{ homelab_path }}/{{ item.path }}"
+            state: directory
+            owner: "{{ item.owner | default(homelab_user) }}"
+            group: "{{ item.group | default(item.owner | default(homelab_user)) }}"
+            mode: "{{ item.mode | default('0755') }}"
+          loop:
+            - { path: monitoring/grafana/data, owner: "472" }            # grafana
+            - { path: monitoring/loki/data, owner: "10001" }             # loki
+            - { path: monitoring/prometheus/data, owner: "65534" }       # nobody
+            - { path: monitoring/alloy/data }
+            - { path: tools/portainer/data }
+            - { path: tools/syncthing/data }
+            - { path: games/minecraft/data }
+            - { path: games/minecraft/backups }
+            - { path: vpn/duckdns/config, mode: "0775" }
+            - { path: security/clamav/database, owner: "100", group: "101", mode: "0775" }   # clamav
+            - { path: security/clamav/reports, mode: "0775" }
+
+        - name: Данные AutoDealFinder (контейнер пишет от пользователя nobody)
+          ansible.builtin.file:
+            path: "{{ homelab_path }}/tools/autodealfinder/data"
+            state: directory
+            mode: "0777"
+
+        - name: Запуск по порядку (веб-шлюз — последним)
+          ansible.builtin.command:
+            cmd: docker compose up -d --build
+            chdir: "{{ homelab_path }}/{{ item }}"
+          loop: "{{ compose_projects }}"
+          register: compose_up
+          changed_when: "'Started' in compose_up.stderr or 'Created' in compose_up.stderr or 'Recreated' in compose_up.stderr"
+
+        - name: Только подготовить (ClamAV запускает таймер, Minecraft — вручную)
+          ansible.builtin.command:
+            cmd: docker compose create --build
+            chdir: "{{ homelab_path }}/{{ item }}"
+          loop: "{{ compose_create_only }}"
+          register: compose_create
+          changed_when: "'Created' in compose_create.stderr"
+
+    # ------------------------------------------------------------------
+    - name: Инструменты пользователя и автозапуск Claude
+      tags: [user]
+      block:
+        - name: Пользовательские службы работают без входа в систему (linger)
+          ansible.builtin.command:
+            cmd: loginctl enable-linger {{ homelab_user }}
+            creates: "/var/lib/systemd/linger/{{ homelab_user }}"
+
+        - name: uv, bun и Claude Code — официальными установщиками
+          become: true
+          become_user: "{{ homelab_user }}"
+          ansible.builtin.shell:
+            cmd: "{{ item.cmd }}"
+            creates: "{{ item.creates }}"
+          loop:
+            - { cmd: "curl -LsSf https://astral.sh/uv/install.sh | sh", creates: "{{ homelab_home }}/.local/bin/uv" }
+            - { cmd: "curl -fsSL https://bun.sh/install | bash", creates: "{{ homelab_home }}/.bun/bin/bun" }
+            - { cmd: "curl -fsSL https://claude.ai/install.sh | bash", creates: "{{ homelab_home }}/.local/bin/claude" }
+
+        - name: graphify (с watchdog — для автообновления графа)
+          become: true
+          become_user: "{{ homelab_user }}"
+          ansible.builtin.command:
+            cmd: "{{ homelab_home }}/.local/bin/uv tool install graphifyy --with watchdog"
+            creates: "{{ homelab_home }}/.local/bin/graphify"
+
+        - name: Команда textclean
+          ansible.builtin.file:
+            src: "{{ homelab_path }}/tools/textclean/textclean.py"
+            dest: "{{ homelab_home }}/.local/bin/textclean"
+            state: link
+            owner: "{{ homelab_user }}"
+            force: true
+
+        - name: Папка пользовательских служб
+          ansible.builtin.file:
+            path: "{{ homelab_home }}/.config/systemd/user"
+            state: directory
+            owner: "{{ homelab_user }}"
+            group: "{{ homelab_user }}"
+            mode: "0755"
+
+        - name: Службы из репозитория (ссылками — правки в git сразу действуют)
+          ansible.builtin.file:
+            src: "{{ homelab_path }}/{{ item }}"
+            dest: "{{ homelab_home }}/.config/systemd/user/{{ item | basename }}"
+            state: link
+            owner: "{{ homelab_user }}"
+            force: true
+          loop: "{{ user_units }}"
+
+        - name: UID пользователя (для systemctl --user)
+          ansible.builtin.getent: { database: passwd, key: "{{ homelab_user }}" }
+
+        - name: Включить службы пользователя
+          become: true
+          become_user: "{{ homelab_user }}"
+          environment:
+            XDG_RUNTIME_DIR: "/run/user/{{ ansible_facts['getent_passwd'][homelab_user][1] }}"
+          ansible.builtin.command:
+            cmd: systemctl --user enable {{ user_units | map('basename') | join(' ') }}
+          register: user_enable
+          changed_when: "'Created symlink' in user_enable.stderr"
+
+    # ------------------------------------------------------------------
+    - name: Что осталось сделать руками
+      tags: [always]
+      ansible.builtin.debug:
+        msg:
+          - "1. VPN: поставьте Amnezia через приложение AmneziaVPN по SSH (манифест VPN не трогает)."
+          - "2. Claude: войдите — `claude` в терминале, затем плагины: claude plugin install frontend-design@claude-plugins-official telegram@claude-plugins-official"
+          - "3. Telegram для Claude: токен в ~/.claude/channels/telegram/.env, привязка через /telegram:access (см. tools/claude-telegram/README.md)."
+          - "4. Plex: откройте http://<сервер>:32400/web и привяжите к аккаунту; библиотеку восстановите из бэкапа /var/lib/plexmediaserver."
+          - "5. Данные из бэкапа: games/minecraft/data, tools/syncthing/data, web/business-card/profile.json."
+          - "6. Диски: впишите UUID в group_vars/all.yml (data_disks) и запустите --tags storage."

@@ -1,0 +1,11 @@
+[Unit]
+Description=Scheduled ClamAV scan
+Wants=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+User=sparrow
+Group=docker
+ExecStart=/home/sparrow/HomeLab/security/clamav/nightly-scan.sh
+TimeoutStartSec=infinity
