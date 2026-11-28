@@ -60,6 +60,8 @@
           - python3-pip
           - python3-venv
           - python3-psycopg2     # для модулей postgresql в этом плейбуке
+          - nodejs               # Playwright — браузер, которым Claude смотрит сайты
+          - npm
           - smartmontools
           - lm-sensors
           - fail2ban
@@ -311,6 +313,24 @@
           ansible.builtin.command:
             cmd: "{{ homelab_home }}/.local/bin/uv tool install graphifyy --with watchdog"
             creates: "{{ homelab_home }}/.local/bin/graphify"
+
+        - name: Playwright для Claude (смотреть сайты в браузере без экрана)
+          become: true
+          become_user: "{{ homelab_user }}"
+          ansible.builtin.shell:
+            cmd: |
+              mkdir -p {{ homelab_home }}/.local/share/browser-tools && cd {{ homelab_home }}/.local/share/browser-tools
+              test -f package.json || npm init -y >/dev/null
+              npm install --silent playwright@1.48.2
+              npx playwright install chromium
+            creates: "{{ homelab_home }}/.local/share/browser-tools/node_modules/playwright"
+
+        - name: Системные библиотеки для Chromium
+          ansible.builtin.command:
+            cmd: npx playwright install-deps chromium
+            chdir: "{{ homelab_home }}/.local/share/browser-tools"
+          register: pw_deps
+          changed_when: "'Setting up' in pw_deps.stdout"
 
         - name: Команда textclean
           ansible.builtin.file:
